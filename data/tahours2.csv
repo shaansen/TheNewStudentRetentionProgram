@@ -1,0 +1,1905 @@
+﻿Username,Timestamp,Events,Time Spent,Time Helped
+316,2/6/2017 14:24,HW1,3,Trying to cast string to int
+227,2/7/2017 12:42,HW1,5,Needed def main():/main()
+184,2/7/2017 13:20,HW1,3,Needed commas seperating string and variables
+334,2/7/2017 13:23,HW1,1,
+337,2/7/2017 13:25,LAB2,2,
+334,2/7/2017 13:29,OTHERS,1,
+137,2/7/2017 14:42,HW1,1,Student left
+151,2/7/2017 14:54,HW1,3,
+151,2/7/2017 15:27,HW1,2,
+151,2/7/2017 15:39,HW1,2,Help with basic concepts (had missed class?)
+151,2/8/2017 14:22,HW1,3,Help debugging
+184,2/8/2017 14:47,HW1,2,Syntax and casting
+151,2/8/2017 14:56,HW1,2,Print syntax
+215,2/8/2017 15:02,HW1,2,GL directory issues
+111,2/8/2017 15:13,HW1,3,Casting input to integer
+320,2/8/2017 15:44,HW1,3,
+160,2/9/2017 12:06,HW1,2,Help using ITE 240 computer
+130,2/9/2017 14:37,HW1,3,Needed help with basically everything
+130,2/9/2017 15:40,HW1,2,"GL/emacs help, how to get started on hw1_part2"
+253,2/9/2017 15:59,OTHERS,3,GL/terminal help
+337,2/9/2017 16:36,HW1,3,Wanted confirmation that program worked correctly
+337,2/9/2017 17:22,HW1,4,Wanted confirmation that program worked correctly
+337,2/9/2017 17:29,OTHERS,1,Said nevermind as soon as I stood up
+158,2/10/2017 10:13,HW1,2,Wanted confirmation that their .py files were not directories.
+171,2/10/2017 14:04,HW1,2,Questions on submiting and deleting files
+171,2/10/2017 14:06,HW1,5,Not storing expression in  variable
+116,2/10/2017 14:07,HW1,2,Simple syntax error
+171,2/10/2017 14:34,HW1,1,Comma was in string when trying to seperate arguments in print()
+183,2/10/2017 14:36,HW1,3,using int(input( for a string
+313,2/10/2017 15:43,OTHERS,4,"Had problems with files/directories, deleting stuff, etc"
+316,2/13/2017 14:21,HW2,2,Needed help checking if invalid in last part of HW
+369,2/13/2017 14:57,HW2,3,Was curious about how much commenting was acceptable
+310,2/14/2017 13:12,HW2,4,Did HW4 with math and wanted to know if it was ok (sent to Gibson)
+184,2/14/2017 13:15,HW2,2,Needed help understanding decision making
+335,2/14/2017 14:23,HW2,2,Didn't know you could have many if-else staements
+173,2/14/2017 14:46,HW2,3,Figuring out flowchat for program
+155,2/14/2017 15:31,HW2,4,Typing space before input
+173,2/14/2017 15:40,HW2,2,confused ob methodlogy of asking
+155,2/14/2017 15:57,HW2,2,Formatting question
+335,2/14/2017 19:03,HW2,2,Confused about if/elif/else blocks
+335,2/14/2017 19:17,HW2,3,confused about code design
+335,2/14/2017 19:36,HW2,3,
+169,2/15/2017 11:09,HW2,3,created help request from home/dorm (not here); help with mod
+174,2/15/2017 13:07,OTHERS,1,"Not my student, wanted to get point back on lab."
+169,2/15/2017 13:37,HW2,3,Wanted to make sure homework was done correctly.
+297,2/15/2017 13:38,HW2,2,Had questions about if statments
+151,2/15/2017 15:06,HW2,5,Was missing colons at the end of if statements
+151,2/15/2017 15:09,HW2,2,Forgot to enable bash 
+155,2/15/2017 15:21,HW2,3,False alarm! But she forgot Sunday and Saturday in part 4
+151,2/15/2017 15:27,HW2,2,Over complicating part 2 of the homework 
+155,2/15/2017 15:41,HW2,2,Trying to figure out the modulus operator 
+151,2/15/2017 15:41,HW2,2,
+120,2/15/2017 16:29,HW2,4,showed up 5 minutes later (not here)
+257,2/15/2017 16:35,HW2,4,
+151,2/16/2017 13:05,HW3,3,Dog question structure
+302,2/16/2017 13:20,HW2,3,"confusion between input and print. Understood math, couldnt understood where to go with program though."
+151,2/16/2017 13:33,HW3,3,
+151,2/16/2017 14:12,HW2,3,Just a sanity check
+130,2/16/2017 14:29,HW2,2,"trouble with decision statements and comparing - logic is all right, actually coding it is hard"
+173,2/16/2017 14:29,HW2,3,used wrong variable names
+138,2/16/2017 16:02,HW2,4,"needed help with how to get min, hour, day from user inupt"
+302,2/16/2017 16:03,HW2,3,how to get started on the dog question (hw2_part2)
+253,2/16/2017 16:21,HW2,5,"had every possible day checked for (and knew he shouldn't), advised to use mod"
+171,2/17/2017 14:05,HW2,5,Needed help with what operator to use for hw2_part4
+274,2/17/2017 14:08,HW2,4,not here
+171,2/17/2017 14:33,HW2,3,not sure how to use % in part 4
+130,2/17/2017 14:36,HW2,3,Help with general syntax of python
+171,2/17/2017 15:18,HW2,3,asking the user minimum questions - branching
+130,2/17/2017 15:36,HW2,3,didnt know what to do next - branching
+130,2/17/2017 16:02,HW2,2,"branching, modulus (%), filesystem "
+274,2/17/2017 16:11,HW2,4,He needed help with moving files out of directories he made accidentally 
+274,2/17/2017 16:41,HW2,3,was having trouble with if's
+316,2/20/2017 10:25,HW3,2,didn't understand problem
+121,2/20/2017 13:26,HW3,5,Needed help figuring out logic for HW3 part 4
+316,2/20/2017 14:20,HW3,2,needed help keeping track of answer for part2 and getting started part4
+369,2/20/2017 15:00,OTHERS,3,put a comment on every single line; told to only comment loops and large blocks
+151,2/21/2017 13:55,HW3,2,Needed help with structuring code
+151,2/21/2017 14:06,HW3,4,requested again
+305,2/21/2017 14:15,HW3,3,confused on multiple conditions for while
+151,2/21/2017 14:27,HW3,2,putting psudeocode to code
+305,2/21/2017 14:45,HW3,2,Student left (didn't respond?)
+151,2/21/2017 14:49,HW3,2,Confused on what was in the while loop
+151,2/21/2017 15:13,HW3,2,Couple of logic errors
+305,2/21/2017 15:20,HW3,3,syntax error
+358,2/21/2017 15:30,HW3,4,"syntax error, > vs >="
+305,2/21/2017 15:37,HW3,3,"logic error, < vs >"
+335,2/21/2017 19:01,LAB3,4,showed lab3 (didnt finish) and question about hw3
+227,2/22/2017 10:02,HW3,5,hw3 clarifications
+158,2/22/2017 10:29,LAB4,3,confused on while loop conditions
+278,2/22/2017 10:30,HW3,5,issue with conditions on hw3 p2 and p4
+102,2/22/2017 10:34,HW4,5,confused about indenting & code belonging to blocks
+102,2/22/2017 11:17,HW3,3,Incorrect order of action within a sent. loop
+278,2/22/2017 11:28,HW3,5,"manipulating print statments/ end =  """""
+118,2/22/2017 11:57,HW3,5,"manipulating print statments/ end =  """""
+124,2/22/2017 12:11,HW3,5,cleaning file directory and homework parameter clarification
+173,2/22/2017 12:57,HW3,5,Needed help thinking through part 2
+173,2/22/2017 13:26,HW3,3,Needed help thinking through part 3 and what to use for the while loop
+151,2/22/2017 15:03,OTHERS,3,Needed to be walked through lab 3
+184,2/22/2017 15:18,HW3,4,Needed help with the hailstone problem 
+155,2/22/2017 15:19,HW3,2,"Created a directory instead of a file, wanted to know about comments, and questionable This works but I don't know why it works"
+155,2/22/2017 15:36,HW3,2,Repeat?
+155,2/22/2017 15:36,HW3,2,Variable naming conventions question
+184,2/22/2017 16:15,HW3,3,"Infinite Loop, not updating condition"
+120,2/22/2017 16:24,HW3,5,"Not here, told me they signed in 10 minutes before coming in :( "
+217,2/23/2017 12:00,HW3,5,Needed help with when to update a variable when to print the box correctly 
+310,2/23/2017 12:08,OTHERS,5,Just wanted to double check that his logic for part3 was a valid use of a while loop
+316,2/23/2017 12:28,HW3,2,"Understanding what the ' end="" ' was doing when print each character in the line"
+162,2/23/2017 12:31,HW3,4,Needed help with how to structure while loops in part4
+112,2/23/2017 12:38,HW3,2,
+364,2/23/2017 12:58,OTHERS,3,Didn't understand loops within loops
+292,2/23/2017 13:02,HW3,3,Didnt understand counters or nested while loops
+302,2/23/2017 13:04,HW3,3,Needed help understanding how while loops check values
+151,2/23/2017 13:07,HW3,2,Needed help understanding the if/elif
+112,2/23/2017 13:41,HW3,3,student left
+184,2/23/2017 13:42,HW3,3,Printing inside while loops (had two seperate loops)
+297,2/23/2017 14:19,HW3,3,trying to compare to a value that isn't updated in loop
+151,2/23/2017 14:22,HW3,2,print(count+=1)
+173,2/23/2017 14:23,HW3,5,"needed help seeing the patterns for part 4 (width * height, rows end in width*count, etc)"
+364,2/23/2017 14:56,HW3,3,"needed help seeing the patterns for part 4 (width * height, rows end in width*count, etc)"
+173,2/23/2017 15:00,HW3,5,part 4 help - going from printing 1 line to all the lines
+169,2/23/2017 15:10,HW3,4,"part 3, variables were all over the place. forgot how to update a variable's value"
+364,2/23/2017 15:18,HW3,3,"had part 4 started, hopefully i got her on the right track for when to print the new lines"
+179,2/23/2017 15:53,OTHERS,3,not here
+138,2/23/2017 15:55,HW3,4,Part 1 logic
+356,2/23/2017 15:56,HW3,4,Part 4 printing
+253,2/23/2017 16:00,HW3,4,Part 2 logic. How to divide? (Use subtraction)
+302,2/23/2017 16:01,HW3,3,How to figure out if a number is even (part 3)
+190,2/23/2017 16:05,HW3,3,"Had a solution to part 4 that didn't have a while loop, was confused about intended solution"
+169,2/23/2017 16:11,HW3,2,Part 4 using a double while loop - he thought of that strategy but had trouble implementing it (syntax)
+138,2/23/2017 16:15,HW3,3,confused on when to reprompt for while loop
+356,2/23/2017 16:19,HW3,4,confused on printing in part 4
+138,2/23/2017 16:28,HW3,2,nneded help with setting up the while loop
+253,2/23/2017 16:41,HW3,5,needed help with printing
+302,2/23/2017 16:56,HW3,3,part 4 logic
+138,2/23/2017 16:56,HW3,3,off by one error
+297,2/23/2017 17:02,HW3,4,wanted confirmation on what to do :)
+302,2/23/2017 17:13,HW3,3,"didn't knwo  about end="""
+138,2/23/2017 17:14,HW3,2,forgot about %
+297,2/23/2017 17:17,HW3,4,infinite loop
+292,2/23/2017 17:17,HW3,4,resetting counter
+297,2/23/2017 17:25,HW3,4,if-elif probs
+138,2/23/2017 17:30,HW3,3,syntax error
+190,2/23/2017 17:34,HW3,2,algorithm for part4
+302,2/23/2017 17:40,HW3,3,algorithm for part2
+138,2/23/2017 17:51,HW3,3,part4
+227,2/24/2017 10:01,HW3,5,"Needed clues as to how to get the box"" shape (new lines)"""
+306,2/24/2017 10:04,HW3,5,Needed help with doing division without actually using the operator.
+101,2/24/2017 10:09,HW3,5,Helped her with part 4: Mentioned how % would be helpful
+174,2/24/2017 10:16,HW3,2,Needed help with doing division without actually using the operator.
+285,2/24/2017 10:18,HW3,4,Needed help fixing her code structure
+101,2/24/2017 10:42,HW3,2,Needed help with positioning print statements
+110,2/24/2017 10:59,HW3,3,Needed help with part4: How to get the newlines
+306,2/24/2017 11:06,HW3,5,Needed help with hailstones
+268,2/24/2017 11:10,HW3,5,Was actually multiplying a list height times.
+137,2/24/2017 11:13,HW3,3,printing box in hw-- confused about order of if statement execution
+285,2/24/2017 11:27,HW3,4,Hinted that using % would be more helpful since comparing to width would not work.
+306,2/24/2017 11:27,HW3,2,if statement ordering
+331,2/24/2017 11:40,HW3,4,lab update
+269,2/24/2017 11:42,HW3,2,Wanted me to reiterate that you may NOT use the division operator for part 4.
+174,2/24/2017 11:44,HW3,2,Else statement accounted for =1 AND odd.
+253,2/24/2017 11:47,LAB4,5,Explained to him that another variable to total up the numbers MIGHT be useful.
+108,2/24/2017 11:48,HW3,3,Explained to her that division is similar to subtracting multiple times and that you want to count how many times a number goes into another to replicate what the division operator does.
+124,2/24/2017 14:04,HW3,5,Having trouble with creating box
+151,2/24/2017 14:06,HW3,3,needed help with condition for while loop
+174,2/24/2017 14:06,HW3,2,Needed help figuring out how to move to next line for box
+108,2/24/2017 14:07,HW3,3,had > instead of >=
+120,2/24/2017 14:11,HW3,5,student left
+274,2/24/2017 14:12,HW3,3,printing to a new line
+135,2/24/2017 14:12,HW3,2,not updating looping variable
+258,2/24/2017 14:13,OTHERS,5,needed to store the variable he was subtracting to print at the end
+335,2/24/2017 14:19,HW3,2,nevermind
+130,2/24/2017 14:20,HW3,3,need help starting part 4
+232,2/24/2017 14:23,HW3,5,understanding when variables update
+262,2/24/2017 14:29,HW3,4,Needed help with conditions for while loop and if statement
+108,2/24/2017 14:30,HW2,3,need help starting part 4
+130,2/24/2017 14:35,HW3,2,needed help starting part4
+120,2/24/2017 14:36,HW3,5,needed help with looping 
+306,2/24/2017 14:41,HW3,5,Needed assistance with getting while loops to run enough times
+135,2/24/2017 14:43,HW3,2,nevermind
+232,2/24/2017 14:46,HW3,5,"needed help with end =  """""
+124,2/24/2017 14:46,HW3,5,"needed help with end =  """""
+335,2/24/2017 14:53,HW3,2,"needed help with end =  """""
+171,2/24/2017 15:02,HW3,4,stuck on how to implement while loop  for part 4
+174,2/24/2017 15:05,HW3,1,Updated height before printing
+151,2/24/2017 15:10,HW3,5,Needed help thinking through the part4 counter
+329,2/24/2017 15:11,HW3,4,nevermind (came up to me and said he was good)
+108,2/24/2017 15:12,HW3,3,needed help with using mod (the new line)
+258,2/24/2017 15:18,HW3,4,infinite loop
+174,2/24/2017 15:30,HW3,1,student left
+130,2/24/2017 15:32,HW3,2,Had to leave so helped early. Was updating height before printing
+296,2/24/2017 15:33,OTHERS,2,needed hash files explained
+274,2/24/2017 15:33,HW3,5,needed help with while loop logic
+346,2/24/2017 15:37,HW3,3,
+124,2/24/2017 15:41,HW3,5,needed help with while loop logic
+130,2/24/2017 15:54,HW3,2,needed help with part 3
+232,2/24/2017 15:54,HW3,5,Wasn't looping enough
+258,2/24/2017 16:04,HW3,5,infinite loop when hail at 0
+171,2/24/2017 16:07,HW3,4,even vs odd (modulus)
+151,2/24/2017 16:15,HW3,5,whiteboarding the while loop
+167,2/24/2017 16:22,HW3,4,needed help with using mod for new line
+171,2/24/2017 16:24,HW3,3,infinite loop on hailstone (using new variable for calculations)
+232,2/24/2017 16:29,HW3,5,while loop went 1 step too far
+258,2/24/2017 16:43,HW3,3,using modulus for if statement
+118,2/27/2017 14:03,HW4,5,"part4: wasn't appending the last element, part2: need help comparing strings"
+118,2/27/2017 14:31,HW4,2,printing after one character that wasn't !
+155,2/27/2017 14:43,HW4,5,need help with order inside while loop part 3
+369,2/27/2017 14:54,HW4,4,wasnt sure whether or not to use a constant
+130,2/28/2017 12:48,LAB5,2,Needed help understanding a counter and how lists work (Needed help with the lab and NOT HW4)
+302,2/28/2017 13:22,LAB5,3,Needed help with the lab didn't understand how to change a certain element in a list
+316,2/28/2017 13:30,HW4,2,Needed to change the order of his while loop (stored data before asking for data)
+130,2/28/2017 14:19,HW4,2,wrong sentienel value
+173,2/28/2017 14:54,OTHERS,2,priniing index as index+1
+215,2/28/2017 19:26,HW4,5,
+215,2/28/2017 19:39,HW4,4,
+184,3/1/2017 10:05,HW4,2,didn't get you could use variables as indexers
+237,3/1/2017 11:54,HW4,4,upper/lower didnt know if taught/could use
+262,3/1/2017 12:04,HW4,4,Appending to a list
+101,3/1/2017 12:10,HW4,4,upper/lower didint know how to use
+173,3/1/2017 12:14,OTHERS,3,Lab 4 incrementing single items in a list
+297,3/1/2017 12:16,HW4,3,Not using a whiel loop to print contents of a lsit
+262,3/1/2017 12:37,HW4,2,THE POWER OF SLICING
+262,3/1/2017 12:50,HW4,3,infinite loops needed better sentiels
+297,3/1/2017 12:57,HW4,3,Needed help using counter to print out two lists at once.
+262,3/1/2017 13:02,HW4,4,Was printing out whole list instead of item at each index
+237,3/1/2017 13:07,HW4,3,"Created a list of empty "", then was appending"
+297,3/1/2017 13:14,HW4,2,Needed explanation of how .lower() and .upper() works
+173,3/1/2017 13:15,OTHERS,4,Needed help understanding the lab (had lab earlier before this)
+262,3/1/2017 13:25,HW4,2,Needed reminder of .lower() and .upper() functions
+143,3/1/2017 15:13,LAB5,5,Needed help with the lab 
+242,3/1/2017 15:15,HW4,4,Confusion on how to use .lower()
+356,3/1/2017 15:18,HW4,3,"Part 4 of the homework, asked for quanitity even when the user entered stop "
+184,3/1/2017 15:22,HW4,3,Grocery list input problem 
+242,3/1/2017 15:27,HW4,4,nevermind
+356,3/1/2017 15:38,OTHERS,2,Walked through live coding problem 
+155,3/1/2017 15:41,HW4,3,Help with \t and the ology part of the homework
+242,3/1/2017 15:44,HW4,5,Wasnt accessing the sting with []
+173,3/2/2017 11:58,HW4,4,Needed help with getting out of a while loop with QUIT
+310,3/2/2017 12:14,OTHERS,5,Questions about formating output
+138,3/2/2017 12:20,HW4,3,Needed an intro to lists 
+316,3/2/2017 12:25,HW4,3,How to use boolean flags to check whether the string had an exclamation point or not
+118,3/2/2017 12:40,HW4,5,
+118,3/2/2017 12:58,HW4,5,requested again
+118,3/2/2017 12:59,HW4,5,requested again
+138,3/2/2017 13:03,HW4,3,
+184,3/2/2017 13:03,HW4,3,
+334,3/2/2017 13:04,HW4,5,student left
+302,3/2/2017 13:06,HW4,3,"Needed help with mv, appened STOP to list which gave indexOutOfBounds"
+262,3/2/2017 13:12,HW4,4,Structural stuff with ifs inside while loop
+356,3/2/2017 13:24,HW4,3,"used class as variable name which isnt allowed in python, but doesn't show na appropriate error"
+138,3/2/2017 13:42,HW4,2,needed help with the input validation while loop
+329,3/2/2017 13:43,HW4,4,needed help with finding exclamation point
+160,3/2/2017 14:03,HW4,5,didn't understand how upper works
+292,3/2/2017 14:16,HW4,2,student left
+173,3/2/2017 14:19,HW4,4,didn't understand how lower works
+138,3/2/2017 14:30,HW4,3,emacs sux
+130,3/2/2017 14:34,HW4,3,lots of questions about how while loops and booleans etc
+297,3/2/2017 14:50,HW4,4,Had two while loops instead of one
+138,3/2/2017 15:08,HW4,4,was doing pw validation checks inside loop thru the whole string
+173,3/2/2017 15:11,HW4,4,"part 2 lowercase + !"" check logic"""
+160,3/2/2017 15:15,HW4,3,had <= len()
+138,3/2/2017 15:16,HW4,4,infinite while loop hidden in her program
+130,3/2/2017 15:28,HW4,3,"had it mostly there, just had output while loop inside of the input while loop (part 3"
+137,3/2/2017 15:35,HW4,3,student left ?
+173,3/2/2017 15:41,HW4,4,needs to only print when password is definitely invalid (had all checks working though)
+262,3/2/2017 15:46,HW4,4,was setting if password is valid to false every time
+169,3/2/2017 15:50,HW4,3,"was trying to turn a string into a list, which is superfluous"
+160,3/2/2017 15:52,OTHERS,2,"had the right idea for slicing in part 4, just needed help with syntax"
+138,3/2/2017 15:54,HW4,3,"no syntax error when i got there, but small while loop logic issue"
+302,3/2/2017 15:57,HW4,4,didn't know how to check for if password is all lower or has !
+215,3/2/2017 16:05,HW4,5,how to figure out if a string was all lowercase (had a constant with all capital alphabetical characters so I steered her away from that approach)
+130,3/2/2017 16:12,HW4,3,Needed help with a ton of errors in a ton of files
+184,3/2/2017 16:19,HW4,3,lowercase part of part2
+215,3/2/2017 16:19,HW4,5,requested again (part 4 logical setup)
+262,3/2/2017 16:19,HW4,4,part 2 lowercase logic stuff
+173,3/2/2017 16:19,HW4,3,"needed help with print statement output and using \t"""""
+138,3/2/2017 16:26,HW4,3,"also needed help with print statement output and using \t"""""
+169,3/2/2017 16:26,HW4,3,"thought that a string entered by the user had to be declared like in examples with strName = blahblah"" in order to be indexed"""
+253,3/2/2017 16:34,HW4,5,was stuck on counting loops (looping thru the password to check for a !)
+184,3/2/2017 16:51,HW4,3,needed to know if had to loop character by chatacter to check for !
+173,3/2/2017 16:55,HW4,2,"had an if statement instead of a while for input, also needed help with logic to check for ology"""""
+139,3/2/2017 16:55,HW4,5,wasn't resetting count in while loop
+138,3/2/2017 17:00,HW4,3,needed help with what to do for part 4
+302,3/2/2017 17:05,HW4,3,needed help with how to check for !
+262,3/2/2017 17:08,HW4,4,needed help with checking every letter for ! logic
+253,3/2/2017 17:20,HW4,5,needed help with structuring code- didn't have while loop to check for valid password
+173,3/2/2017 17:28,HW4,3,help with string slicing
+232,3/2/2017 17:30,HW4,5,"ran out of time to help student, gave advice on how to check for !"
+358,3/2/2017 17:53,HW4,4,helped with formatting on my way out
+137,3/3/2017 10:00,HW4,3,"Wasn't sure if using in"" and ""not in"" was allowed. (?)"""
+227,3/3/2017 10:01,HW4,5,Had an unnecessary if statement in her while loop.
+215,3/3/2017 10:01,HW4,5,Needed help with string slicing.
+130,3/3/2017 10:01,HW4,3,student left
+121,3/3/2017 10:04,HW4,4,Had while block in the wrong area.
+268,3/3/2017 10:09,HW4,3,Needed help with string slicing.
+215,3/3/2017 10:18,HW4,5,finding if char not in string
+278,3/3/2017 10:21,HW4,5,finding if char not in string
+174,3/3/2017 10:31,HW4,1,Needed help figuring out what to put in the while list to print out the checklist.
+120,3/3/2017 10:35,HW4,5,Needed help with string slicing.
+215,3/3/2017 10:45,HW4,5,reseting counter each time while loop runs
+154,3/3/2017 10:50,HW4,4,finding if char NOT in string
+173,3/3/2017 10:59,HW4,3,slicing string that has been indexed from list
+138,3/3/2017 10:59,HW4,3,Needed help with string slicing.
+143,3/3/2017 11:00,HW4,5,needed help with string slicing.
+331,3/3/2017 11:23,HW4,3,"Did not know about len(myList), so I had to teach him lists."
+138,3/3/2017 11:25,HW4,3,slicing string that has been indexed from list
+108,3/3/2017 11:32,HW4,3,"student left, not sure what happened with the following names"
+278,3/3/2017 11:32,HW4,5,office hours over
+120,3/3/2017 11:34,HW4,5,office hours over
+143,3/3/2017 11:37,HW4,5,part 3 not entering quantity when entering stop
+253,3/3/2017 11:39,LAB5,5,office hours over
+215,3/3/2017 11:46,HW4,5,office hours over
+135,3/3/2017 13:59,HW4,3,How to use .lower to check lowercase
+306,3/3/2017 14:00,HW4,5,part 3 not entering quantity when entering stop
+174,3/3/2017 14:00,HW4,2,part 1 was incrementing count before printing
+262,3/3/2017 14:00,HW4,4,"needed help with slicing ology"""
+173,3/3/2017 14:01,HW4,3,need help checking for ! 
+151,3/3/2017 14:01,HW4,2,Question about upper and lower and iterating through a string
+105,3/3/2017 14:01,HW4,5,checking for !
+122,3/3/2017 14:01,HW4,5,"needed help keeping track of !"""""
+302,3/3/2017 14:01,HW4,3,Structuring conditionals with while loop 
+278,3/3/2017 14:03,HW2,5,loop structure incorrect
+184,3/3/2017 14:03,HW4,3,tried to make string into a list
+274,3/3/2017 14:05,HW4,5,"wasn't sure how to iterate and check for !"""
+232,3/3/2017 14:05,HW4,5,checking for !
+243,3/3/2017 14:06,HW4,5,not appending last item to grocery list
+108,3/3/2017 14:07,HW2,3,"understaind how to find the !"""""
+350,3/3/2017 14:07,HW4,5,understanding indexing
+157,3/3/2017 14:08,HW2,2,"trouble with !"" checking"""
+306,3/3/2017 14:10,HW4,5,needed help with multiple parts
+176,3/3/2017 14:10,HW4,5,wrong slice at end of string
+258,3/3/2017 14:10,HW4,5,"trouble with !"" checking"""
+242,3/3/2017 14:15,HW4,5,"trouble with slicing, actual problem is layout of loops"
+120,3/3/2017 14:15,HW4,5,"trouble with checking for !"""""
+297,3/3/2017 14:17,HW4,3,had trouble understanding indexing
+329,3/3/2017 14:25,HW4,4,slicing string for last character
+174,3/3/2017 14:26,HW4,1,trouble checking for if it's lowercase
+143,3/3/2017 14:29,HW4,5,"trouble with checking for !"""""
+135,3/3/2017 14:32,HW4,3,had problems with logical positioning 
+262,3/3/2017 14:32,HW4,4,"needs to separate list creation from checking for ology"""""
+105,3/3/2017 14:36,HW2,5,needed help understanding slicing with len
+173,3/3/2017 14:40,HW4,4,"trouble with checking for !"""""
+278,3/3/2017 14:44,HW2,5,Had issues with indexing syntax
+108,3/3/2017 14:45,HW4,3,"had problem asking for qunatity after entering """
+151,3/3/2017 14:45,HW4,2,wasn't setting boolean flags to false
+306,3/3/2017 14:47,HW4,5,student left
+232,3/3/2017 14:54,HW2,5,help with controlling while loops for password
+244,3/3/2017 14:59,HW4,5,What the question asked. Very succicent 
+121,3/3/2017 15:02,HW4,5,was missing setting a boolean
+184,3/3/2017 15:04,HW4,3,"needed help slicing for ology"""""
+189,3/3/2017 15:04,HW4,5,"was slicing the list, not the string"
+243,3/3/2017 15:14,HW4,4,exclamation case
+302,3/3/2017 15:14,HW4,4,"trouble with checking for !"""""
+122,3/3/2017 15:18,HW4,5,Forgot to update counters 
+258,3/3/2017 15:18,HW4,4,Missing parens
+130,3/3/2017 15:20,HW4,3,checking for !
+120,3/3/2017 15:21,HW4,5,extra input() at end of while loop
+171,3/3/2017 15:22,HW4,4,wrong code order
+274,3/3/2017 15:29,HW4,5,small problems with boolean flag
+157,3/3/2017 15:32,HW4,1,"needed help determining location of """
+242,3/3/2017 15:35,HW4,5,student left
+108,3/3/2017 15:38,HW4,3,looping through a list and printing
+135,3/3/2017 15:44,HW4,3,help with appending 10 classes
+151,3/3/2017 15:55,HW4,2,was using password for both boolean and string
+262,3/3/2017 16:09,HW4,4,not accessing element of list inside while loop
+187,3/3/2017 16:13,HW4,3,asking for password again inside if statements
+108,3/3/2017 16:14,HW4,3,appending 10 items to list
+244,3/3/2017 16:30,HW4,5,infinite loop due to not updating loop variable
+174,3/3/2017 16:34,HW4,2,"wasn't using a while loop to check for !"""""
+258,3/3/2017 16:34,HW4,4,Variable slicing
+243,3/3/2017 16:38,HW4,3,checking for !
+105,3/3/2017 16:39,HW4,5,was using class as a variable
+130,3/3/2017 16:42,HW4,3,checking if lowercase
+171,3/3/2017 16:43,HW4,4,office hours over
+189,3/3/2017 16:46,HW4,5,office hours over
+151,3/3/2017 16:47,HW4,2,office hours over
+331,3/3/2017 16:52,HW4,4,office hours over
+302,3/3/2017 17:00,HW4,5,office hours over
+187,3/3/2017 17:00,HW4,2,office hours over
+305,3/6/2017 14:41,LAB5,5,need help tallying and printing votes for lab 5
+305,3/6/2017 15:29,PROJ1,2,Questions about the design doc
+310,3/7/2017 12:25,OTHERS,5,Questions about tabing 
+174,3/7/2017 13:18,OTHERS,2,Needed help understanding return statements
+310,3/7/2017 13:26,OTHERS,1,I told him why sometimes it might over tab. I told him that as long as his outputs are easy to read he should be fine when it comes to grading.
+149,3/8/2017 10:19,PROJ1,2,just needed sanity check
+130,3/8/2017 11:07,LAB6,3,"I helped earlier, jsut forgot to input name as I wlaked over. She needed help with how function return and call each other. "
+105,3/8/2017 11:21,OTHERS,2,Functions and how their returns work
+155,3/8/2017 11:42,PROJ1,3,How to comment
+136,3/8/2017 12:32,PROJ1,4,"No show, also checked when it first popped jsut forgot to add name"
+297,3/8/2017 13:38,PROJ1,3,Didn't realize they could use the same function to get min and max value from user
+151,3/8/2017 15:06,PROJ1,3,"Not sure on function returns and formal paramaters, core ideas of functions"
+128,3/8/2017 15:18,PROJ1,4,Questions about design doc
+151,3/8/2017 15:32,PROJ1,2,Help with the divisor hierarchy 
+310,3/9/2017 12:02,OTHERS,5,Needed help with print table
+151,3/9/2017 12:02,PROJ1,3,understanding print table
+138,3/9/2017 12:03,OTHERS,3,Starting the design doc
+316,3/9/2017 12:20,LAB6,4,Help with lab6 functions
+151,3/9/2017 12:37,PROJ1,2,Needed a bit more help than should be given
+118,3/9/2017 12:55,PROJ1,4,Confused by inputs/outputs
+245,3/9/2017 13:01,OTHERS,5,Needed help with appending return value to list
+262,3/9/2017 13:07,PROJ1,3,Didn't know where to start
+250,3/9/2017 13:16,LAB6,2,needed lab regrade
+310,3/9/2017 13:22,OTHERS,5, <----- NEEDS EXECUTIVE DECISION FROM Avery
+151,3/9/2017 13:28,PROJ1,2,
+118,3/9/2017 13:30,PROJ1,2,student left
+138,3/9/2017 13:48,OTHERS,5,question about design
+292,3/9/2017 14:02,PROJ1,3,design question
+334,3/9/2017 14:05,PROJ1,4,design question
+245,3/9/2017 14:08,OTHERS,5,syntax error on a list - but not fully understanding the concept of main
+151,3/9/2017 14:08,PROJ1,2,needed help understanding triangle
+173,3/9/2017 14:31,PROJ1,3,understanding helper functions
+151,3/9/2017 14:32,PROJ1,3,checking to make sure tirangle function worked
+369,3/9/2017 14:42,PROJ1,4,wanted their design checked
+130,3/9/2017 14:45,PROJ1,3,
+173,3/9/2017 15:11,PROJ1,3,understanding the concept of helper functions
+245,3/9/2017 15:38,OTHERS,5,understanding the concept of helper functions
+359,3/9/2017 15:42,LAB6,4,student left ?
+302,3/9/2017 15:42,PROJ1,2,just checking what we actually want in the design doc
+305,3/9/2017 15:53,LAB6,3,"working on lab 6, understanding functions (...and lists and while loops)"
+237,3/9/2017 16:06,PROJ1,4,showed me his pseudocode document for verification that it was correct
+245,3/9/2017 16:18,OTHERS,2,called the function an extra time before while loop
+173,3/9/2017 16:25,PROJ1,4,needed help with the logic for functions
+136,3/9/2017 16:38,PROJ1,4,wanted design checked (making sure he understood what it was asking for)
+305,3/9/2017 16:41,LAB6,4,nevermind- already had it figured out
+245,3/9/2017 16:51,OTHERS,2,"wanted to divide by all prior number, would not have worked"
+139,3/9/2017 16:53,PROJ1,5,input only takes 1 argument (unlike print)
+245,3/9/2017 17:12,OTHERS,1,clarification on how to print results
+139,3/9/2017 17:13,PROJ1,5,verified the relationship between variables and functions
+137,3/10/2017 10:03,PROJ1,4,Needed help with function headers.
+173,3/10/2017 10:03,PROJ1,3,Did not know that functions do not need pseudocode yet.
+227,3/10/2017 10:04,PROJ1,5,Needed clarification of what function headers should look like.
+173,3/10/2017 10:04,PROJ1,3,requested again
+137,3/10/2017 10:26,OTHERS,1,Wanted to know how you would calculate triangular numbers..?
+292,3/10/2017 10:27,PROJ1,4,Confused about how detailed her pseudocode should be.
+227,3/10/2017 10:36,PROJ1,5,"Had an obnoxious amount of #'s and was wondering if that was OK."""""
+329,3/10/2017 10:37,PROJ1,5,Wanted to know whether or not the functions needed pseudocode.
+173,3/10/2017 10:45,PROJ1,2,Was initializing functions inside of main.
+292,3/10/2017 11:08,PROJ1,4,Wanted me to check on the pseudocode in their main() function.
+264,3/10/2017 11:12,PROJ1,3,was confused about level of detail needed in design
+242,3/10/2017 11:17,PROJ1,4,"Taught him about \t"""""
+173,3/10/2017 11:24,PROJ1,3,Wanted to know if you need to write the function calls in main().
+261,3/10/2017 11:29,LAB6,5,lab 5 help
+232,3/10/2017 11:34,PROJ1,2,Did not know what the design document was for.
+143,3/10/2017 11:43,PROJ1,2,Wanted clarification about how detailed pseudocode should be.
+245,3/10/2017 11:45,PROJ1,5,Unsure about his pseudocode. 
+358,3/10/2017 11:52,PROJ1,5,"Wanted to know if he could deviate"" from the example design."""
+245,3/10/2017 12:06,PROJ1,1,office hours over
+262,3/10/2017 13:56,PROJ1,4,Help with how to structure design doc and functions
+135,3/10/2017 13:58,PROJ1,2,need help getting started with triangle numbers
+184,3/10/2017 14:00,PROJ1,3,wasn't sure how some functions given interacted with each other
+160,3/10/2017 14:06,PROJ1,4,wasn't sure about when and how getValidInt() was called in main
+276,3/10/2017 14:18,PROJ1,4,question about how many different fuctions needed
+313,3/10/2017 14:27,PROJ1,5,Question about detail required on design document
+143,3/10/2017 14:42,PROJ1,4,making sure that all functions needed were in the design document
+108,3/10/2017 14:50,PROJ1,2,Help with how to approach the design document
+261,3/10/2017 14:51,HW3,5,going back over an old homework
+261,3/10/2017 15:04,HW3,5,help with old hw (number boxes)
+262,3/10/2017 15:14,PROJ1,1,Question about powerpoint 
+261,3/10/2017 15:26,HW4,5,help with old hw (passwprd)
+108,3/10/2017 15:28,OTHERS,2,Needed clarification of main 
+171,3/10/2017 15:45,PROJ1,2,Needed to add fuction headers and flush out main
+108,3/10/2017 15:51,OTHERS,3,design - main
+297,3/10/2017 16:12,PROJ1,2,help with functions (project)
+157,3/10/2017 16:22,PROJ1,3,design questions
+152,3/10/2017 16:30,PROJ1,2,input only takes 1 argument (unlike print)
+297,3/10/2017 16:42,PROJ1,1,actual vs formal parameters
+227,3/13/2017 10:05,PROJ1,5,sumDivisors code
+354,3/13/2017 10:05,PROJ1,5,comprehending how main is supposed to work
+278,3/13/2017 10:08,PROJ1,5,help with getValidInt
+227,3/13/2017 10:26,PROJ1,2,not understanding sumDivisors and how it works with isPrime and isPerfect
+278,3/13/2017 10:41,PROJ1,5,problems understanding how getValidInt works
+227,3/13/2017 10:43,PROJ1,2,problems with tabs
+334,3/13/2017 11:17,PROJ1,5,"Wanted to know when lab7 comes out. Wanted to know if it was ok to return Odd/Even"" instead of True/False"""
+174,3/13/2017 11:24,LAB7,2,Needed help understanding formal parameters and return statements
+278,3/13/2017 11:28,OTHERS,3,Needed help understanding why loop wasnt working and how to fix it
+334,3/13/2017 11:40,PROJ1,5,Input validation question
+242,3/13/2017 11:49,PROJ1,4,Wanted help with input validation
+174,3/13/2017 12:22,LAB7,2,Not during when office hours were being held (form should have been closed)
+121,3/13/2017 13:01,PROJ1,5,Needed clarification on when to use constants and comments
+334,3/13/2017 13:10,OTHERS,3,Wanted verification on how triangular function should work.
+334,3/13/2017 13:29,PROJ1,1,Wanted to create a list of numbers in the range of the user
+138,3/13/2017 13:31,PROJ1,4,Needed help on where to start coding
+138,3/13/2017 14:01,PROJ1,3,pointed her to lab 6 for getValidInt()
+316,3/13/2017 14:19,PROJ1,3,help with isolating whole part of a number for checking if square
+369,3/13/2017 14:35,PROJ1,5,Wanted to know if his function headers were correct or not.
+174,3/13/2017 14:45,LAB7,2,Question about parameters and how to pass things into a function
+135,3/13/2017 15:01,PROJ1,5,How to call functions with variables from previous functions 
+174,3/13/2017 15:04,LAB7,2,Lab 7 questions 
+253,3/13/2017 15:04,PROJ1,2,Move and copy commands
+369,3/13/2017 15:10,OTHERS,2,When to use tuples and why 
+174,3/13/2017 15:20,LAB7,1,Syntax error (Variable spelling)
+253,3/13/2017 15:32,PROJ1,2,How to test functions (calling and returns) and line wrapping
+133,3/13/2017 15:37,OTHERS,2,Going over review guide
+107,3/13/2017 15:43,PROJ1,3,Calling functions and returns 
+253,3/13/2017 15:57,PROJ1,2,Sentinel loops for input validation 
+107,3/13/2017 16:05,PROJ1,2,Logic for isPrime()
+329,3/13/2017 16:39,PROJ1,3,wanted help translating his pseudocode to actual code
+278,3/15/2017 10:01,PROJ1,4,iterating through lists with counter correctly
+306,3/15/2017 10:05,LAB7,4,problem with double while loop and comparing words instead of indexes 
+112,3/15/2017 10:06,LAB7,2,lab 7 - getting individual charcters
+262,3/15/2017 10:06,PROJ1,4,help with functions
+221,3/15/2017 10:09,Midterm,4,finding errors in code
+142,3/15/2017 10:09,PROJ1,4,Help with isPrime
+354,3/15/2017 10:11,LAB7,5,index of range with while loop
+112,3/15/2017 10:23,LAB7,2,double indexing
+278,3/15/2017 10:23,PROJ1,4,problems returning flase 
+142,3/15/2017 10:30,PROJ1,4,understanding how to loop
+354,3/15/2017 10:32,LAB7,2,understanding loops
+221,3/15/2017 10:39,Midterm,3,exam review - magic numbers
+174,3/15/2017 10:45,LAB7,2,
+221,3/15/2017 10:46,PROJ1,2,newline char and porject formatting
+155,3/15/2017 10:46,PROJ1,3,
+278,3/15/2017 10:47,PROJ1,4,algorithm help
+137,3/15/2017 10:59,LAB7,4,Lab 7 double while loop help 
+306,3/15/2017 11:05,LAB7,4,Lab 7 concatenation
+329,3/15/2017 11:17,LAB7,3,Lab 7 walk through and isDivisor/sum Divisor walk through 
+137,3/15/2017 11:18,LAB7,4,Double Indexing
+155,3/15/2017 11:18,PROJ1,3,Question about project 1 output
+155,3/15/2017 11:18,PROJ1,3,student left
+221,3/15/2017 11:19,PROJ1,2,Question on project coding standards
+174,3/15/2017 11:25,LAB7,2,Double Indexing
+278,3/15/2017 11:27,PROJ1,5,Googlling formula for triangle nums
+268,3/15/2017 11:30,PROJ1,3,Double Indexing
+137,3/15/2017 11:48,LAB7,4,student left
+310,3/15/2017 11:48,PROJ1,5,Confirming coding standards
+130,3/15/2017 12:06,OTHERS,3,"Lots of stuff, in serious trouble"
+261,3/15/2017 12:14,Midterm,2,Exam Review Sheet
+268,3/15/2017 12:20,LAB7,1,Counter PLacement inside while loops
+110,3/15/2017 12:29,PROJ1,3,Forgot about mod
+310,3/15/2017 12:31,OTHERS,4,Coding standards
+237,3/15/2017 12:37,LAB7,3,Counter Placement inside loops
+297,3/15/2017 12:38,PROJ1,3,Bad logic in his Math comparisons
+174,3/15/2017 12:42,OTHERS,1,was already g2g
+357,3/15/2017 12:47,PROJ1,5,How to do triangular numbers and how to do perfects
+297,3/15/2017 13:19,PROJ1,2,Needed help with creating the logic behind finding a square number
+169,3/15/2017 13:29,PROJ1,3,Wasn't in bash
+262,3/15/2017 13:34,PROJ1,4,Needed help with creating the logic behind finding a triangular number
+357,3/15/2017 13:36,PROJ1,5,Needed help understanding syntax error
+130,3/15/2017 13:46,OTHERS,2,
+262,3/15/2017 14:05,PROJ1,5,Isperfect walk through 
+118,3/15/2017 14:10,PROJ1,5,Infinite while loops everywhere
+120,3/15/2017 14:36,LAB7,2,Needed help with nested while loop
+135,3/15/2017 14:41,PROJ1,4,Figured it out/Table header clarification 
+138,3/15/2017 14:53,LAB7,5,Tools to do lab 7
+138,3/15/2017 14:54,LAB7,2,requested again
+184,3/15/2017 14:58,LAB7,3,Nested while loop 
+118,3/15/2017 15:02,PROJ1,5,requested again
+151,3/15/2017 15:06,PROJ1,4,Now needed help with isPrime()
+143,3/15/2017 15:14,LAB7,3,List Index out of range 
+274,3/15/2017 15:19,PROJ1,5,needed someone to talk to
+297,3/15/2017 15:20,PROJ1,2,Told him to look at hailstone project to see how to see if a number is divisible by another
+285,3/15/2017 15:31,PROJ1,5,not here
+138,3/15/2017 15:38,LAB7,3,wasn't sure how function parameters could have new variable names
+305,3/15/2017 15:39,LAB7,2,double indexing and strings as lists
+110,3/15/2017 15:47,PROJ1,4,Lining up with \t
+143,3/15/2017 15:48,LAB7,5,code blocks & nested while loops
+138,3/15/2017 15:48,LAB7,3,Repeat
+138,3/15/2017 15:49,PROJ1,5,Repeat
+135,3/15/2017 15:53,PROJ1,3,"is printing out all numbers, wanted to know how to tell if they were odd"
+305,3/15/2017 16:04,LAB7,2,Wanted help understanding tha lab
+297,3/15/2017 16:07,PROJ1,2,return statements in strange places
+107,3/15/2017 16:14,PROJ1,3,needed help through math logic
+184,3/15/2017 16:15,LAB7,3,double indexing and strings as lists
+305,3/15/2017 16:16,LAB7,3,Wanted help with lab
+340,3/15/2017 16:16,PROJ1,4,needed someone to talk to
+151,3/15/2017 16:16,PROJ1,2,Needed help with syntax and understanding how string literals worked
+143,3/15/2017 16:24,LAB7,5,index out of bounds help
+142,3/15/2017 16:24,PROJ1,4,function params
+138,3/15/2017 16:28,PROJ1,3,"Helped previously, not here anymore"
+106,3/15/2017 16:37,PROJ1,2,tried using variable in another function
+305,3/15/2017 16:53,PROJ1,5,student left
+151,3/16/2017 12:02,PROJ1,3,Help with return value
+310,3/16/2017 12:03,OTHERS,5,"Review for the midterm, what are the control structures"
+138,3/16/2017 12:10,PROJ1,4, Sum divisors was adding incorrectly
+151,3/16/2017 12:17,PROJ1,2,Syntax Errors naming parameters and then using them
+118,3/16/2017 12:20,PROJ1,5,Help with sum divisors
+135,3/16/2017 12:22,LAB7,3,Help with calling functions
+357,3/16/2017 12:26,OTHERS,5,Some small bugs in program
+334,3/16/2017 12:31,PROJ1,5,Help with spacing the print statement
+313,3/16/2017 12:43,OTHERS,5,Needed help with reveiw guide
+151,3/16/2017 12:43,PROJ1,2,Bugs
+112,3/16/2017 12:52,PROJ1,3,Wasn't sure how return true corresponded to number being even
+138,3/16/2017 12:53,PROJ1,4,Print statements werent lining up
+334,3/16/2017 12:58,PROJ1,5,requested again
+184,3/16/2017 13:03,PROJ1,3,<<<<<<<<<<<<<<<<< ANOTHER TA HELP
+357,3/16/2017 13:07,OTHERS,1,tab problem
+135,3/16/2017 13:12,PROJ1,3,stuent left
+151,3/16/2017 13:14,PROJ1,3,problems with not thinking through the assignment
+310,3/16/2017 13:15,LAB7,5,student left
+232,3/16/2017 13:19,LAB7,5,troubl e with double indexing in lab
+151,3/16/2017 13:30,PROJ1,3,requested again
+332,3/16/2017 13:33,PROJ1,5,student left
+121,3/16/2017 13:33,PROJ1,5,formatting problems
+130,3/16/2017 13:44,OTHERS,3,
+112,3/16/2017 13:56,PROJ1,2,problem conceptualizing is Divisor
+232,3/16/2017 14:13,LAB7,5,requeetsed again
+339,3/16/2017 14:20,OTHERS,5,formatting problems
+151,3/16/2017 14:31,PROJ1,3,lots of errors
+131,3/16/2017 14:33,PROJ1,3,How to deal with special cases on isPrime
+155,3/16/2017 14:43,LAB7,5,Lab 7 nested loop problems
+306,3/16/2017 14:50,PROJ1,4,help understanding the idea of helper functions
+169,3/16/2017 15:04,LAB7,3,
+232,3/16/2017 15:05,LAB7,3,Wasn't resetting a counter
+112,3/16/2017 15:08,PROJ1,3,student left
+297,3/16/2017 15:09,PROJ1,5,needed help with isDivisor()
+151,3/16/2017 15:17,PROJ1,3,student left
+171,3/16/2017 15:21,PROJ1,3,Student left
+130,3/16/2017 15:23,PROJ1,2,
+306,3/16/2017 15:24,PROJ1,5,Wasn't sure how to pass parameters to functions store values returned.
+116,3/16/2017 15:26,LAB7,3,lab 7 gameplan
+208,3/16/2017 15:33,PROJ1,5,needed help getting numbers into list
+350,3/16/2017 15:38,OTHERS,4,student left
+232,3/16/2017 15:45,LAB7,5,Same exact question. Solved with other question.
+179,3/16/2017 15:50,LAB7,3,Lab 7 help
+310,3/16/2017 15:52,LAB7,5,student left
+297,3/16/2017 15:55,PROJ1,5,Wasn't passing correct parameter to function
+106,3/16/2017 15:59,PROJ1,3,Had logic errors for isDivisor()
+107,3/16/2017 15:59,PROJ1,2,"Needed help with casting int to string, and formatting help"
+364,3/16/2017 16:03,LAB7,5,Needed help with lab and understanding what to do
+306,3/16/2017 16:05,PROJ1,5,"Didn't realize she needed to write print(num"") each time."""
+179,3/16/2017 16:10,LAB7,4,requested again
+305,3/16/2017 16:19,PROJ1,3,???
+130,3/16/2017 16:23,PROJ1,3,requested again
+305,3/16/2017 16:34,PROJ1,3,???
+253,3/16/2017 16:37,LAB7,3,needed help looping through letters in a list of strings
+358,3/16/2017 16:38,PROJ1,4,Needed help with formatting questions and outputs
+179,3/16/2017 16:39,PROJ1,4,student left
+329,3/16/2017 16:54,PROJ1,2,student left
+169,3/16/2017 16:56,LAB7,4,"has tons of errors, wanted to know how to do sum divisor"
+260,3/16/2017 17:03,PROJ1,2,student left
+128,3/16/2017 17:08,PROJ1,5,
+137,3/16/2017 17:09,PROJ1,3,student left
+292,3/16/2017 17:15,PROJ1,4,variable undefined
+280,3/16/2017 17:20,LAB7,2,"was going through and printing the [ ] and , as part of the upper case str"
+171,3/16/2017 17:23,PROJ1,2,"input string concatenation, was using ,s"
+329,3/16/2017 19:10,PROJ1,5,.
+176,3/16/2017 19:14,PROJ1,1,
+226,3/16/2017 19:17,OTHERS,1,
+176,3/16/2017 19:49,PROJ1,1,
+278,3/17/2017 10:43,PROJ1,5,function arguments
+151,3/17/2017 10:44,OTHERS,4,Forgot to remove troubleshooting print statement
+169,3/17/2017 10:44,LAB7,3,execution of indented code confusion
+305,3/17/2017 10:44,PROJ1,3,triangular and square
+227,3/17/2017 10:44,PROJ1,5,Print Pretty Question
+130,3/17/2017 10:48,PROJ1,3,Helper functions usage
+296,3/17/2017 10:48,PROJ1,4,isPrime help - using isDivisor
+170,3/17/2017 10:52,PROJ1,5,wanted to know if he should be following design document
+266,3/17/2017 10:53,PROJ1,5,triangular numbers
+143,3/17/2017 11:01,PROJ1,5,didnt want to return bools from functions
+292,3/17/2017 11:06,PROJ1,5,Help with main
+151,3/17/2017 11:09,OTHERS,2,all sorts of namespace issues
+137,3/17/2017 11:09,PROJ1,5,calling functions within while loop
+278,3/17/2017 11:14,PROJ1,5,indentation confusions
+305,3/17/2017 11:19,PROJ1,3,function arguments
+143,3/17/2017 11:21,PROJ1,5,math help-- finding square numbers
+329,3/17/2017 11:23,PROJ1,3,debugging 101
+137,3/17/2017 11:24,PROJ1,5,student left
+296,3/17/2017 11:26,PROJ1,4,inifinite loop in isPrime and starting isTriangular
+266,3/17/2017 11:29,PROJ1,1,student left
+169,3/17/2017 11:31,PROJ1,2,student left
+260,3/17/2017 11:36,PROJ1,2,student left
+130,3/17/2017 11:42,PROJ1,2,student left
+305,3/17/2017 11:42,PROJ1,3,help with prime
+122,3/17/2017 11:43,PROJ1,2,Student left
+151,3/17/2017 11:45,OTHERS,3,
+292,3/17/2017 11:50,PROJ1,4,student left
+120,3/17/2017 11:50,PROJ1,5,help with isPrime
+151,3/17/2017 14:04,OTHERS,2,requested again
+135,3/17/2017 14:04,LAB7,3,Lab help
+124,3/17/2017 14:04,PROJ1,5,Spacing
+184,3/17/2017 14:04,PROJ1,3,trying to get both start val and stop val in getValidInt
+305,3/17/2017 14:04,PROJ1,3,Student needed help with print functions.
+262,3/17/2017 14:04,PROJ1,5,fixing getValidInt and lining up numbers in table
+268,3/17/2017 14:04,PROJ1,3,syntax in sumDivisors and logic in getValidInt
+354,3/17/2017 14:05,PROJ1,5,isPrime function
+157,3/17/2017 14:05,PROJ1,2,needs to redo structure to match design
+329,3/17/2017 14:05,PROJ1,5,Requested again
+124,3/17/2017 14:05,PROJ1,5,Student left
+120,3/17/2017 14:05,PROJ1,5,Student left
+297,3/17/2017 14:05,PROJ1,4,help with algorithm for triangular
+108,3/17/2017 14:06,PROJ1,4,needed help with printTableLine (explaining idea)
+303,3/17/2017 14:07,PROJ1,3,Help with structure of assignment 
+346,3/17/2017 14:08,LAB7,3,Student left
+143,3/17/2017 14:10,PROJ1,5,help with tabbing
+296,3/17/2017 14:13,OTHERS,3,understanding triangular 
+187,3/17/2017 14:14,PROJ1,2,student left
+142,3/17/2017 14:23,PROJ1,5,student left
+305,3/17/2017 14:23,PROJ1,4,Help with sumDivisors
+174,3/17/2017 14:26,PROJ1,2,getting is prime to work 
+269,3/17/2017 14:28,OTHERS,3,Weirdest print formating error ever. Ask me about it maybe?
+337,3/17/2017 14:30,PROJ1,2,Needed help with how to return multiple variables.
+151,3/17/2017 14:31,PROJ1,4,isPrime function
+329,3/17/2017 14:38,PROJ1,3,Logic Issues
+305,3/17/2017 14:52,PROJ1,4,Needed help printing 
+215,3/17/2017 14:54,PROJ1,5,"Needed help with lining up, and a few weird errors"
+262,3/17/2017 15:02,PROJ1,5,
+130,3/17/2017 15:04,PROJ1,3,questions about commenting
+120,3/17/2017 15:05,PROJ1,5,Question about is perfect
+184,3/17/2017 15:07,PROJ1,3,
+105,3/17/2017 15:08,PROJ1,4,main helo
+157,3/17/2017 15:09,PROJ1,2,help with main
+135,3/17/2017 15:11,PROJ1,3,fixed syntax errors in proj and logic in lab 7
+108,3/17/2017 15:15,PROJ1,4,Needed help with perfect (thought it was bool)
+297,3/17/2017 15:15,PROJ1,3,help with structure of triangular
+131,3/17/2017 15:17,PROJ1,5,printing
+162,3/17/2017 15:17,PROJ1,4,Needed help with tabs
+174,3/17/2017 15:29,PROJ1,2,wasn't indenting things into while loop
+296,3/17/2017 15:31,OTHERS,4,Needed help with prime
+105,3/17/2017 15:31,PROJ1,5,input help. 
+305,3/17/2017 15:31,PROJ1,4,help with sumDivisors
+303,3/17/2017 15:33,PROJ1,3,Needed help with prime function.
+152,3/17/2017 15:35,PROJ1,2,Clarification about coding standards 
+232,3/17/2017 15:46,PROJ1,5,Help with triangular 
+171,3/17/2017 15:48,PROJ1,4,helped with isPrime
+112,3/17/2017 15:51,PROJ1,5,Needed help understanding how sumDivisors helps with perfect function
+354,3/17/2017 15:53,PROJ1,4,returning from isPerfect
+329,3/17/2017 15:56,PROJ1,5,student Left
+136,3/17/2017 16:09,PROJ1,5,Wanted assurance that his code looked up to standards and wasn't too long. it wasnt 
+157,3/17/2017 16:12,LAB7,1,Wasn't resetting letter counter at start of each word
+297,3/17/2017 16:13,OTHERS,3,Tableline issues 
+262,3/17/2017 16:13,PROJ1,5,"Was comparing count < num, not count <= num"
+105,3/17/2017 16:14,PROJ1,5,
+174,3/17/2017 16:20,PROJ1,2,helping with is prime and following design specifications
+120,3/17/2017 16:22,PROJ1,5,isTriangular and printTableLine
+171,3/17/2017 16:27,PROJ1,3,Needed help with calling sumDivisors()
+260,3/17/2017 16:34,PROJ1,2,Help with triangular 
+296,3/17/2017 16:35,OTHERS,4,Needed help flipping return statements
+354,3/17/2017 16:36,PROJ1,3,
+157,3/17/2017 16:36,PROJ1,3,Didn't know to call numDivisor()
+228,3/17/2017 16:36,PROJ1,4,wasn't assigning function calls into a variable
+162,3/17/2017 16:40,PROJ1,2,NO (nevermind?)
+112,3/17/2017 16:40,PROJ1,3,Print formatting
+303,3/17/2017 16:42,PROJ1,3,fixed minor errors in check for perfect and is square
+304,3/17/2017 16:44,LAB7,5,had to reset counter
+296,3/17/2017 16:45,OTHERS,5,
+171,3/17/2017 16:45,PROJ1,3,
+174,3/17/2017 16:47,PROJ1,2,Was confusing a list and a total
+232,3/17/2017 16:54,PROJ1,2,confused about actual and formal parameters
+105,3/17/2017 16:56,PROJ1,5,
+108,3/17/2017 16:57,PROJ1,4,not here
+261,3/27/2017 15:01,OTHERS,2,Was on linux not windows
+261,3/27/2017 15:18,PROJ1,5,Needed help with the print order 
+261,3/28/2017 14:58,PROJ1,3,ihelp wtih sPrime
+261,3/28/2017 15:39,PROJ1,2,isDivisor
+261,3/28/2017 18:39,PROJ1,5,needed help with main/confusion on project 1
+261,3/28/2017 19:28,PROJ1,3,confused on divisor question
+130,3/29/2017 12:59,OTHERS,2,Wanted review on class material about tuples
+130,3/29/2017 13:25,OTHERS,2,Wanted review on class material about lists
+261,3/29/2017 15:12,PROJ1,4,If else returns in while loops 
+261,3/29/2017 16:04,PROJ1,3,Wasnt understanding what sumdivisors was doing and how it applied to perffect numbers
+334,3/30/2017 13:20,OTHERS,3,Wanted to know the difference between shallow/deep copies
+184,3/31/2017 14:04,HW5,2,Help with understand where the return value goes
+130,3/31/2017 16:00,HW5,2,"Making functions from given headers, using tuples"
+120,4/3/2017 14:26,HW5,4,figuring out how functions in part 2 interact
+120,4/3/2017 15:06,HW5,2,Not incrementing the counter in a while loop 
+369,4/3/2017 15:14,HW5,3,Constants on the grocery list problem 
+120,4/3/2017 15:32,HW5,2,"Really messy checks, had her rewrite "
+357,4/4/2017 12:32,HW5,3,Needed to refresh HW document for updates
+151,4/4/2017 12:34,HW5,2,Needed help access items from a tuple
+151,4/4/2017 13:09,HW5,2,Missing a )
+334,4/4/2017 13:10,HW5,5,Missing a )
+151,4/4/2017 13:18,HW5,2, redefined points in function instead of using formal parameters
+130,4/4/2017 13:19,OTHERS,2,
+120,4/4/2017 13:20,HW5,4,
+302,4/4/2017 13:43,LAB8,3,lab 8 help - 2d list
+151,4/4/2017 13:56,HW5,3,Rubber Duck
+130,4/4/2017 14:08,OTHERS,2,lab 8 and hw5
+357,4/4/2017 14:21,HW5,4,How helper function works
+357,4/4/2017 14:49,HW5,1,hw5 - printing 2d lists
+297,4/4/2017 15:11,HW5,2,hw5 - checking proper
+137,4/4/2017 15:38,HW5,3,working with tuples
+346,4/4/2017 15:55,HW5,3,office hours over
+335,4/4/2017 19:28,OTHERS,2,Had questions about part 3 of hw 5
+335,4/4/2017 19:53,OTHERS,2,
+306,4/5/2017 10:02,HW5,4,"Distance eqn wasn't working for unknown reason, debugging strategies"
+130,4/5/2017 10:26,HW5,2,confusion on calling function within while loop
+130,4/5/2017 10:50,HW5,2,directed her to lab 08 part 1A
+306,4/5/2017 11:59,HW5,4,help with hw5 functions
+262,4/5/2017 12:12,HW5,3,tuples
+233,4/5/2017 13:05,HW5,2,nevermind
+138,4/5/2017 15:02,HW5,3,Help with tuple and double while loop to access 2D list
+278,4/5/2017 15:03,HW5,5,How to use tuples part 1 and loop to check for the endings part 2
+135,4/5/2017 15:03,HW5,3,Trouble calling functions
+124,4/5/2017 15:06,HW5,5,int object not subsricptable 
+184,4/5/2017 15:08,HW5,3,Confusion about helper functions
+138,4/5/2017 15:19,LAB8,3,Just too many variables and it got confusing 
+124,4/5/2017 15:39,HW5,5,#VALUE!
+184,4/5/2017 16:02,HW5,2,General structure of homework
+358,4/5/2017 16:43,HW5,5,Confused by what some of the functions were supposed to be doing
+346,4/5/2017 16:47,HW5,4,Didn't understand how to initialize tuples
+130,4/6/2017 12:00,HW5,3,Help with how to do check common endings
+137,4/6/2017 12:01,HW5,3,Help with check common endings
+260,4/6/2017 12:06,HW5,2,"Help with part 1, wasn't casting to int"
+316,4/6/2017 12:12,HW5,3,Werid 2-D List copying
+171,4/6/2017 12:17,HW5,3,Returning values from a function
+297,4/6/2017 12:17,LAB8,3,Lab8
+184,4/6/2017 12:18,HW5,3,Confused by check common endings
+237,4/6/2017 12:18,HW5,2,
+151,4/6/2017 12:24,HW5,3,Confused by check common endings
+262,4/6/2017 12:25,HW5,3,Confused by check common endings
+110,4/6/2017 12:25,HW5,4,Functions weren't complex enough for part 3
+130,4/6/2017 12:34,HW5,2,Student left
+221,4/6/2017 12:44,HW5,3,uestion about flow of part 2
+260,4/6/2017 12:57,HW5,2,Used flag varible for first function of part 2 to solve logic error
+130,4/6/2017 13:07,HW5,3,requested again
+237,4/6/2017 13:21,HW5,3,use python3 and dont have empty  functions
+184,4/6/2017 13:51,HW5,3,Hw5 working with return values
+137,4/6/2017 13:55,HW5,2,problem with index going out of range due to if - if statement insteaad of if elif
+292,4/6/2017 13:57,HW5,4,tuples
+260,4/6/2017 14:11,HW5,2,main hw5 pt3
+346,4/6/2017 14:27,HW5,4,problem with while loop ocntinuing after finds correct end
+130,4/6/2017 14:27,HW5,2,
+151,4/6/2017 14:28,HW5,2,
+137,4/6/2017 14:28,HW5,3,student left (wifi out)
+173,4/6/2017 14:39,HW5,2,student left (wifi out)
+302,4/6/2017 15:24,HW5,3,couldnt figure out divide by zero error
+316,4/6/2017 15:27,HW5,2,asking if there is a simple way to print out stuff in part 3
+356,4/6/2017 15:34,HW5,3,indexing issue (didnt know what type of value was actually being compared)
+329,4/6/2017 15:35,HW5,2,help with tuple syntax
+137,4/6/2017 15:36,HW5,4,function calling question
+302,4/6/2017 15:56,HW5,2,how to do exponents
+130,4/6/2017 15:58,HW5,2,general design questions about the homework
+356,4/6/2017 16:02,HW5,3,wanted to make sure she was checking for word endings correctly
+137,4/6/2017 16:07,HW5,2,wasn't sure how helper function would be called in code
+302,4/6/2017 16:15,HW5,4,didn't really understand how tuples work
+137,4/6/2017 16:20,HW5,2,small syntax errors on part 3
+169,4/6/2017 16:28,HW5,4,function parameter passing issues
+297,4/6/2017 16:32,HW5,2,"didn't answer when called, may not have heard me but like idk?? I called three times"
+184,4/6/2017 16:33,HW5,3,didn't know how 2D list really worked
+121,4/6/2017 16:36,HW5,5,general design questions about the homework
+329,4/6/2017 16:37,HW5,3,"really didn't know what he was doing tbh, wasn't great at listening either"
+137,4/6/2017 16:38,HW5,3,double-indexing
+130,4/6/2017 16:46,HW5,3,using function return values as conditions
+302,4/6/2017 16:57,HW5,2,needed to explain helper function descriptions
+183,4/6/2017 17:03,HW5,4,"needed to take academic integrity q/uiz first, will resumbit problem when done"
+169,4/6/2017 17:03,HW5,3,"referenced var before assignemnt, only assignedd in an if"
+137,4/6/2017 17:04,HW5,3,wasn't resetting variable in while loop- nested whiles
+184,4/6/2017 17:09,HW5,2,appending into 2d list
+297,4/6/2017 17:09,HW5,3,organizing part 2 into funcitons
+329,4/6/2017 17:14,HW5,4,needed help with while logic
+130,4/6/2017 17:21,HW5,3,needed guidance on functions
+183,4/6/2017 17:21,HW5,4,needed help on functions in general
+169,4/6/2017 17:25,HW5,2,"infinite loop, never reassigns value"
+356,4/6/2017 17:36,HW5,3,"student left (literally was leaving as I called her, she said it's fine)"
+260,4/7/2017 10:04,HW5,2,infintely loops
+302,4/7/2017 10:04,HW5,3,problem returning
+227,4/7/2017 10:04,HW5,5,problem with infinitely loop
+215,4/7/2017 10:10,HW5,5,logic problem
+296,4/7/2017 10:14,HW5,3,missing return function
+260,4/7/2017 10:27,HW5,2,needed help with more than one parameter in input
+292,4/7/2017 10:29,HW5,5,needed help with isSameEnd but more just wanted a check of if it works
+302,4/7/2017 10:39,HW5,3,needed heko with isSameEnd - not understanding what its supposed to do
+130,4/7/2017 10:43,HW5,2,algorithm problem
+292,4/7/2017 10:44,HW5,2,problem with is same end
+174,4/7/2017 10:46,HW5,2,2D List
+296,4/7/2017 10:54,HW5,3,algorithm problem
+215,4/7/2017 10:57,HW5,5,Needed help fixing minor syntax errors
+260,4/7/2017 11:00,HW5,2,Traversing a 2d list
+292,4/7/2017 11:01,HW5,3,Needed help with checkCommonEndings()
+143,4/7/2017 11:02,HW5,5,Travsering a 2d list
+296,4/7/2017 11:14,HW3,4,Needed further help with string indexing/slicing.
+331,4/7/2017 11:22,LAB8,4,traversing a 2d list
+215,4/7/2017 11:45,HW5,5,while loop order of execution
+292,4/7/2017 11:53,HW5,5,while loop structure for checkCommonEndings
+173,4/7/2017 11:53,HW5,2,Needed further explaination of how function return worked.
+151,4/7/2017 14:03,HW5,3,help visualizing the 2D list for part 3
+297,4/7/2017 14:03,HW5,4,help with isSameEnd
+262,4/7/2017 14:03,HW5,4,syntax in part 2 and starting part 3
+184,4/7/2017 14:03,HW5,3,not returning properly
+106,4/7/2017 14:13,HW5,2,understanding how functions interact
+174,4/7/2017 14:14,HW5,2,help with indexing a double lists
+135,4/7/2017 14:15,HW5,3,starting part3
+143,4/7/2017 14:20,HW5,5,help debugging
+306,4/7/2017 14:21,HW5,5,help choosing functions for part 3
+169,4/7/2017 14:22,HW2,5,simplifying isProperName
+296,4/7/2017 14:30,HW5,5,syntax error above line that was being funky
+174,4/7/2017 14:31,HW5,2,syntax for 2D lists
+151,4/7/2017 14:34,HW5,3,Printing out the Grocery list 
+297,4/7/2017 14:39,HW5,3,isSameEnd in loop
+262,4/7/2017 14:41,HW5,4,isSameEnd in loop
+274,4/7/2017 14:42,HW5,5,returning correct variable from check checkCommonEnding
+155,4/7/2017 14:49,HW5,3,while loop input (not repeating code)
+108,4/7/2017 14:53,HW5,2,Explained Two-D lists. needed to be confident in ability
+143,4/7/2017 14:54,HW5,5,nevermind
+302,4/7/2017 14:56,HW5,3,commonEndings
+135,4/7/2017 14:56,HW5,2,Getting input in the right order
+121,4/7/2017 15:04,HW5,5,getting functions looked over
+157,4/7/2017 15:06,HW5,1,Lost
+108,4/7/2017 15:07,HW5,2,requested again
+297,4/7/2017 15:07,HW5,3,"Question with check common endings, was getting input wrong"
+215,4/7/2017 15:12,HW5,5,needed help with isSameEnd
+106,4/7/2017 15:13,HW2,4,part2 functions
+292,4/7/2017 15:14,HW5,4,Question about 2-d list in general
+151,4/7/2017 15:14,HW5,3,hadn't put thought into it
+306,4/7/2017 15:18,HW5,3,had spagetti if statemetnts 
+296,4/7/2017 15:18,HW5,3,confused about how 2d list was supposed to work
+329,4/7/2017 15:20,HW5,4,2d list append
+215,4/7/2017 15:23,HW5,5,requested again
+171,4/7/2017 15:32,HW5,3,hw5 part2 parameters
+262,4/7/2017 15:37,HW5,5,was indexing instead of slicing
+169,4/7/2017 15:38,HW5,5,looking at the right end characters 
+135,4/7/2017 15:39,HW5,3,Printing 2-D
+122,4/7/2017 15:43,HW5,3,string contants
+258,4/7/2017 15:53,HW5,5,using tuples
+190,4/7/2017 15:53,HW5,3,needed help with 2d lists
+151,4/7/2017 15:59,HW3,4,appending to 2d
+232,4/7/2017 16:00,HW5,4,difference between two fxns
+174,4/7/2017 16:03,HW5,2,
+297,4/7/2017 16:04,HW5,3,confused on 2d list
+215,4/7/2017 16:07,HW5,5,forgot to count
+108,4/7/2017 16:08,HW5,3,hw5 pt2 functions 
+262,4/7/2017 16:08,HW5,5,accessing a 2-d list
+171,4/7/2017 16:11,HW5,2,didn't read design directions for fxns
+329,4/7/2017 16:12,HW5,4,printing foods
+106,4/7/2017 16:17,HW2,2,confused on calling fxns
+190,4/7/2017 16:17,HW5,3,
+258,4/7/2017 16:20,HW5,5,
+292,4/7/2017 16:22,HW5,5,confused about fxns and 2d lists
+151,4/7/2017 16:22,HW5,3,student left
+157,4/7/2017 16:23,HW5,2,
+296,4/7/2017 16:29,HW5,3,student left
+169,4/7/2017 16:32,HW5,5,functions for hw5 part2
+215,4/7/2017 16:34,HW5,5,office hours over
+297,4/7/2017 16:36,HW5,3,office hours over
+171,4/7/2017 16:36,HW5,3,office hours over
+174,4/7/2017 16:39,HW5,2,overthinking slicing
+262,4/7/2017 16:42,HW5,5,office hours over
+280,4/7/2017 16:43,OTHERS,2,using () to index tuple
+232,4/7/2017 16:44,HW5,4,office hours over
+329,4/7/2017 16:48,HW5,2,office hours over
+262,4/10/2017 15:13,PROJ2,4,Overwhelmed by project description 
+369,4/10/2017 15:37,PROJ2,3,FIle IO questions 
+151,4/11/2017 12:36,PROJ2,3,Wanted comfirmation about design process
+169,4/11/2017 13:28,PROJ2,2,Pseudo code question
+310,4/11/2017 13:39,OTHERS,5,Werid Range Function (told him to think more about the design 
+130,4/11/2017 14:12,PROJ2,2,
+171,4/11/2017 14:19,PROJ2,2,Design Question
+297,4/11/2017 14:30,OTHERS,2,help deleting directory
+176,4/12/2017 12:24,PROJ2,2,design Question
+297,4/12/2017 13:25,OTHERS,2,Needed clarification on the sample output and how to read in a file
+297,4/12/2017 15:07,OTHERS,2,Tips on design 
+159,4/12/2017 15:08,PROJ2,5,Walk through design 
+264,4/13/2017 12:04,PROJ2,4,Structure question for the 3-D list
+310,4/13/2017 12:11,OTHERS,5,Question about building 3-D list
+171,4/13/2017 12:12,PROJ2,2,How to structure design doc
+264,4/13/2017 12:21,OTHERS,4,How to reading in to a 3-D list
+120,4/13/2017 12:23,PROJ2,4,Help with design doc
+155,4/13/2017 12:26,PROJ2,3,Help with design doc
+334,4/13/2017 12:30,PROJ2,4,Help with design doc structure
+316,4/13/2017 12:39,PROJ2,2,"Wasn't understanding how strip worked, told him to go look at the lab for this weel"
+124,4/13/2017 12:43,PROJ2,5,Indexing a 3d list
+310,4/13/2017 12:51,OTHERS,5,Help with creating the lowest level of the 3-D list from file
+155,4/13/2017 12:54,PROJ2,2,Wanted confirmation on how design looked
+120,4/13/2017 13:21,PROJ2,4,Wanted confirmation on how design looked
+357,4/13/2017 13:22,PROJ2,5,Confirmation on design
+316,4/13/2017 13:29,PROJ2,2,Needed help with 3d list
+155,4/13/2017 13:39,OTHERS,2,general questions about coding standards/design document
+124,4/13/2017 13:58,PROJ2,5,Problem setting up 3d list
+357,4/13/2017 14:14,PROJ2,5,understanding 3d lists
+173,4/13/2017 14:31,PROJ2,1,question about constants
+357,4/13/2017 14:32,PROJ2,5,writing back to the file
+297,4/13/2017 14:53,LAB9,2,lab help
+173,4/13/2017 15:05,PROJ2,2,design doc help
+297,4/13/2017 15:23,LAB9,2,"forgot to use strip to remove \n"""""
+169,4/13/2017 15:37,PROJ2,2,"review proj1, how to improve/fix it"
+297,4/13/2017 15:42,LAB9,1,"typed forward slash, not backslash"
+316,4/13/2017 15:53,PROJ2,1,"resetting each inner list at the right time"" in the loop"""
+136,4/13/2017 15:57,PROJ2,5,how to think about design without actually sitting down and coding it out
+184,4/13/2017 16:14,PROJ2,3,didn't really know what to save in the external .txt file
+358,4/13/2017 16:54,PROJ2,4,Double-checking design document
+337,4/13/2017 17:07,PROJ2,4,had some questions about specific input and output for functions
+304,4/13/2017 17:42,OTHERS,5,"Dr. Gibson stole me and I helped on my way out, had indexing error"
+121,4/14/2017 10:24,PROJ2,5,Needed help with writing file -- problem was in his nested for loops
+143,4/14/2017 11:09,PROJ2,5,Wanted feedback on design document
+261,4/14/2017 11:23,PROJ2,5,Needed help with coming up with a plan
+173,4/14/2017 11:39,PROJ2,3,Needed a rubber duck
+155,4/14/2017 11:44,PROJ2,3,Wanted to know if they needed a display card function
+133,4/14/2017 11:45,PROJ2,4,He was missing main() and pseudocode.
+121,4/14/2017 11:58,PROJ2,5,Needed further help with his write function
+110,4/14/2017 14:00,OTHERS,5,Walk through design with him to makes sure it made sense
+264,4/14/2017 14:00,PROJ2,5,talked about not needing to return list because of mutability
+173,4/14/2017 14:01,PROJ2,5,checking her design and talking about input/output for some functions
+264,4/14/2017 14:09,PROJ2,5,Understanding how to print the 2D list
+143,4/14/2017 14:20,PROJ2,5,Design understanding
+316,4/14/2017 14:24,PROJ2,2,strategies for printing 3D list
+173,4/14/2017 14:27,PROJ2,4,talked about for loop vs while loop in main
+130,4/14/2017 14:29,PROJ2,3,checked design and helped with a couple functions
+184,4/14/2017 14:30,PROJ2,3,Design Doc
+329,4/14/2017 14:31,PROJ2,4,Help with design doc
+171,4/14/2017 14:48,PROJ2,3,need help with what functions to write
+228,4/14/2017 14:54,PROJ2,2,talked about a fuction to make a selection
+173,4/14/2017 14:57,PROJ2,4,Questions about design doc functions
+121,4/14/2017 14:57,PROJ2,5,clarify proper use of fuctions
+150,4/14/2017 14:58,PROJ2,1,Using function for user input
+143,4/14/2017 15:00,PROJ2,5,Wanted to make sure their design looked good 
+130,4/14/2017 15:01,PROJ2,3,"Reading into 3d lists (split, append)"
+292,4/14/2017 15:05,PROJ2,4,3-D lists
+329,4/14/2017 15:15,PROJ2,3,Variables
+316,4/14/2017 15:22,PROJ2,2,Printing 3d lists
+171,4/14/2017 15:24,PROJ2,2,constants
+261,4/14/2017 15:24,PROJ2,5,CONSTANTS
+173,4/14/2017 15:25,PROJ2,4,Organizing design
+108,4/14/2017 15:31,PROJ2,4,input outout
+130,4/14/2017 15:40,PROJ2,2,Printing 3d lists
+329,4/14/2017 15:57,PROJ2,2,function call path
+121,4/14/2017 16:12,PROJ2,5,Help with printing
+150,4/14/2017 16:16,PROJ2,1,CONSTANTS
+329,4/14/2017 16:17,PROJ2,3,requested again
+261,4/14/2017 16:25,PROJ2,5,
+171,4/14/2017 16:35,PROJ2,3,one last check for errors before submitting
+108,4/14/2017 16:37,OTHERS,4,
+150,4/14/2017 16:50,PROJ2,1,office hours over
+227,4/17/2017 9:59,PROJ2,5,printing 3D list
+227,4/17/2017 10:20,PROJ2,5,help printing 3D list
+130,4/17/2017 10:44,PROJ2,3,not understanding output
+227,4/17/2017 13:01,PROJ2,5,Needed help displaying vending machine properly
+118,4/17/2017 13:02,PROJ2,5,Needed help reading file into 3D list
+227,4/17/2017 13:16,PROJ2,5,nevermind
+357,4/17/2017 13:47,PROJ2,2,Question on how the code worked in the 3D list
+297,4/17/2017 13:57,PROJ2,2,wrote input(float( instead of float(input(
+251,4/17/2017 14:02,OTHERS,2,question about where to use constants
+357,4/17/2017 14:02,PROJ2,2,iterating over file name instead of file object
+251,4/17/2017 14:03,OTHERS,2,requested again
+137,4/17/2017 14:06,PROJ2,4,making 3d list
+357,4/17/2017 14:12,PROJ2,2,assigning .append result to a variable
+274,4/17/2017 14:23,OTHERS,5,not here
+297,4/17/2017 14:39,PROJ2,2,questions about function structure for menu
+296,4/17/2017 14:40,PROJ2,2,basic setup for a 3D list
+296,4/17/2017 14:57,OTHERS,3,structure of 3D list
+274,4/17/2017 15:01,PROJ2,5,reading into the 3D lists properly
+107,4/17/2017 15:01,PROJ2,3,Help with validating user choice for the vending machine 
+264,4/17/2017 15:04,PROJ2,5,Help with validating user choice for the vending machine 
+268,4/17/2017 15:12,PROJ2,2,Trouble breaking down the lines from each file
+297,4/17/2017 15:34,PROJ2,2,Walked through what a 3D list is
+268,4/17/2017 15:43,PROJ2,1,Error accessing a tuple?
+158,4/18/2017 12:35,PROJ2,3,Wanted suggestions on how to structure print statements
+316,4/18/2017 12:41,PROJ2,2,To be continued....
+242,4/18/2017 12:42,PROJ2,5,Needed help with syntax
+221,4/18/2017 12:45,PROJ2,3,Questions about writing to a file
+350,4/18/2017 12:52,PROJ2,3,Needed help understanding indexing 3D lists
+264,4/18/2017 12:59,PROJ2,5,Needed help understanding writing to a file
+149,4/18/2017 13:00,PROJ2,3,Needed a RubberDuck
+184,4/18/2017 13:01,PROJ2,3,Needed help understanding indexing 3D lists
+242,4/18/2017 13:06,PROJ2,5,Need help with structuring prints
+221,4/18/2017 13:25,PROJ2,2,Need help making 3D list
+264,4/18/2017 13:34,PROJ2,5,nevermind
+118,4/18/2017 13:36,PROJ2,5,"Needed help printing list, Fishing for Answers (Was very upset when I didnt give him the answer )"
+350,4/18/2017 13:40,PROJ2,4,using len to convert to int
+334,4/18/2017 13:43,PROJ2,3,student left
+310,4/18/2017 13:44,OTHERS,5,student left
+221,4/18/2017 13:46,PROJ2,3,help making list
+120,4/18/2017 13:50,PROJ2,4,3D list
+137,4/18/2017 13:51,PROJ2,5,student left
+316,4/18/2017 13:59,PROJ2,2,student left
+221,4/18/2017 14:19,PROJ2,3,printing 3D list
+120,4/18/2017 14:23,PROJ2,4,requested again
+174,4/18/2017 14:26,PROJ2,1,Answered questions about 3D lists and Returns
+120,4/18/2017 14:45,PROJ2,4,3d list
+221,4/18/2017 14:51,PROJ2,3,
+357,4/18/2017 15:01,PROJ2,4,clarification
+120,4/18/2017 15:02,OTHERS,3,making 3d list
+229,4/18/2017 15:04,PROJ2,1,printing problem
+108,4/18/2017 15:04,PROJ2,3,3D list
+211,4/18/2017 15:06,PROJ2,5,
+215,4/18/2017 15:07,PROJ2,5,
+174,4/18/2017 15:08,PROJ2,1,
+297,4/18/2017 15:09,PROJ2,2,
+221,4/18/2017 15:12,PROJ2,3,student left
+357,4/18/2017 15:27,PROJ2,4,student left
+130,4/18/2017 15:29,PROJ2,3,
+211,4/18/2017 15:38,PROJ2,4,
+274,4/18/2017 15:51,PROJ2,5,needed help creating 3d list
+350,4/18/2017 16:09,PROJ2,3,questions about layout of 3d list (didn't come to class)
+215,4/18/2017 16:16,PROJ2,5,3d list creation help
+262,4/18/2017 16:17,PROJ2,5,needed help starting reading in the file
+229,4/18/2017 16:18,PROJ2,1,wasn't doing zero count items correctly
+337,4/18/2017 16:46,PROJ2,3,needed help with file I/O
+329,4/18/2017 18:00,PROJ2,4,needed help with filling in 3d list
+337,4/18/2017 18:01,PROJ2,4,helped with scope and return values
+226,4/18/2017 18:01,PROJ2,2,needed clarification on 3d lists
+100,4/18/2017 18:19,PROJ2,5,clarified the readlines/readline/read
+329,4/18/2017 18:43,PROJ2,4,helped with 3d lists
+100,4/18/2017 18:51,OTHERS,5,helped with error/clarification
+316,4/18/2017 18:53,PROJ2,2,needed to assign value to list
+329,4/18/2017 19:04,PROJ2,2,appended too many times/duplicates
+100,4/18/2017 19:21,OTHERS,5,syntax error
+358,4/18/2017 19:55,PROJ2,5,syntax error for File i/o
+220,4/19/2017 10:01,PROJ2,4,needed help visualized 3d lists
+264,4/19/2017 10:03,PROJ2,5,updating the correct list in 2d list
+174,4/19/2017 10:24,PROJ2,2,how to build 3d list
+346,4/19/2017 10:27,PROJ2,4,was trying to split file object
+102,4/19/2017 10:33,PROJ2,5,thought he had to submit candi.txt files
+346,4/19/2017 10:51,PROJ2,2,trying to print contents of file
+334,4/19/2017 10:56,PROJ2,4,not here
+137,4/19/2017 11:05,PROJ2,5,Manipulating 3d lists
+346,4/19/2017 11:16,PROJ2,3,Inputing the file as a 3d list
+334,4/19/2017 11:22,PROJ2,4,Printing in the correct places
+233,4/19/2017 11:30,PROJ2,2,Returning inside of a control structure
+332,4/19/2017 11:33,PROJ2,3,"(delay on this one, a student couldnt edit form so he sint listed) but sunny mixed up his variable names"
+334,4/19/2017 11:39,PROJ2,4,Wasn't sure how to make 3D list and printing list options and using while loop
+118,4/19/2017 13:01,PROJ2,5,Index out of bounds error
+292,4/19/2017 13:01,PROJ2,5,Needed help making 3D list
+297,4/19/2017 13:01,PROJ2,2,Needed help making 3D list
+227,4/19/2017 13:01,PROJ2,5,Needed an if statement in inner most loop to print empty correctly
+262,4/19/2017 13:10,PROJ2,5,needed help visualizing 3D lists
+334,4/19/2017 13:11,OTHERS,5,Needed help printing out vending machine correctly
+162,4/19/2017 13:15,PROJ2,5,Needed hlep reading in file to 3D list
+335,4/19/2017 13:18,PROJ2,2,office hours over
+199,4/19/2017 13:22,PROJ2,5,office hours over
+118,4/19/2017 13:26,PROJ2,5,office hours over
+297,4/19/2017 13:36,PROJ2,1,office hours over
+130,4/19/2017 14:04,PROJ2,4,office hours over
+137,4/19/2017 15:02,PROJ2,5,helped multiple
+297,4/19/2017 15:02,PROJ2,2,"I know you're helping multiple, so just put them all down as the same time"
+305,4/19/2017 15:03,PROJ2,2,
+143,4/19/2017 15:03,PROJ2,5,
+135,4/19/2017 15:04,PROJ2,3,
+369,4/19/2017 15:07,PROJ2,3,
+261,4/19/2017 15:13,PROJ2,2,"Different problem, autosave recover "
+155,4/19/2017 15:19,PROJ2,5,Returning none in some cases 
+305,4/19/2017 15:20,PROJ2,2,requested again
+180,4/19/2017 15:20,PROJ2,5,Using read instead of for line in file
+255,4/19/2017 15:21,PROJ2,3,Explanation of 3D lists 
+176,4/19/2017 15:26,OTHERS,5,Splitting error 
+250,4/19/2017 15:30,PROJ2,5,Debugging/fixing 3d list(was 2d)
+305,4/19/2017 15:35,PROJ2,3,requested again
+184,4/19/2017 15:42,PROJ2,3,3D list
+297,4/19/2017 15:44,PROJ2,1,student left
+305,4/19/2017 15:47,PROJ2,2,office hours over
+262,4/19/2017 15:50,PROJ2,5,Debugging with 3d list
+232,4/19/2017 15:52,PROJ2,5,student left
+356,4/19/2017 16:05,PROJ2,3,student left
+176,4/19/2017 16:06,OTHERS,2,student left
+369,4/19/2017 16:10,PROJ2,4,Needed second opinion on something
+189,4/19/2017 16:15,PROJ2,5,office hours over
+107,4/19/2017 16:34,PROJ2,3,office hours over
+358,4/19/2017 16:52,PROJ2,4,office hours over
+189,4/20/2017 11:59,OTHERS,5,How create a 3d list from the 2-d list 
+310,4/20/2017 11:59,OTHERS,5,Proper spacing
+297,4/20/2017 11:59,PROJ2,3,reading in from a file
+337,4/20/2017 12:00,PROJ2,4,how to create 3d list 
+305,4/20/2017 12:01,PROJ2,3,creating a 3d list
+138,4/20/2017 12:01,PROJ2,5,"Wasn't quite understanding how balnace should work, had to change a bit of how the project work"
+107,4/20/2017 12:07,PROJ2,3,Writing to a file
+260,4/20/2017 12:11,PROJ2,3,student left
+118,4/20/2017 12:11,PROJ2,5,confused by balance fucntion
+120,4/20/2017 12:16,PROJ2,5,3d lists 
+305,4/20/2017 12:17,PROJ2,3,student left
+121,4/20/2017 12:21,PROJ2,5,Bug with code
+316,4/20/2017 12:22,PROJ2,3,student left
+299,4/20/2017 12:26,PROJ2,5,nevermind
+334,4/20/2017 12:31,PROJ2,5,student left
+110,4/20/2017 12:37,PROJ2,5,student left
+112,4/20/2017 12:41,PROJ2,5,printing
+285,4/20/2017 12:46,PROJ2,5,
+313,4/20/2017 12:47,OTHERS,1,grabbed it for him from his submit folder
+137,4/20/2017 12:53,PROJ2,5,3d list up front
+221,4/20/2017 13:10,PROJ2,4,help printing
+262,4/20/2017 13:12,PROJ2,5,student left
+199,4/20/2017 13:13,PROJ2,4,help with printing list
+162,4/20/2017 13:15,PROJ2,5,group help
+215,4/20/2017 13:16,PROJ2,5,student left
+260,4/20/2017 13:21,PROJ2,2,student left
+176,4/20/2017 13:23,OTHERS,5,studet left
+337,4/20/2017 13:28,PROJ2,5,nevermind - Avery
+221,4/20/2017 13:28,PROJ2,4,requested again
+220,4/20/2017 13:32,PROJ2,5,nevermind - Avery
+145,4/20/2017 13:35,OTHERS,3,need help with saving
+305,4/20/2017 13:37,PROJ2,3,making 3d list
+285,4/20/2017 13:44,PROJ2,3,requested again
+176,4/20/2017 13:48,PROJ2,5,requested again
+297,4/20/2017 13:49,PROJ2,2,help printing
+173,4/20/2017 13:55,PROJ2,3,student left
+120,4/20/2017 13:59,PROJ2,4,printing 3d list
+211,4/20/2017 14:17,PROJ2,5,help with join
+171,4/20/2017 14:18,PROJ2,3,"designing the functions (I/O, functionality)"
+261,4/20/2017 14:32,PROJ2,4,
+297,4/20/2017 14:33,PROJ2,2,requested again
+340,4/20/2017 14:36,PROJ2,4,looping thru a row in the machine
+130,4/20/2017 14:41,PROJ2,4,making a 3d list
+337,4/20/2017 14:44,PROJ2,4,making 3d list
+137,4/20/2017 14:49,PROJ2,5,wasn't sure how to print the list
+237,4/20/2017 14:53,PROJ2,3,needed confirmation that he was doing it right
+110,4/20/2017 15:03,PROJ2,5,working with 3d list
+139,4/20/2017 15:05,OTHERS,5,help with reading input into list
+211,4/20/2017 15:16,PROJ2,4,looping thru and printing 3d list
+346,4/20/2017 15:27,PROJ2,5,student left?
+173,4/20/2017 15:30,PROJ2,5,needed help with structuring the 3d list
+171,4/20/2017 15:33,PROJ2,5,student left
+176,4/20/2017 15:38,OTHERS,5,student left
+261,4/20/2017 15:48,PROJ2,4,student left
+169,4/20/2017 15:49,PROJ2,3,
+316,4/20/2017 15:52,PROJ2,5,student left
+136,4/20/2017 15:53,PROJ2,5,student left
+184,4/20/2017 15:57,PROJ2,2,"had stuff outside of for loop, was only reading in the last line of input file"
+135,4/20/2017 15:58,PROJ2,3,"thought he could cast the input as a 3D list, what a cute innocent child"
+145,4/20/2017 16:03,OTHERS,3,output wasn't lining up properly for one of the files
+107,4/20/2017 16:09,PROJ2,4,"wasn't sure how to read/write with files, and when to close"
+255,4/20/2017 16:13,PROJ2,4,helped with visualizing 3d list
+165,4/20/2017 16:13,PROJ2,4,"helped her when I helped Mona, sitting together"
+305,4/20/2017 16:15,PROJ2,4,3d list setup
+130,4/20/2017 16:18,PROJ2,3,"inadvertantly helped her when helping the student next to her, needed help with structure"
+199,4/20/2017 16:28,PROJ2,5,printing empty question for when vending machine quantity is 0
+137,4/20/2017 16:28,PROJ2,5,structure for printing the vendig machine
+237,4/20/2017 16:35,PROJ2,4,confused about 3D list layout
+106,4/20/2017 16:39,PROJ2,5,"super confused about everything, how to print and store 3d list"
+305,4/20/2017 16:40,PROJ2,2,office hours over
+139,4/20/2017 16:44,PROJ2,4,office hours over
+122,4/20/2017 16:49,PROJ2,5,office hours over
+297,4/20/2017 16:51,PROJ2,5,office hours over
+173,4/20/2017 16:56,PROJ2,5,office hours over
+232,4/20/2017 16:57,PROJ2,5,office hours over
+329,4/20/2017 17:07,PROJ2,2,office hours over
+291,4/20/2017 17:10,PROJ2,4,student left
+292,4/20/2017 17:19,PROJ2,5,office hours over
+329,4/20/2017 17:30,PROJ2,2,requested again
+169,4/20/2017 17:34,PROJ2,3,office hours over
+121,4/21/2017 9:59,PROJ2,5,Needed help with printing WITHOUT using hard coding.
+244,4/21/2017 10:00,PROJ2,5,Helped her write a function to read in a file for her lists. Student literally had nothing and gave me attitude.
+297,4/21/2017 10:00,PROJ2,3,Needed help with printing the menu items in the correct order.
+260,4/21/2017 10:00,PROJ2,2,Order of if loops were wrong.
+354,4/21/2017 10:03,PROJ2,5,Needed help with writing a function that will write line-by-line.
+260,4/21/2017 10:04,PROJ2,4,The problem wasn't with her add balance function... She never utilized a list and was just utilizing messy variables that were never passed in.
+155,4/21/2017 10:04,PROJ2,5,output formatting and tab spacing and concatenation
+332,4/21/2017 10:10,PROJ2,4,Very strange list shallow copy issue
+260,4/21/2017 10:14,OTHERS,2,requested again
+305,4/21/2017 10:16,PROJ2,2,requested again
+121,4/21/2017 10:20,PROJ2,5,Student left
+292,4/21/2017 10:21,PROJ2,5,
+306,4/21/2017 10:21,PROJ2,3,
+340,4/21/2017 10:24,PROJ2,5,Student left
+332,4/21/2017 10:26,PROJ2,4,requested again
+130,4/21/2017 10:28,PROJ2,4,Student left
+297,4/21/2017 10:33,PROJ2,4,
+253,4/21/2017 10:44,PROJ2,5,3D list visualization
+260,4/21/2017 10:45,PROJ2,2,
+232,4/21/2017 10:48,PROJ2,5,
+110,4/21/2017 10:58,PROJ2,5,
+176,4/21/2017 10:59,OTHERS,5,fishing on how to create 3d list
+136,4/21/2017 10:59,PROJ2,5,Wanted help with function headers.
+305,4/21/2017 11:00,PROJ2,2,Basic variable scope issues
+133,4/21/2017 11:04,PROJ2,3,Wanted confirmation that his 3D list was good. It was perfect.
+106,4/21/2017 11:04,PROJ2,5,
+176,4/21/2017 11:07,OTHERS,5,requested again
+296,4/21/2017 11:09,OTHERS,5,3D list construction
+165,4/21/2017 11:10,PROJ2,5,printing out gride for displayMachine
+329,4/21/2017 11:12,PROJ2,4,was copying stuff out of the list
+306,4/21/2017 11:12,PROJ2,5,requested again
+305,4/21/2017 11:13,PROJ2,3,requested again
+261,4/21/2017 11:16,PROJ2,5,trouble with saving variables when returning to main
+322,4/21/2017 11:19,PROJ2,3,3d ist on board
+261,4/21/2017 11:22,PROJ2,4,requested again
+278,4/21/2017 11:23,PROJ2,5,student left
+173,4/21/2017 11:35,PROJ2,3,unfinished function caused tabbing errors
+136,4/21/2017 11:37,PROJ2,5,requested again
+305,4/21/2017 11:44,PROJ2,4,wasn't passing information to fxns
+332,4/21/2017 11:50,PROJ2,5,"was trying to deep copy 3d list, just created both at same time instead"
+260,4/21/2017 11:59,PROJ2,2,3d list on board
+292,4/21/2017 12:22,PROJ2,5,was comparing float against list and then str
+118,4/21/2017 12:22,PROJ2,5,problem with boolean flags
+232,4/21/2017 12:23,PROJ2,5,trying to use [ [ [  ] ] ] as the vending machine
+171,4/21/2017 12:35,PROJ2,4,not saving values in main with assn operator
+260,4/21/2017 12:50,PROJ2,2,student left
+292,4/21/2017 12:57,PROJ2,4,subscripting problems
+118,4/21/2017 13:16,PROJ2,5,was printing instead of writing to file
+105,4/21/2017 13:17,PROJ2,5,office hours over
+269,4/21/2017 13:18,PROJ2,3,office hours over
+183,4/21/2017 13:19,PROJ2,5,office hours over
+251,4/21/2017 13:21,PROJ2,5,office hours over
+305,4/21/2017 13:24,PROJ2,3,office hours over
+171,4/21/2017 13:31,PROJ2,3,office hours over
+118,4/21/2017 14:00,PROJ2,5,Help with writing
+183,4/21/2017 14:00,PROJ2,5,help with printing the list
+297,4/21/2017 14:00,PROJ2,3,used the membership operator to check if location valid
+305,4/21/2017 14:00,PROJ2,3,help with printing the list
+354,4/21/2017 14:00,PROJ2,5,writing finished list to a file
+173,4/21/2017 14:00,PROJ2,5,printing list
+105,4/21/2017 14:00,PROJ2,5,Writing finished list to a file
+165,4/21/2017 14:00,PROJ2,3,checking if location is valid
+329,4/21/2017 14:00,PROJ2,5,subtracting balance and quantity
+184,4/21/2017 14:00,PROJ2,3,3-d list building
+120,4/21/2017 14:01,PROJ2,5,seleciton function
+260,4/21/2017 14:01,PROJ2,2,returning amount and where to read file in
+285,4/21/2017 14:01,PROJ2,5,printing 3d list
+136,4/21/2017 14:02,PROJ2,5,student left
+262,4/21/2017 14:03,PROJ2,5,help with selection function
+135,4/21/2017 14:08,PROJ2,4,making 3d list
+183,4/21/2017 14:08,PROJ2,5,
+171,4/21/2017 14:11,PROJ2,5,"infinite loop main, loading from file"
+306,4/21/2017 14:11,PROJ2,4,Needed help undestanding the 3d list
+174,4/21/2017 14:15,PROJ2,3,Structure questions
+108,4/21/2017 14:15,PROJ2,5,updating balance (scope)
+297,4/21/2017 14:15,PROJ2,3,selection validation
+105,4/21/2017 14:18,PROJ2,5,student left
+305,4/21/2017 14:20,PROJ2,2,printing 3d
+316,4/21/2017 14:22,PROJ2,3,Was opening up a file object not the file name
+232,4/21/2017 14:34,PROJ2,4,
+354,4/21/2017 14:35,PROJ2,3,2d to 3d list
+260,4/21/2017 14:36,PROJ2,2,Was not able to update the list correctly 
+143,4/21/2017 14:37,PROJ2,5,nevermind
+105,4/21/2017 14:38,PROJ2,5,requested again
+344,4/21/2017 14:42,PROJ2,5,making 3d list
+296,4/21/2017 14:43,OTHERS,5,creating 3d list wrong
+303,4/21/2017 14:46,PROJ2,3,trouble with returning variables
+171,4/21/2017 14:48,PROJ2,5,requested again
+261,4/21/2017 14:49,PROJ2,5,student left
+165,4/21/2017 14:52,PROJ2,3,student left
+150,4/21/2017 14:52,PROJ2,2,printing 3d
+130,4/21/2017 14:53,PROJ2,4,Was help with printing found bug with reading in file
+297,4/21/2017 14:54,PROJ2,3,requested again
+292,4/21/2017 14:54,PROJ2,5,returning values
+121,4/21/2017 14:55,PROJ2,5,wanted to make sure he had no magic numbers 
+135,4/21/2017 14:59,PROJ2,3,group help
+173,4/21/2017 14:59,PROJ2,5,requested again
+120,4/21/2017 15:03,PROJ2,4,printing empty
+184,4/21/2017 15:06,PROJ2,3,needed help with 3d list
+335,4/21/2017 15:08,PROJ2,4,completely lost on printing the list
+260,4/21/2017 15:09,PROJ2,2,requested again
+215,4/21/2017 15:11,PROJ2,5,making 3d list
+124,4/21/2017 15:13,PROJ2,5,Writting to a file
+183,4/21/2017 15:17,PROJ2,5,"trying to print 3d list, wasn't read in correctly"
+350,4/21/2017 15:18,OTHERS,4,confused about what to write to a file
+335,4/21/2017 15:20,PROJ2,5,requested again
+159,4/21/2017 15:20,PROJ2,5,group help
+291,4/21/2017 15:23,PROJ2,5,writing to file
+171,4/21/2017 15:27,PROJ2,2,requested again
+262,4/21/2017 15:28,PROJ2,5,was deleting list when he printed
+108,4/21/2017 15:29,PROJ2,4,writing to file
+297,4/21/2017 15:30,PROJ2,3,updating quantity
+305,4/21/2017 15:40,PROJ2,3,
+133,4/21/2017 15:42,PROJ2,2,invalid check
+215,4/21/2017 15:46,PROJ2,5,requested again
+106,4/21/2017 16:00,OTHERS,5,updating balance
+296,4/21/2017 16:01,OTHERS,4,logic trouble
+190,4/21/2017 16:01,PROJ2,4,
+261,4/21/2017 16:05,PROJ2,5,wasn't returning values
+255,4/21/2017 16:08,PROJ2,5,office hours over
+292,4/21/2017 16:09,PROJ2,4,office hours over
+110,4/21/2017 16:11,PROJ2,5,office hours over
+183,4/21/2017 16:12,PROJ2,5,requested again
+174,4/21/2017 16:19,PROJ2,2,office hours over
+215,4/21/2017 16:21,PROJ2,5,office hours over
+261,4/21/2017 16:22,PROJ2,4,requested again
+278,4/24/2017 14:02,HW6,5,defining base cases and dealing with the recursive call inside the function
+278,4/24/2017 14:52,HW1,5,working on recursive case
+369,4/24/2017 14:54,HW6,4,recursive case for part 1
+118,4/25/2017 12:45,HW6,5,Needed help understanding recursion
+120,4/25/2017 13:00,HW6,4,Needed help understanding recursion
+184,4/25/2017 13:09,HW6,3,Needed help understanding recursion (did a group with thing with Izabella)
+296,4/25/2017 13:19,HW6,4,
+171,4/25/2017 13:21,HW6,2,Needed help understanding recursion (did a group with thing with Kara)
+227,4/25/2017 13:44,HW6,5,Needed help thinking about pascal's triangle ( had the triangle needed help structuring)
+130,4/25/2017 14:07,LAB10,2,returning none
+162,4/25/2017 14:08,HW6,4,
+124,4/25/2017 14:24,HW6,4,not here
+171,4/25/2017 14:28,HW6,2,syntax issue
+173,4/25/2017 14:29,HW6,3,pascal
+130,4/25/2017 14:37,HW6,2,misunderstanding negative indexing and string slicing
+120,4/25/2017 15:02,HW6,4,confused about recursive inputs
+162,4/25/2017 15:36,HW6,3,algorithm
+120,4/25/2017 15:37,HW6,3,boolean flags
+135,4/25/2017 16:02,HW6,3,office hours over
+285,4/25/2017 17:54,HW6,5,logic error
+244,4/25/2017 18:10,HW6,4,recursion question
+226,4/25/2017 18:18,LAB10,1,questions about lab
+316,4/25/2017 18:29,HW6,3,did not understand part 1
+244,4/25/2017 18:30,HW6,5,logic error
+155,4/25/2017 19:07,HW6,5,had wrong input
+124,4/26/2017 10:02,HW6,5,issue with base case
+155,4/26/2017 10:38,HW6,5,confused about what levelList was for/where it was made
+310,4/26/2017 10:40,HW6,5,wanted reassurance
+110,4/26/2017 10:51,HW6,4,"Sigh, ben wrote my name in so I cant give myself a fancy title. But it a brain fart error."
+124,4/26/2017 11:22,HW6,5,Was checking for palindromes without realizing it
+155,4/26/2017 11:27,HW6,5,not here
+124,4/26/2017 12:14,HW6,5,part 2 of the homework
+227,4/26/2017 12:39,HW6,5,not here
+334,4/26/2017 12:40,HW6,5,Making part1 one super complicated with lists
+254,4/26/2017 12:41,HW6,4,Didn't understand how to use third required input
+227,4/26/2017 12:59,HW6,5,Needed help creating the list
+334,4/26/2017 13:06,HW6,3,Was passing in and returning wrong types
+335,4/26/2017 13:07,HW6,2,Wasn't sure how to use third required input
+227,4/26/2017 13:29,HW6,5,Out of range error
+335,4/26/2017 13:31,HW6,3,Wasn't recursing correctly
+227,4/26/2017 13:47,HW6,5,Having difficulty creating the 2D list using previous numbers in triangle
+297,4/26/2017 15:06,HW6,2,Help with plaindrome problem 
+135,4/26/2017 15:07,HW6,3,Needed help starting pascals triangle
+369,4/26/2017 15:07,HW6,5,Help with conceptualizing which way the pascals recursion goes 
+174,4/26/2017 15:09,HW6,1,Trouble makind gcd recursive
+254,4/26/2017 15:21,HW6,4,Help with pascal function and what to pass it 
+184,4/26/2017 15:22,HW6,3,Help with the gcd function 
+285,4/26/2017 15:45,HW6,5,Was resetting the reverseWord in palindrome function 
+266,4/26/2017 16:06,HW6,4,not here
+184,4/26/2017 16:09,HW6,3,"Recursion depth reached, base case was never being reached, faulty if"
+369,4/26/2017 16:22,HW6,5,out of bounds error
+310,4/27/2017 12:00,OTHERS,5,Understanding the stack
+174,4/27/2017 12:05,HW6,2,Help with iterative solution before recursive
+268,4/27/2017 12:14,HW6,2,quick clarifications
+137,4/27/2017 12:15,HW6,4,Questions about inputs for pascal function
+121,4/27/2017 12:19,HW6,5,How to approach pascals triangle
+269,4/27/2017 12:23,HW6,2,Second problem what to return
+229,4/27/2017 12:24,HW6,1,Questions about how to do pascals triangle
+107,4/27/2017 12:24,HW6,4,working with passing in a 2d list recursively and appending to it
+316,4/27/2017 12:29,HW6,3,Pascals base case
+106,4/27/2017 12:36,HW6,5,wasn't sur how to start 
+120,4/27/2017 12:41,HW6,5,setting up part 3
+221,4/27/2017 12:54,HW6,5,
+121,4/27/2017 12:56,HW6,5,Bug fixing help
+227,4/27/2017 12:57,HW6,5,student left
+335,4/27/2017 13:04,HW6,3,kinda trying to fish for answers
+118,4/27/2017 13:19,HW3,5,problem with recursion
+310,4/27/2017 13:26,HW3,5,problem with base case
+130,4/27/2017 13:29,HW6,3,fishing/wants answers checked
+254,4/27/2017 13:35,HW6,5,student left
+334,4/27/2017 13:39,HW3,5,student left
+120,4/27/2017 13:46,HW6,3,recursive step
+162,4/27/2017 13:47,HW6,5,student left
+261,4/27/2017 13:50,HW6,5,problem with recursion idea
+121,4/27/2017 14:14,HW6,5,recursive reverse
+217,4/27/2017 14:17,HW6,5,not understanding that you need to reverse it first and compare it
+297,4/27/2017 14:18,HW6,3,reverse string
+171,4/27/2017 14:19,HW6,3,fishing
+145,4/27/2017 14:22,HW6,4,problem creating level list
+335,4/27/2017 14:22,HW6,3,input validation
+118,4/27/2017 14:22,HW6,5,pascal recursive step
+112,4/27/2017 14:32,HW6,4,not understanding list mutibility
+137,4/27/2017 14:44,HW6,5,problem with the three inputs
+243,4/27/2017 14:53,HW6,4,"GCD was right, but needed help figuring out part 1"
+261,4/27/2017 14:54,HW6,5,part 1 recursion
+165,4/27/2017 14:55,HW2,3,recursive reverse
+335,4/27/2017 14:57,HW6,4,student left ?
+112,4/27/2017 15:00,HW6,3,pascal recursive step
+217,4/27/2017 15:06,HW6,4,student left ?
+171,4/27/2017 15:18,HW6,3,student left ?
+130,4/27/2017 15:27,HW6,4,helped for prob 1 and 2
+208,4/27/2017 15:29,HW6,5,fixed her problem since she submitted the form
+108,4/27/2017 15:29,HW6,3,student left
+338,4/27/2017 15:30,HW6,4,"had error with recursive function, worked after not trying to do length of a string"
+145,4/27/2017 15:30,HW6,4,student left
+243,4/27/2017 15:31,HW6,4,student left
+254,4/27/2017 15:53,HW6,5,student left
+165,4/27/2017 15:56,HW2,3,student left
+329,4/27/2017 15:57,HW6,3,didn't understand recursion AT ALL
+184,4/27/2017 16:02,HW6,3,needed help with how to set up 2D list and how to use it for this hw
+332,4/27/2017 16:03,HW6,3,wanted to know if he hardcoded something and how to prind out the 2D list
+261,4/27/2017 16:05,HW6,4, double-checking design for poblem 2
+208,4/27/2017 16:14,HW6,2,needed to use string concatination for input message
+184,4/27/2017 16:15,HW6,3,answered question when I helped her earlier
+303,4/27/2017 16:24,HW6,4,help with reverse function logic
+261,4/27/2017 16:27,HW6,2,requested again
+297,4/27/2017 16:36,HW6,3,student left?
+358,4/27/2017 16:42,HW6,5,index error on pascals (starting at level 1 not 0)
+329,4/27/2017 16:49,HW6,4,"Had a super simple logic error, was checking second letter against last instead of first"
+179,4/27/2017 17:03,HW6,2,student left??
+292,4/27/2017 17:09,HW6,4,needed help with how to do part 3
+179,4/27/2017 17:17,HW6,3,needed help understanding what the error was saying
+171,4/27/2017 17:20,HW6,4,needed help with what to do for part 3
+179,4/27/2017 17:30,HW6,2,"was accessing a part of the 2D list that didn't exist, too far"
+292,4/27/2017 17:44,HW6,3,needed help understanding what to do still
+107,4/27/2017 17:45,HW6,5,help with printing
+179,4/27/2017 17:50,HW6,2,office hours over
+121,4/28/2017 10:03,HW6,5,(???) He was unsure whether or not it was OK to create part of the list before passing it in... but his program works fine otherwise. I told him that it was OK but I'm unsure about the answer I gave him.
+260,4/28/2017 10:03,HW6,2,Wanted help with printing out the contents in his 2D list (he did a list of lists)
+215,4/28/2017 10:04,HW6,5,Needed help with understanding the concept of pascal's triangle + help with logic.
+149,4/28/2017 10:06,HW6,3,Wanted t know if it was OK to add another parameter to pascal(). No.
+220,4/28/2017 10:07,HW6,4,Program wasn't recursive.
+278,4/28/2017 10:08,HW6,5,Explained to him how he might use the 3rd parameter.
+217,4/28/2017 10:08,HW6,4,Needed help with recursive.\
+130,4/28/2017 10:10,HW6,3,Program wasn't recursive.
+174,4/28/2017 10:10,HW6,2,Needed help with parameters.
+296,4/28/2017 10:15,HW6,4,Confusion about 3rd parameter in GCD problem
+215,4/28/2017 10:32,HW6,4,
+149,4/28/2017 10:43,HW6,2,Needed further help with base cases for pascal()
+120,4/28/2017 10:44,HW6,5,
+162,4/28/2017 10:46,HW6,4,told her to draw out Pascals triangle
+260,4/28/2017 10:49,HW6,2,didn't have a base case
+143,4/28/2017 10:54,HW6,5,directed her to Euclid's algorithm
+292,4/28/2017 10:57,HW6,5,confused about row generation
+110,4/28/2017 10:59,HW6,3,GCD only had 2 parameters
+261,4/28/2017 11:08,HW2,4,She was missing closing parenthesis... Her program was so simple I'm mad I didn't think of that solution. 
+215,4/28/2017 11:09,HW6,5,student left
+334,4/28/2017 11:09,HW6,5,was calling pascal with wrong params
+154,4/28/2017 11:10,HW6,4,student left
+149,4/28/2017 11:13,HW6,2,student left
+108,4/28/2017 11:20,HW6,3,
+162,4/28/2017 11:30,HW6,3,row generation
+260,4/28/2017 11:31,HW6,1,office hours over
+232,4/28/2017 11:32,HW6,4,office hours over
+174,4/28/2017 11:40,HW6,2,office hours over
+143,4/28/2017 11:48,HW6,5,office hours over
+269,4/28/2017 11:57,HW6,3,office hours over
+176,4/28/2017 11:59,HW6,4,office hours over
+120,4/28/2017 13:55,HW6,5,debugging pascals triangle
+162,4/28/2017 13:56,HW6,4,starting pascals triangle
+232,4/28/2017 13:56,HW6,5,not using levelList
+190,4/28/2017 13:56,HW6,5,Help with pascals triangle
+306,4/28/2017 13:56,HW6,4,help with part 1
+258,4/28/2017 13:56,HW6,4,starting part 1
+184,4/28/2017 13:57,HW6,3,basic structure for pascal's triangle
+337,4/28/2017 13:59,HW6,4,starting part 1
+296,4/28/2017 14:04,HW6,4,starting part 3
+135,4/28/2017 14:04,HW6,3,algortihm for part 2
+303,4/28/2017 14:04,HW6,4,algorithm for part 2
+143,4/28/2017 14:12,HW6,5,how to make a new level part 3
+305,4/28/2017 14:21,HW6,3,starting part 1
+232,4/28/2017 14:23,HW6,3,starting part 1
+269,4/28/2017 14:26,HW6,3,algorithm for part 3
+316,4/28/2017 14:26,HW6,3,how to make a new level part 3
+297,4/28/2017 14:31,HW6,3,algorithm for part 2
+337,4/28/2017 14:31,HW6,2,working on understanding recursion for part 1
+296,4/28/2017 14:32,HW6,5,recursive step pascal
+108,4/28/2017 14:33,HW6,3,recursive step pascal
+243,4/28/2017 14:34,HW6,5,Needed help with algorithm for pascals
+162,4/28/2017 14:35,HW6,5,student left
+135,4/28/2017 14:35,HW6,3,gcd recursive step
+258,4/28/2017 14:43,HW6,4,reversing word
+283,4/28/2017 14:46,HW6,5,gcd recursive step
+171,4/28/2017 14:49,HW6,3,Forgot that it had 3 inputs
+305,4/28/2017 14:55,HW3,2,pascal
+306,4/28/2017 14:59,HW6,3,
+303,4/28/2017 14:59,HW6,4,Ended up needing part 3 help
+184,4/28/2017 15:00,HW6,3,List not set up right
+179,4/28/2017 15:00,HW6,2,student left
+244,4/28/2017 15:03,HW6,4,was using euclid's method and didn't understand it
+108,4/28/2017 15:13,HW6,3,
+150,4/28/2017 15:14,HW6,1,"was trying to use factorial for pascal, and didn't understand it"
+296,4/28/2017 15:17,HW6,5,recursive step pascal
+316,4/28/2017 15:19,HW6,2,recursive step pascal
+135,4/28/2017 15:21,HW6,3,student left
+135,4/28/2017 15:22,HW6,3,requested again
+130,4/28/2017 15:23,HW6,4,spaghetti code
+306,4/28/2017 15:25,HW6,4,requested again
+297,4/28/2017 15:26,HW6,2,pascal revursive step
+190,4/28/2017 15:29,HW6,5,recursive step pascal
+305,4/28/2017 15:31,HW6,2,recursion woes
+337,4/28/2017 15:38,HW6,4,recursion woes
+171,4/28/2017 15:47,HW6,4,
+244,4/28/2017 16:02,HW6,4,
+258,4/28/2017 16:03,HW6,4,office hours over
+108,4/28/2017 16:10,HW6,2,office hours over
+150,4/28/2017 16:28,HW2,2,office hours over
+329,4/28/2017 16:30,HW6,5,forgot to call recursive function in important recursive case
+304,4/28/2017 16:31,HW6,5,for loop for creating a new level
+306,4/28/2017 16:39,HW6,4,office hours over
+184,4/28/2017 16:41,HW6,3,office hours over
+305,4/28/2017 16:55,HW6,5,office hours over
+266,5/2/2017 14:14,PROJ3,4,Needed help thinking about the project
+297,5/2/2017 14:47,PROJ3,3,student left
+121,5/2/2017 17:58,PROJ3,5,help with the design of functions
+173,5/2/2017 18:10,PROJ3,2,help with understanding the design
+107,5/2/2017 18:19,PROJ3,2,confused about the prettyPrint function
+121,5/2/2017 18:37,PROJ3,5,question about variables
+335,5/2/2017 18:46,PROJ3,3,questions about the design
+176,5/2/2017 18:58,PROJ3,1,
+215,5/3/2017 13:00,PROJ3,5,questions about coding for flags and mines
+173,5/3/2017 13:18,PROJ3,3,questions about functions and design
+297,5/3/2017 13:44,PROJ3,2,"didnt include to ."" when getting the file"""
+124,5/3/2017 14:15,PROJ3,4,How to play minesweeper
+217,5/3/2017 15:40,OTHERS,4,design check and question on how to store the board 
+274,5/4/2017 12:02,PROJ3,5,Making the 2d list from the file
+264,5/4/2017 12:03,PROJ3,4,How to make the userBoard that does not effect the other board
+121,5/4/2017 12:04,PROJ3,5,Recursion
+124,5/4/2017 12:07,PROJ3,5,help with understanding what an island is
+162,5/4/2017 12:21,PROJ3,4,Understanding islands
+120,5/4/2017 12:22,PROJ3,5,Understanding the two lists
+334,5/4/2017 12:27,PROJ3,5,Understanding the two lists
+121,5/4/2017 12:33,PROJ3,5,Making a trail for the recursion to not repeat a location
+310,5/4/2017 12:37,OTHERS,4,Can use dictonary for coordinates?
+118,5/4/2017 12:51,PROJ3,5,
+169,5/4/2017 13:05,PROJ3,4,"Needed help, suggested playing minesweeper since hes never played or understands what is going ion"
+155,5/4/2017 13:05,PROJ3,3,structure of file
+118,5/4/2017 13:11,PROJ3,5,maybe copied over prettyboard function incorrectly?
+292,5/4/2017 13:11,PROJ3,3,function ideas
+121,5/4/2017 13:23,PROJ3,5,wanted help with island
+120,5/4/2017 13:35,PROJ3,4,doesnt understand game really
+310,5/4/2017 13:43,OTHERS,5,easy question
+261,5/4/2017 13:45,PROJ3,2,nevermind
+155,5/4/2017 13:58,PROJ3,3,making a list of mines
+292,5/4/2017 13:59,PROJ3,4,program design
+322,5/4/2017 14:00,PROJ3,4,Read the file twice
+120,5/4/2017 14:08,PROJ3,4,making two boards
+310,5/4/2017 14:09,OTHERS,5,error with changing a constant
+121,5/4/2017 14:12,PROJ3,5,going to bounds and getting stuck
+369,5/4/2017 14:20,PROJ3,3,needed help getting started
+128,5/4/2017 14:26,PROJ3,3,shallow copies
+118,5/4/2017 14:32,PROJ3,5,printing boards
+211,5/4/2017 14:35,PROJ3,5,help with recursion function - trying to do too much
+322,5/4/2017 14:36,PROJ3,2,counting mines
+121,5/4/2017 14:44,PROJ3,5,talking about recursion
+130,5/4/2017 14:49,PROJ3,4,understanding minesweeper
+118,5/4/2017 15:31,PROJ1,5,"small bug counting mines, also design questions (2 board setup)"
+322,5/4/2017 15:41,PROJ3,4,"board was a list of strings, not a list of lists of chars. caused problems"
+329,5/4/2017 15:44,PROJ3,3,doesn't know how to structure design document
+130,5/4/2017 15:45,PROJ3,3,setting up 2d lists
+253,5/4/2017 15:58,PROJ2,4, help with design (also changing to 2d list not list of strings)
+305,5/4/2017 16:34,PROJ3,2,"starting out this proj, general design"
+253,5/4/2017 16:47,PROJ3,3,"was setting entire board to dots, couldn't figure out how to keep border"
+329,5/4/2017 16:51,PROJ3,4,general design help
+261,5/4/2017 17:10,PROJ3,2,needed instruction clarifications
+253,5/4/2017 17:18,PROJ3,4,coudln't read in file twice to make two boards
+261,5/4/2017 17:51,PROJ3,4,design verification
+296,5/5/2017 10:06,OTHERS,5,Needed help with ideas for functions.
+155,5/5/2017 10:24,PROJ3,4,Needed help thinking of other possible recursive functions.
+296,5/5/2017 10:30,OTHERS,5,Was wondering if it would be a good idea to recursively generate the clue # fields.
+155,5/5/2017 11:01,PROJ3,4,"by request, recursion"
+130,5/5/2017 11:41,PROJ3,4,Fishing. Didn't know how to create the 2D list. I helped them a bit.
+173,5/5/2017 11:53,PROJ3,2,was confused about two 2d lists
+262,5/5/2017 14:00,OTHERS,5,Questions about design function ideas for more
+173,5/5/2017 14:00,PROJ3,3,Question about design functions
+274,5/5/2017 14:00,PROJ3,4,shallow vs deep copy for creating the display board
+242,5/5/2017 14:00,PROJ3,5,understanding island recursion
+143,5/5/2017 14:00,PROJ3,5,checking design and parameters
+251,5/5/2017 14:01,PROJ3,4,Questions about the two 2-d lists and pretty print function 
+184,5/5/2017 14:01,PROJ3,3,"questions about separate list, parameters and order of main"
+110,5/5/2017 14:01,PROJ3,5,Question about design functions
+362,5/5/2017 14:03,PROJ3,5,thinking about base cases
+274,5/5/2017 14:10,PROJ3,3,Help with deep copy and pretty print
+297,5/5/2017 14:13,PROJ3,2,"using , in input"
+251,5/5/2017 14:14,PROJ3,4,Questions about design functions and constants 
+251,5/5/2017 14:15,PROJ3,2,requested again
+242,5/5/2017 14:18,PROJ3,5,confused about parameter for pretty print
+184,5/5/2017 14:32,PROJ3,2,design questions
+110,5/5/2017 14:34,PROJ3,2,deep copy not working ?? i don't know why
+242,5/5/2017 14:40,PROJ3,5,Help with the two different boards
+108,5/5/2017 14:41,PROJ3,3,choosing functions and how minesweeper works
+130,5/5/2017 14:45,PROJ3,4,Question about printing
+297,5/5/2017 14:56,PROJ3,2,how to count mines with flags
+242,5/5/2017 15:00,PROJ3,5,update board function what helper functions needed
+108,5/5/2017 15:08,PROJ2,3,design questions
+354,5/5/2017 15:08,PROJ3,5,understanding project
+306,5/5/2017 15:10,PROJ3,4,Needed to know what new functions to add
+130,5/5/2017 15:13,PROJ3,4,Needed assistance with recursion 
+242,5/5/2017 15:16,PROJ3,5,Checking design
+297,5/5/2017 15:27,PROJ3,2,Understanding two boards
+143,5/5/2017 15:31,PROJ3,5,Wanted to discuss their design
+354,5/5/2017 15:35,PROJ3,5,Recursive loops
+108,5/5/2017 15:36,PROJ3,4,Didn't uderstand difference between recursive call and the count mines function
+261,5/5/2017 15:51,PROJ3,5,Design document
+130,5/5/2017 16:06,PROJ3,2,recursion help
+329,5/5/2017 16:31,PROJ3,5,Design document
+274,5/8/2017 9:59,PROJ3,5,recursive design
+227,5/8/2017 10:00,PROJ3,5,"fishing. legit said i don't know how to do it recursively"""""
+155,5/8/2017 10:12,PROJ3,4,didnt use prettyPrintBoard
+130,5/8/2017 10:37,PROJ3,4,trying to do too much
+155,5/8/2017 10:52,PROJ3,3,problem with recursive design
+297,5/8/2017 13:12,PROJ3,2,"Needed and"" instead of ""or"" in conditional statement"""
+264,5/8/2017 13:16,PROJ3,4,Needed help thinking out base case
+118,5/8/2017 13:23,PROJ3,5,Was actually shallow copying instead of deep copying
+297,5/8/2017 13:40,PROJ3,2,"Needed two lists, was passing original to pretty print"
+357,5/8/2017 13:40,PROJ3,5,Wasn't reading in list correctly
+253,5/8/2017 13:47,PROJ3,5,Logic error
+264,5/8/2017 13:53,PROJ3,4,fishing
+253,5/8/2017 13:58,PROJ3,3,Wasn't using indices for board
+357,5/8/2017 13:59,PROJ3,2,trying to read line from file when pointer was already at end
+253,5/8/2017 14:07,PROJ3,5,figuring out iterating over the 2d list
+130,5/8/2017 14:15,PROJ3,3,helping fix a syntax error (kept asking more questions)
+176,5/8/2017 14:24,PROJ3,2,syntax error and general idea of recursion
+278,5/8/2017 14:31,PROJ3,4,reading in file and creating 2d list
+253,5/8/2017 14:41,PROJ3,4,need to clean up debugging statements
+176,5/8/2017 14:48,PROJ3,1,putting  debug statement in wrong place
+130,5/8/2017 14:50,PROJ3,3,counting total # of mines
+297,5/8/2017 14:59,PROJ3,2,Needed to make a copy of the board to show the user 
+176,5/8/2017 15:02,PROJ3,1,Was confused about when recursion should happen 
+253,5/8/2017 15:12,PROJ3,4,Couldn't conceptualize what the recursion meant and what was needed
+128,5/8/2017 15:32,PROJ3,3,Good commenting
+158,5/9/2017 12:29,PROJ3,4,Needed help making the board
+227,5/9/2017 12:30,PROJ3,5,Needed help figuring out how to do recursive search
+124,5/9/2017 12:32,PROJ3,5,Needed help figuring out how to do recursive search
+107,5/9/2017 12:33,PROJ3,5,Needed help figuring out how to do recursive search
+264,5/9/2017 12:35,PROJ3,5,student left
+284,5/9/2017 12:38,PROJ3,2,student left
+162,5/9/2017 12:45,PROJ3,4,Help understanding print pretty board
+310,5/9/2017 12:53,OTHERS,5,Rubber Duck
+149,5/9/2017 12:54,PROJ3,3,Win conditions and Rubber Duck
+130,5/9/2017 12:56,PROJ3,4,multiple questions about syntax issues
+227,5/9/2017 12:57,PROJ3,5,Needed help with base case
+255,5/9/2017 13:03,PROJ3,5,Needed help making the second board
+346,5/9/2017 13:06,PROJ3,4,student left
+120,5/9/2017 13:18,PROJ3,5,board studd
+334,5/9/2017 13:41,PROJ3,5,needed help thinking about a clue list
+357,5/9/2017 13:44,PROJ3,5,
+334,5/9/2017 13:53,PROJ3,5,requested again
+162,5/9/2017 14:01,PROJ3,4,issues wwith pretty print
+297,5/9/2017 14:11,OTHERS,3,
+130,5/9/2017 14:13,PROJ3,5,printing
+173,5/9/2017 14:13,PROJ3,3,
+357,5/9/2017 14:16,PROJ3,5,requested again
+130,5/9/2017 14:50,LAB13,3,
+242,5/9/2017 15:06,PROJ3,5,print
+242,5/9/2017 15:31,PROJ3,5,
+155,5/9/2017 15:39,PROJ3,4,
+173,5/9/2017 17:56,PROJ3,3,strip/split confusion
+297,5/9/2017 18:08,PROJ3,2,needed help converting the dots for the clue board
+130,5/9/2017 18:15,LAB13,4,confused about strip/split and how to create a key in a dictionary
+254,5/9/2017 18:43,PROJ3,3,needed clarification on prettyprint function
+130,5/9/2017 18:48,LAB13,2,requested again
+173,5/9/2017 18:50,PROJ3,3,minor error in strip/split
+285,5/9/2017 18:59,PROJ3,5,errors/confusion with strip and split
+130,5/9/2017 19:16,LAB13,2,confused about dictionaries
+260,5/10/2017 10:01,PROJ3,2,was/is confused about what prettyprint is doing
+124,5/10/2017 10:02,PROJ3,5,was returning her recursive call-- ending loop
+176,5/10/2017 10:03,PROJ3,2,having trouble with deep copies
+252,5/10/2017 10:17,PROJ3,4,was splitting on whitespace
+155,5/10/2017 10:25,PROJ3,4,thinking out recursion
+260,5/10/2017 10:39,PROJ3,2,Was splitting on whitespace
+334,5/10/2017 10:57,PROJ3,5,not here
+173,5/10/2017 13:02,PROJ3,2,Needed help with updating and counting mines
+334,5/10/2017 13:02,PROJ3,5,Was returning the wrong variable
+227,5/10/2017 13:03,PROJ3,5,Syntax error in if statement
+130,5/10/2017 13:03,PROJ3,5,Was trying to call recursive function each time user picked reveal
+254,5/10/2017 13:06,PROJ3,3,student left
+242,5/10/2017 13:08,PROJ3,5,Was trying to make getting the length of the board complicated...
+244,5/10/2017 13:10,PROJ3,5,fishing. Didn't seem to even read the project description
+297,5/10/2017 13:11,PROJ3,2,Wasn't updating the board in their flag function
+305,5/10/2017 13:23,PROJ3,3,office hours over
+340,5/10/2017 13:30,PROJ3,5,office hours over
+227,5/10/2017 13:33,PROJ3,5,office hours over
+268,5/10/2017 13:37,PROJ3,1,office hours over
+356,5/10/2017 13:39,PROJ3,4,office hours over
+274,5/10/2017 13:57,PROJ3,5,office hours over
+244,5/10/2017 14:33,PROJ3,5,Super behind on creating 2d lsits
+305,5/10/2017 14:34,PROJ3,2,"jsut started project, didnt know how to count mines"
+110,5/10/2017 14:35,PROJ3,4,...messed up my name :{ but he asked about recursivly bounds checking
+274,5/10/2017 14:36,PROJ3,5,recursive call logic
+176,5/10/2017 14:40,OTHERS,3,Recursive call logic
+356,5/10/2017 14:47,PROJ3,4,Out of range on the boundaries of the board 
+305,5/10/2017 14:55,PROJ3,3,Not here -- Came back and said nobody called her(did help with her question)
+369,5/10/2017 14:58,PROJ3,4,Not on the right track with the recursion 
+176,5/10/2017 15:08,PROJ3,1,Help with recursion 
+356,5/10/2017 15:14,PROJ3,4,was using  <= len(board) so still going out of range 
+274,5/10/2017 15:18,PROJ3,5,Needed help with starting the recursion/how to stop it 
+254,5/10/2017 15:24,PROJ3,4,Making a deep copy of a 2D list 
+184,5/10/2017 15:33,PROJ3,3,Starting with reading in the board 
+100,5/10/2017 15:45,OTHERS,4,student left
+176,5/10/2017 15:47,PROJ3,2,Bug
+255,5/10/2017 15:59,PROJ3,5,islands and checkforwin
+279,5/10/2017 16:00,OTHERS,3,help understanding islands
+100,5/10/2017 16:02,OTHERS,4,wasnt sure how islands or duplicate board would work
+369,5/10/2017 16:03,PROJ3,5,Wasnt sure how to go about the island recursion
+155,5/10/2017 16:14,PROJ3,5,office hours over
+358,5/10/2017 16:19,PROJ3,4,office hours over
+184,5/10/2017 16:27,PROJ3,3,office hours over
+159,5/10/2017 16:31,PROJ3,3,office hours over
+335,5/10/2017 16:33,PROJ3,3,office hours over
+260,5/11/2017 11:57,PROJ3,2,How to make the 2 different boards
+217,5/11/2017 11:57,PROJ3,4,understanding recursion
+227,5/11/2017 11:57,PROJ3,5,Understanding recursion
+329,5/11/2017 11:57,PROJ3,1,How to make 2-D list
+285,5/11/2017 11:58,PROJ3,5,student left
+107,5/11/2017 12:03,PROJ3,5,understanding recursion
+320,5/11/2017 12:05,PROJ3,4,building 2-D list from file
+173,5/11/2017 12:06,PROJ3,2,setting up the answer key board
+297,5/11/2017 12:07,PROJ3,3,counting the bombs
+255,5/11/2017 12:11,PROJ3,5,student left
+171,5/11/2017 12:11,PROJ3,3,"Help with getting started, design was not going to work for the project"
+296,5/11/2017 12:22,PROJ3,5,"return statement in wrong spot, returning too early"
+227,5/11/2017 12:30,PROJ3,5,nevermind
+260,5/11/2017 12:32,PROJ3,2,trying to add str and int when calculating mines
+260,5/11/2017 12:32,PROJ3,2,requested again
+335,5/11/2017 12:36,PROJ3,3,"needed help with island, couldn't figure out logic behind it"
+329,5/11/2017 12:43,PROJ3,4,couldnt figure out islands
+118,5/11/2017 12:47,PROJ3,5,"revealing spot, but accessing the wrong copy of the board"
+184,5/11/2017 12:56,PROJ3,3,fixing 2d boards
+320,5/11/2017 13:06,PROJ3,3,help making 2d list
+130,5/11/2017 13:12,PROJ3,5,Lots of things...
+169,5/11/2017 13:12,PROJ3,4,help copying 2d list
+261,5/11/2017 13:13,PROJ3,5,help with design
+179,5/11/2017 13:18,PROJ3,4,student left
+171,5/11/2017 13:28,PROJ3,5,student left
+244,5/11/2017 13:29,PROJ3,5,Loading the file
+258,5/11/2017 13:38,PROJ3,3,never created 2d lst
+173,5/11/2017 13:39,PROJ3,4,just wanted to check
+334,5/11/2017 13:49,PROJ3,5,student left
+260,5/11/2017 13:52,PROJ3,2,help with getting numbers
+118,5/11/2017 13:59,PROJ3,5,island reveal
+261,5/11/2017 14:14,PROJ3,5,requested again
+297,5/11/2017 14:14,PROJ3,2,logic help and needed to be an or
+101,5/11/2017 14:20,PROJ3,3,just needed to change board to 2d list not list of strings
+145,5/11/2017 14:22,PROJ3,4,"Game mechanics, how spaces get revealed"
+176,5/11/2017 14:32,OTHERS,5,student left ?
+165,5/11/2017 14:33,PROJ3,4,"making second list, just forgot to reset row to empty inside loop"
+159,5/11/2017 14:33,PROJ3,5,fixing recursion. almost had it right just small changes
+320,5/11/2017 14:33,PROJ3,3,fix making second baord (use indices not values)
+258,5/11/2017 14:52,PROJ3,3,student left ?
+244,5/11/2017 14:59,PROJ3,4,student left ?
+130,5/11/2017 15:03,PROJ3,4,student left
+335,5/11/2017 15:06,PROJ2,4,
+101,5/11/2017 15:09,PROJ3,3,couldn't properly create 2d list
+340,5/11/2017 15:11,PROJ3,5,recursion was looping forever
+108,5/11/2017 15:38,PROJ3,4,recursion help
+145,5/11/2017 15:39,PROJ3,4,couldn't figure out how to recursively move along the board
+260,5/11/2017 15:40,PROJ3,2,student left?
+139,5/11/2017 15:43,OTHERS,5,needed help with structuring the checking for clues function
+107,5/11/2017 15:51,PROJ3,5,recursion help
+155,5/11/2017 15:53,PROJ3,5,
+253,5/11/2017 16:03,PROJ3,5,student left?
+184,5/11/2017 16:07,PROJ3,3,help with recursion and revealing clues
+305,5/11/2017 16:11,PROJ3,3,theres no way this girl is finishing 
+139,5/11/2017 16:26,OTHERS,5,helped above
+190,5/11/2017 16:29,PROJ3,3,made a shallow copy of board
+184,5/11/2017 16:30,PROJ3,3,helped above
+335,5/11/2017 16:42,PROJ2,3,student left?
+139,5/11/2017 17:15,OTHERS,5,recursion help
+171,5/11/2017 17:21,PROJ3,5,was having issues with function
+305,5/11/2017 17:44,PROJ3,5,recursion help
+305,5/12/2017 10:00,PROJ3,4,
+173,5/12/2017 10:02,PROJ3,2,Fixed her clues -- she never reset the count to 0.
+130,5/12/2017 10:02,PROJ3,5,Fixed her nested for loops but could not help with her recursive reveal function.
+305,5/12/2017 10:02,PROJ3,5,requested again
+260,5/12/2017 10:02,PROJ3,2,
+268,5/12/2017 10:11,PROJ3,2,Island help
+173,5/12/2017 10:12,PROJ3,3,Recursive function help
+162,5/12/2017 10:14,PROJ3,5,Recursion help
+278,5/12/2017 10:14,PROJ3,5,Wanted help figuring out an approach to the recursive function.
+250,5/12/2017 10:14,OTHERS,5,"Recursive function never went up-left, left, or down-left."
+219,5/12/2017 10:18,PROJ3,5,not here
+217,5/12/2017 10:18,PROJ3,5,was confused about recursion
+305,5/12/2017 10:30,PROJ3,2,She hard coded every board
+296,5/12/2017 10:31,PROJ3,5,
+130,5/12/2017 10:43,PROJ3,4,student left
+143,5/12/2017 10:52,PROJ3,4,fishing
+297,5/12/2017 10:52,PROJ3,2,how do i start?' -- recursive function
+138,5/12/2017 10:53,PROJ3,5,was calculating clues on the fly
+217,5/12/2017 10:58,PROJ3,5,student left
+118,5/12/2017 10:58,PROJ3,5,Helped him solve looping bugs
+162,5/12/2017 11:01,PROJ3,5,student left
+258,5/12/2017 11:03,OTHERS,5,wasnt stripping lines as read in from file
+199,5/12/2017 11:12,PROJ3,5,
+285,5/12/2017 11:12,PROJ3,5,
+137,5/12/2017 11:13,PROJ3,5,student left
+190,5/12/2017 11:14,PROJ3,3,
+305,5/12/2017 11:16,PROJ3,5,office hours over
+335,5/12/2017 11:21,PROJ3,3,office hours over
+261,5/12/2017 11:21,PROJ3,5,office hours over
+329,5/12/2017 11:30,PROJ3,3,office hours over
+260,5/12/2017 11:37,PROJ3,2,office hours over
+250,5/12/2017 11:37,OTHERS,5,office hours over
+118,5/12/2017 11:40,PROJ3,5,office hours over
+118,5/12/2017 11:41,PROJ3,5,office hours over
+334,5/12/2017 11:44,PROJ3,5,office hours over
+169,5/12/2017 11:45,PROJ3,5,office hours over
+176,5/12/2017 11:53,OTHERS,5,office hours over
+258,5/12/2017 11:56,PROJ3,4,office hours over
+199,5/12/2017 12:02,PROJ3,5,office hours over
+297,5/12/2017 14:00,PROJ3,2,recursion
+285,5/12/2017 14:00,PROJ3,5,group help
+260,5/12/2017 14:00,PROJ3,2,help counting mines
+184,5/12/2017 14:00,PROJ3,3,group help
+305,5/12/2017 14:00,PROJ3,5,Help with logic
+108,5/12/2017 14:00,PROJ3,5,
+190,5/12/2017 14:00,PROJ3,3,group help
+145,5/12/2017 14:00,PROJ3,5,group help
+110,5/12/2017 14:00,PROJ3,3,finished
+176,5/12/2017 14:00,OTHERS,3,calling functions correctly
+105,5/12/2017 14:01,PROJ3,5,group help
+232,5/12/2017 14:01,PROJ3,4,needs to make 2-D list to pass to prettyPrintBoard
+176,5/12/2017 14:01,OTHERS,5,student left
+169,5/12/2017 14:03,PROJ3,4,group help
+303,5/12/2017 14:03,PROJ3,4,Help with 2-D list creation
+296,5/12/2017 14:04,PROJ3,5,fixing a print out error
+357,5/12/2017 14:07,PROJ3,5,recursive function
+258,5/12/2017 14:10,PROJ3,4,Generating the user_board
+130,5/12/2017 14:14,PROJ3,5,recursive function
+130,5/12/2017 14:20,PROJ3,5,requested again
+105,5/12/2017 14:26,PROJ3,5,student left
+105,5/12/2017 14:27,PROJ3,5,requested again
+285,5/12/2017 14:28,PROJ3,5,requested again
+143,5/12/2017 14:28,PROJ3,5,lots of errors
+199,5/12/2017 14:29,PROJ3,5,it cycled. I fixed the cycle
+251,5/12/2017 14:29,PROJ3,3,student left
+291,5/12/2017 14:29,PROJ3,4,handling flags
+329,5/12/2017 14:30,PROJ3,5,Needed help with recursion
+171,5/12/2017 14:31,PROJ3,5,program design
+190,5/12/2017 14:37,PROJ3,5,requested again
+329,5/12/2017 14:41,PROJ3,2,requested again
+137,5/12/2017 14:42,PROJ2,5,needed help with index and resetting clue count
+297,5/12/2017 14:45,PROJ3,2,recursive function
+145,5/12/2017 14:45,PROJ3,5,requested again
+305,5/12/2017 14:48,PROJ3,4,unflagging wasn't working
+285,5/12/2017 14:53,PROJ3,5,broken recursion
+108,5/12/2017 14:58,PROJ3,4,print formartting
+356,5/12/2017 15:00,PROJ3,4,broken logic for checking win in main()
+105,5/12/2017 15:01,PROJ3,5,student left
+357,5/12/2017 15:01,PROJ3,5,counting neighbors
+190,5/12/2017 15:02,PROJ3,5,requested again
+296,5/12/2017 15:02,PROJ3,5,didn't know when to check for win condition
+220,5/12/2017 15:03,PROJ3,5,nevermind
+184,5/12/2017 15:07,PROJ3,3,didn't understand the recursion ()
+297,5/12/2017 15:10,PROJ3,5,requested again
+232,5/12/2017 15:12,PROJ3,4,making a 2d list
+303,5/12/2017 15:15,PROJ3,5,needed help with details of calculating numers
+258,5/12/2017 15:27,PROJ3,3,checking for mines
+130,5/12/2017 15:40,PROJ3,4,recursive function
+344,5/12/2017 15:52,PROJ3,5,"making 2d list, understanding recursion"
+260,5/12/2017 15:52,PROJ3,2,office hours over
+357,5/12/2017 15:54,PROJ3,4,requested again
+261,5/12/2017 16:00,PROJ3,5,office hours over
+305,5/12/2017 16:00,PROJ3,5,office hours over
+143,5/12/2017 16:09,PROJ3,5,office hours over
+145,5/12/2017 16:18,PROJ3,5,office hours over
+279,5/12/2017 16:19,PROJ3,3,office hours over
+171,5/12/2017 16:21,PROJ3,5,office hours over
+131,5/12/2017 16:26,PROJ3,4,office hours over
+122,5/12/2017 16:36,PROJ3,5,office hours over
+356,5/12/2017 16:37,PROJ3,5,office hours over
+329,5/12/2017 16:51,PROJ3,3,office hours over

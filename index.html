@@ -13,7 +13,8 @@
 }
 
 </style>
-<svg width="960" height="500"></svg>
+<h1>Help Seeking Behavior correlation to Student Grades</h1>
+<svg width="1000" height="500"></svg>
 <script src="http://d3js.org/d3.v4.min.js"></script>
 <script>
 
@@ -95,6 +96,50 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
 
     columns.push(d.Username)
   })
+});
+
+
+var helpSeekingCSVdata = []
+
+d3.csv('data/tahours2.csv')
+  .row(function(d) {
+    return {
+      username: d["Username"],
+      timeStamp: parseTime(d["Timestamp"]),
+      event: d["Events"],
+      TimeSpentCat: d["Time Spent"],
+      description: d["Time Helped"]
+    };
+  })
+  .get(function(error, csv) {
+    if (!error) {
+      csv.forEach(function(d,i) {
+        helpSeekingCSVdata.push(d)
+        
+      });
+    } else {
+      // handle error
+    }
+  });
+
+console.log(helpSeekingCSVdata)
+
+
+// Below code basically parses the studentGrade data to create normalized scores of the students till that date
+d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
+  if (error) throw error;
+  
+  studentGradeData.forEach(function(d,i) {
+    var total = 0
+    for (var i = 0; i < dateList.length; i++) {
+      var x = (calendarData[dateList[i]].description)
+      var y = (calendarData[dateList[i]].total)
+      total = total + d[x]
+      d[x] = total/y*100
+    }
+
+    columns.push(d.Username)
+  })
   
 
 // Below code contains the logic to transform the student data into time based data that will be used to create the visualization
@@ -112,7 +157,6 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
   })
 
   data = dataForVisualization
-
 
   var students = columns.slice(1).map(function(id) {
     return {
@@ -145,7 +189,7 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
       .attr("y", 6)
       .attr("dy", "0.71em")
       .attr("fill", "#000")
-      .text("scores, ºF");
+      .text("Scores");
 
   var city = g.selectAll(".city")
     .data(students)
