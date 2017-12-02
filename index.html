@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.axis--x path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+</style>
+<svg width="960" height="500"></svg>
+<script src="http://d3js.org/d3.v4.min.js"></script>
+<script>
+
+var svg = d3.select("svg"),
+    margin = {top: 20, right: 80, bottom: 30, left: 50},
+    width = svg.attr("width") - margin.left - margin.right,
+    height = svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var parseTime = d3.timeParse("%Y%m%d");
+
+var x = d3.scaleTime().range([0, width]),
+    y = d3.scaleLinear().range([height, 0]),
+    z = d3.scaleOrdinal(d3.schemeCategory10);
+
+var line = d3.line()
+    .curve(d3.curveBasis)
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.scores); });
+
+
+// -----------------------------------------------------------------------------------------
+//
+// Code to read Calendar and Map dates to events
+//
+// -----------------------------------------------------------------------------------------
+
+// Calendar data contains the values of all the 
+// dates mapped to their events and the aggregate total score of the events till then
+var calendarData = {}
+
+// dateList contains the sequence of dates of events in an array
+var dateList = []
+
+// cTotal contains the accumulative total for all the events that have occured till that date
+var cTotal = 0
+
+// this is the list of columns that need to be displayed in the visualization
+var columns = ["date"]
+
+
+// Below code parses the calendar csv to mark events on the basis of the date
+// and give descriptions of the events that have occured
+// with the cummulative total score till that event
+d3.csv('data/calendar.csv')
+  .row(function(d) {
+    return {
+      date: parseInt(d["Date"]),
+      description: d["Description"],
+      total: +d["Total"]
+    };
+  })
+  .get(function(error, csv) {
+    if (!error) {
+      csv.forEach(function(d,i) {
+        cTotal = cTotal + d.total
+        dateList.push(d.date)
+        calendarData[d.date] = {}
+        calendarData[d.date]["description"] = d.description
+        calendarData[d.date]["total"] = cTotal
+      });
+    } else {
+      // handle error
+    }
+  });
+
+// Below code basically parses the studentGrade data to create normalized scores of the students till that date
+d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
+  if (error) throw error;
+  
+  studentGradeData.forEach(function(d,i) {
+    var total = 0
+    for (var i = 0; i < dateList.length; i++) {
+      var x = (calendarData[dateList[i]].description)
+      var y = (calendarData[dateList[i]].total)
+      total = total + d[x]
+      d[x] = total/y*100
+    }
+
+    columns.push(d.Username)
+  })
+  
+
+// Below code contains the logic to transform the student data into time based data that will be used to create the visualization
+  var dataForVisualization = []
+
+  dateList.forEach(function(d,i) {
+    var element = {}
+    element["date"] = parseTime(d)
+    var x = calendarData[d].description
+    for (var i = 0; i < studentGradeData.length; i++) {
+      var username = studentGradeData[i]["Username"] 
+      element[username] = studentGradeData[i][x]
+    }
+    dataForVisualization.push(element)
+  })
+
+  data = dataForVisualization
+
+
+  var students = columns.slice(1).map(function(id) {
+    return {
+      id: id,
+      values: data.map(function(d) {
+        return {date: d.date, scores: d[id]};
+      })
+    };
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+
+  y.domain([
+    d3.min(students, function(c) { return d3.min(c.values, function(d) { return d.scores; }); }),
+    d3.max(students, function(c) { return d3.max(c.values, function(d) { return d.scores; }); })
+  ]);
+
+  z.domain(students.map(function(c) { return c.id; }));
+
+  g.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  g.append("g")
+      .attr("class", "axis axis--y")
+      .call(d3.axisLeft(y))
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", "0.71em")
+      .attr("fill", "#000")
+      .text("scores, ºF");
+
+  var city = g.selectAll(".city")
+    .data(students)
+    .enter().append("g")
+      .attr("class", "city");
+
+  city.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d.values); })
+      .style("stroke", function(d) { return z(d.id); });
+
+  city.append("text")
+      .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"; })
+      .attr("x", 3)
+      .attr("dy", "0.35em")
+      .style("font", "10px sans-serif")
+      .text(function(d) { return d.id; });
+});
+
+function type(d, _, columns) {
+  d.date = parseTime(d.date);
+  for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
+  return d;
+}
+
+</script>
