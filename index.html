@@ -14,9 +14,27 @@
 
 </style>
 <h1>Help Seeking Behavior correlation to Student Grades</h1>
-<svg width="1000" height="500"></svg>
+<div id="some_div"></div>
+<svg width="1000" height="650"></svg>
 <script src="http://d3js.org/d3.v4.min.js"></script>
 <script>
+
+
+// create the necessary elements
+var label= document.createElement("label");
+var description = document.createTextNode("test");
+var checkbox = document.createElement("input");
+
+checkbox.type = "checkbox";    // make the element a checkbox
+checkbox.name = "slct[]";      // give it a name we can check on the server side
+checkbox.value = "test";         // make its value "pair"
+
+label.appendChild(checkbox);   // add the box to the element
+label.appendChild(description);// add the description to the element
+
+// add the label element to your div
+document.getElementById('some_div').appendChild(label);
+
 
 var svg = d3.select("svg"),
     margin = {top: 20, right: 80, bottom: 30, left: 50},
@@ -81,25 +99,11 @@ d3.csv('data/calendar.csv')
     }
   });
 
-// Below code basically parses the studentGrade data to create normalized scores of the students till that date
-d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
-  if (error) throw error;
-  
-  studentGradeData.forEach(function(d,i) {
-    var total = 0
-    for (var i = 0; i < dateList.length; i++) {
-      var x = (calendarData[dateList[i]].description)
-      var y = (calendarData[dateList[i]].total)
-      total = total + d[x]
-      d[x] = total/y*100
-    }
 
-    columns.push(d.Username)
-  })
-});
 
 
 var helpSeekingCSVdata = []
+var filteredSet = [316,227,184]
 
 d3.csv('data/tahours2.csv')
   .row(function(d) {
@@ -122,25 +126,24 @@ d3.csv('data/tahours2.csv')
     }
   });
 
-console.log(helpSeekingCSVdata)
-
+//console.log(helpSeekingCSVdata)
 
 // Below code basically parses the studentGrade data to create normalized scores of the students till that date
 d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
   if (error) throw error;
   
   studentGradeData.forEach(function(d,i) {
-    var total = 0
-    for (var i = 0; i < dateList.length; i++) {
-      var x = (calendarData[dateList[i]].description)
-      var y = (calendarData[dateList[i]].total)
-      total = total + d[x]
-      d[x] = total/y*100
-    }
-
+    if(filteredSet.includes(parseInt(d.Username))) {
+      var total = 0
+      for (var i = 0; i < dateList.length; i++) {
+        var x = (calendarData[dateList[i]].description)
+        var y = (calendarData[dateList[i]].total)
+        total = total + d[x]
+        d[x] = total/y*100
+      }
     columns.push(d.Username)
+    }
   })
-  
 
 // Below code contains the logic to transform the student data into time based data that will be used to create the visualization
   var dataForVisualization = []
@@ -150,10 +153,13 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     element["date"] = parseTime(d)
     var x = calendarData[d].description
     for (var i = 0; i < studentGradeData.length; i++) {
+
       var username = studentGradeData[i]["Username"] 
-      element[username] = studentGradeData[i][x]
+      if(filteredSet.includes(parseInt(username))) {
+        element[username] = studentGradeData[i][x]
+      }
     }
-    dataForVisualization.push(element)
+      dataForVisualization.push(element)
   })
 
   data = dataForVisualization
