@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
 
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<style>
 .axis--x path {
   display: none;
 }
+
+body {
+    font-family: 'Ubuntu';
+}
+
 
 .line {
   fill: none;
@@ -13,9 +25,23 @@
 }
 
 </style>
-<h1>Help Seeking Behavior correlation to Student Grades</h1>
-<div id="some_div"></div>
-<svg width="1000" height="650"></svg>
+<div class="container-fluid">
+
+  <div class="page-header"><h1>Effect of Help Seeking Behavior on Student Grades</h1></div>
+  <div class="col-sm-1">
+    <h3>Controls</h3>
+    <h5>Time Spent in Office Hours</h5>
+    <h5>Time Spent on Topic</h5>
+    <div id="some_div"></div>
+  </div>
+  <div class="col-sm-8">
+    <svg width="1000" height="610"></svg>
+  </div>
+  <div class="col-sm-3">
+    <h3>Statistics</h3>
+    <h3>Student Details</h3>
+  </div>
+</div>
 <script src="http://d3js.org/d3.v4.min.js"></script>
 <script>
 
@@ -53,6 +79,7 @@ var line = d3.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.scores); });
 
+var tipBox
 
 // -----------------------------------------------------------------------------------------
 //
@@ -66,6 +93,7 @@ var calendarData = {}
 
 // dateList contains the sequence of dates of events in an array
 var dateList = []
+var longDateToShortDate = {}
 
 // cTotal contains the accumulative total for all the events that have occured till that date
 var cTotal = 0
@@ -93,17 +121,15 @@ d3.csv('data/calendar.csv')
         calendarData[d.date] = {}
         calendarData[d.date]["description"] = d.description
         calendarData[d.date]["total"] = cTotal
+        longDateToShortDate[parseTime(d.date)] = d.date
       });
     } else {
       // handle error
     }
   });
 
-
-
-
 var helpSeekingCSVdata = []
-var filteredSet = [316,227,184]
+var filteredSet = [316,184,243,279,318,362]
 
 d3.csv('data/tahours2.csv')
   .row(function(d) {
@@ -125,8 +151,6 @@ d3.csv('data/tahours2.csv')
       // handle error
     }
   });
-
-//console.log(helpSeekingCSVdata)
 
 // Below code basically parses the studentGrade data to create normalized scores of the students till that date
 d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
@@ -173,7 +197,7 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     };
   });
 
-  x.domain(d3.extent(data, function(d) { return d.date; }));
+  x.domain(d3.extent(data, function(d) {return d.date; }));
 
   y.domain([
     d3.min(students, function(c) { return d3.min(c.values, function(d) { return d.scores; }); }),
@@ -183,43 +207,91 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
   z.domain(students.map(function(c) { return c.id; }));
 
   g.append("g")
-      .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+    .attr("class", "axis axis--x")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
 
   g.append("g")
-      .attr("class", "axis axis--y")
-      .call(d3.axisLeft(y))
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(y))
     .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", "0.71em")
-      .attr("fill", "#000")
-      .text("Scores");
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", "0.71em")
+    .attr("fill", "#000")
+    .text("Scores");
+
+  var tooltip = d3.select("body")
+  .append("div")
+  .style("position", "absolute")
+  .style("z-index", "10")
+  .style("visibility", "hidden")
 
   var city = g.selectAll(".city")
     .data(students)
     .enter().append("g")
-      .attr("class", "city");
+    .attr("class", "city");
 
   city.append("path")
-      .attr("class", "line")
-      .attr("d", function(d) { return line(d.values); })
-      .style("stroke", function(d) { return z(d.id); });
+    .attr("class", "line")
+    .attr("d", function(d) { return line(d.values); })
+    .style("stroke", function(d) { return z(d.id); })
+    .style("stroke-width", "5px")
+    .on("mouseover", mouseOverFunction)
+    .on("mouseout", mouseOutFunction)
+    .on("mousemove", mouseMoveFunction)
 
   city.append("text")
-      .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"; })
-      .attr("x", 3)
-      .attr("dy", "0.35em")
-      .style("font", "10px sans-serif")
-      .text(function(d) { return d.id; });
+    .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+    .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"; })
+    .attr("x", 3)
+    .attr("dy", "0.35em")
+    .style("font", "10px")
+    .text(function(d) { return d.id; });
+
+  function mouseOutFunction() {
+    d3.select(this)
+      .style("stroke-width","5px")   
+
+    tooltip.style("visibility", "hidden") 
+  }
+
+  function mouseOverFunction() {
+    tooltip.style("visibility", "visible")
+  }
+
+  function mouseMoveFunction() {
+    var year = x.invert(d3.mouse(this)[0])
+    var y = getEventName(year)
+    tooltip.style("top", (event.pageY-30)+"px")
+    .style("left",(event.pageX-10)+"px")
+    .text(y)
+    .style("background-color","grey")
+    .style("padding","5px 5px 5px 5px")
+    .style("color","white")
+
+  }
+
+  
+  function getEventName(year) {
+    var y = new Date(year)
+    var x1 = Object.keys(longDateToShortDate)
+    for(var i=0;i<x1.length-1;i++) {
+      var x2 = new Date(x1[i])
+      var x3 = new Date(x1[i+1])
+      if(x2<=y && y<x3) {
+        return calendarData[longDateToShortDate[x3]]["description"]
+      }
+    }
+  }
+
 });
 
-function type(d, _, columns) {
-  d.date = parseTime(d.date);
-  for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
-  return d;
-}
+  function type(d, _, columns) {
+    d.date = parseTime(d.date);
+    for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
+    return d;
+  }
+
 
 </script>
