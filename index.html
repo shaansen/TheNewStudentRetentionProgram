@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 
 <head>
-  <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto Condensed' rel='stylesheet'>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -14,7 +14,7 @@
 }
 
 body {
-    font-family: 'Ubuntu';
+    font-family: 'Roboto Condensed';
 }
 
 
@@ -28,39 +28,25 @@ body {
 <div class="container-fluid">
 
   <div class="page-header"><h1>Effect of Help Seeking Behavior on Student Grades</h1></div>
-  <div class="col-sm-1">
-    <h3>Controls</h3>
-    <h5>Time Spent in Office Hours</h5>
-    <h5>Time Spent on Topic</h5>
-    <div id="some_div"></div>
+  <div class="col-sm-2">
+    <h4><strong>Time Spent on Topic</strong></h4>
+    <div id="timeSpentCheckboxes"></div>
+    <h4><strong>Time Spent in Office Hours</strong></h4>
+    <div id="eventsCheckboxes"></div>
+
+
+    
   </div>
   <div class="col-sm-8">
     <svg width="1000" height="610"></svg>
   </div>
-  <div class="col-sm-3">
+  <div class="col-sm-2">
     <h3>Statistics</h3>
     <h3>Student Details</h3>
   </div>
 </div>
 <script src="http://d3js.org/d3.v4.min.js"></script>
 <script>
-
-
-// create the necessary elements
-var label= document.createElement("label");
-var description = document.createTextNode("test");
-var checkbox = document.createElement("input");
-
-checkbox.type = "checkbox";    // make the element a checkbox
-checkbox.name = "slct[]";      // give it a name we can check on the server side
-checkbox.value = "test";         // make its value "pair"
-
-label.appendChild(checkbox);   // add the box to the element
-label.appendChild(description);// add the description to the element
-
-// add the label element to your div
-document.getElementById('some_div').appendChild(label);
-
 
 var svg = d3.select("svg"),
     margin = {top: 20, right: 80, bottom: 30, left: 50},
@@ -129,13 +115,22 @@ d3.csv('data/calendar.csv')
   });
 
 var helpSeekingCSVdata = []
-var filteredSet = [316,184,243,279,318,362]
+var listOfEvents = ["HW1","LAB2","OTHERS","HW2","HW3","LAB3","LAB4","HW4","LAB5","PROJ1","LAB6","LAB7",
+                    "Midterm","HW5","LAB8","PROJ2","LAB9","HW6","LAB10","PROJ3","LAB13"]
+var hourSpent = {
+  1: "< 5 minutes",
+  2: "6 - 15 minutes",
+  3: "16 - 30 minutes",
+  4: "31 - 60 minutes",
+  5: "> 60 minutes",
+}
+var filteredSet = []
 
 d3.csv('data/tahours2.csv')
   .row(function(d) {
     return {
       username: d["Username"],
-      timeStamp: parseTime(d["Timestamp"]),
+      timeStamp: new Date(d["Timestamp"]),
       event: d["Events"],
       TimeSpentCat: d["Time Spent"],
       description: d["Time Helped"]
@@ -145,19 +140,58 @@ d3.csv('data/tahours2.csv')
     if (!error) {
       csv.forEach(function(d,i) {
         helpSeekingCSVdata.push(d)
-        
       });
     } else {
       // handle error
     }
   });
 
+listOfEvents.forEach(function(values) {
+  // create the necessary elements
+  var br = document.createElement("br");
+  var label= document.createElement("label");
+  var description = document.createTextNode(values);
+  var checkbox = document.createElement("input");
+
+  checkbox.type = "checkbox";    // make the element a checkbox
+  checkbox.name = values;      // give it a name we can check on the server side
+  checkbox.value = values;         // make its value "pair"
+
+  label.appendChild(checkbox);   // add the box to the element
+  label.appendChild(description);// add the description to the element
+  
+  // add the label element to your div
+  document.getElementById('eventsCheckboxes').appendChild(label);
+  document.getElementById('eventsCheckboxes').appendChild(br);
+})
+
+Object.keys(hourSpent).forEach(function(values) {
+  // create the necessary elements
+  var br = document.createElement("br");
+  var label= document.createElement("label");
+  var description = document.createTextNode(hourSpent[values]);
+  var checkbox = document.createElement("input");
+
+  checkbox.type = "checkbox";    // make the element a checkbox
+  checkbox.name = hourSpent[values];      // give it a name we can check on the server side
+  checkbox.value = hourSpent[values];         // make its value "pair"
+
+  label.appendChild(checkbox);   // add the box to the element
+  label.appendChild(description);// add the description to the element
+
+  // add the label element to your div
+  document.getElementById('timeSpentCheckboxes').appendChild(label);
+  document.getElementById('timeSpentCheckboxes').appendChild(br);
+})
+
+
 // Below code basically parses the studentGrade data to create normalized scores of the students till that date
 d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
   if (error) throw error;
   
   studentGradeData.forEach(function(d,i) {
-    if(filteredSet.includes(parseInt(d.Username))) {
+    if(filteredSet.length === 0 || filteredSet.includes(parseInt(d.Username))) {
+      //console.log(d.Username)
       var total = 0
       for (var i = 0; i < dateList.length; i++) {
         var x = (calendarData[dateList[i]].description)
@@ -169,6 +203,8 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     }
   })
 
+  console.log(columns)
+
 // Below code contains the logic to transform the student data into time based data that will be used to create the visualization
   var dataForVisualization = []
 
@@ -179,7 +215,7 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     for (var i = 0; i < studentGradeData.length; i++) {
 
       var username = studentGradeData[i]["Username"] 
-      if(filteredSet.includes(parseInt(username))) {
+      if(filteredSet.length===0 || filteredSet.includes(parseInt(username))) {
         element[username] = studentGradeData[i][x]
       }
     }
@@ -236,7 +272,7 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     .attr("class", "line")
     .attr("d", function(d) { return line(d.values); })
     .style("stroke", function(d) { return z(d.id); })
-    .style("stroke-width", "5px")
+    .style("stroke-width", "2px")
     .on("mouseover", mouseOverFunction)
     .on("mouseout", mouseOutFunction)
     .on("mousemove", mouseMoveFunction)
@@ -251,7 +287,7 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
 
   function mouseOutFunction() {
     d3.select(this)
-      .style("stroke-width","5px")   
+      .style("stroke-width","2px")   
 
     tooltip.style("visibility", "hidden") 
   }
@@ -283,6 +319,10 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
         return calendarData[longDateToShortDate[x3]]["description"]
       }
     }
+  }
+
+  function getJsDateFromExcel(excelDate) {
+    return new Date((excelDate - (25567 + 1))*86400*1000);
   }
 
 });
