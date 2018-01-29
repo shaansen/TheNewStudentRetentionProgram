@@ -27,11 +27,15 @@ body {
 </style>
 <div class="container-fluid">
 
-  <div class="page-header"><h1>Effect of Help Seeking Behavior on Student Grades</h1></div>
-  <div class="col-sm-2">
-    <h4><strong>Time Spent on Topic</strong></h4>
-    <div id="timeSpentCheckboxes"></div>
+  <h1>Effect of Help Seeking Behavior on Student Grades</h1>
+
+  <div class="col-sm-1">
     <h4><strong>Time Spent in Office Hours</strong></h4>
+    <div id="timeSpentCheckboxes"></div>
+
+    <hr>
+
+    <h4><strong>Topic Discussed</strong></h4>
     <div id="eventsCheckboxes"></div>
 
 
@@ -40,16 +44,27 @@ body {
   <div class="col-sm-8">
     <svg width="1000" height="610"></svg>
   </div>
-  <div class="col-sm-2">
+
+
+  <div class="col-sm-3">
     <h3>Statistics</h3>
+    <hr>
     <h3>Student Details</h3>
+    Student ID : 220<br>
+    Overall Grade : +A<br>
+    Overall Score : 98%<br>
+    Highest Score with Assistance : HW1 - 90%<br>
+    Highest Score without Assistance : HW3 - 85%<br>
+    Lowest Score with Assistance : Midterm - 70%<br>
+    Lowest Score without Assistance : Lab1 - 72%<br>
+
   </div>
 </div>
 <script src="http://d3js.org/d3.v4.min.js"></script>
 <script>
 
 var svg = d3.select("svg"),
-    margin = {top: 20, right: 80, bottom: 30, left: 50},
+    margin = {top: 10, right: 50, bottom: 20, left: 25},
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -64,9 +79,8 @@ var line = d3.line()
     .curve(d3.curveBasis)
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.scores); });
-
+    
 var tipBox
-
 // -----------------------------------------------------------------------------------------
 //
 // Code to read Calendar and Map dates to events
@@ -146,7 +160,93 @@ d3.csv('data/tahours2.csv')
     }
   });
 
-listOfEvents.forEach(function(values) {
+
+// Below code basically parses the studentGrade data to create normalized scores of the students till that date
+d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
+  if (error) throw error;
+  
+  studentGradeData.forEach(function(d,i) {
+    if(filteredSet.length === 0 || filteredSet.includes(parseInt(d.Username))) {
+      var total = 0
+      for (var i = 0; i < dateList.length; i++) {
+        var x = (calendarData[dateList[i]].description)
+        var y = (calendarData[dateList[i]].total)
+        total = total + d[x]
+        d[x] = total/y*100
+      }
+    columns.push(d.Username)
+    }
+  })
+
+// Below code contains the logic to transform the student data into time based data that will be used to create the visualization
+  
+  var dataForVisualization = convertIrregToReg(dataForVisualization,dateList,studentGradeData,calendarData)
+  data = dataForVisualization
+  console.log(dataForVisualization)
+
+  var students = columns.slice(1).map(function(id) {
+    return {
+      id: id,
+      values: data.map(function(d) {
+        return {date: d.date, scores: d[id]};
+      })
+    };
+  });
+
+
+  x.domain(d3.extent(data, function(d) {return d.date; }));
+
+  y.domain([
+    d3.min(students, function(c) { return d3.min(c.values, function(d) { return d.scores; }); }),
+    d3.max(students, function(c) { return d3.max(c.values, function(d) { return d.scores; }); })
+  ]);
+
+  z.domain(students.map(function(c) { return c.id; }));
+
+  g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(y))
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", "0.71em")
+    .attr("fill", "#000")
+    .text("Scores");
+
+  var tooltip = d3.select("body")
+  .append("div")
+  .style("position", "absolute")
+  .style("z-index", "10")
+  .style("visibility", "hidden")
+
+  var studentData = g.selectAll(".studentData")
+    .data(students)
+    .enter().append("g")
+    .attr("class", "studentData");
+
+  studentData.append("path")
+    .attr("class", "line")
+    .attr("d", function(d) { return line(d.values); })
+    .style("stroke", function(d) { return z(d.id); })
+    .style("stroke-width", "2px")
+    .on("mouseover", mouseOverFunction)
+    .on("mouseout", mouseOutFunction)
+    .on("mousemove", mouseMoveFunction)
+
+  studentData.append("text")
+    .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+    .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"; })
+    .attr("x", 3)
+    .attr("dy", "0.35em")
+    .style("font", "10px")
+    .text(function(d) { return d.id; });
+
+  listOfEvents.forEach(function(values) {
   // create the necessary elements
   var br = document.createElement("br");
   var label= document.createElement("label");
@@ -156,6 +256,7 @@ listOfEvents.forEach(function(values) {
   checkbox.type = "checkbox";    // make the element a checkbox
   checkbox.name = values;      // give it a name we can check on the server side
   checkbox.value = values;         // make its value "pair"
+  checkbox.id = "event"
 
   label.appendChild(checkbox);   // add the box to the element
   label.appendChild(description);// add the description to the element
@@ -171,6 +272,7 @@ Object.keys(hourSpent).forEach(function(values) {
   var label= document.createElement("label");
   var description = document.createTextNode(hourSpent[values]);
   var checkbox = document.createElement("input");
+  checkbox.id = "hourSpent"
 
   checkbox.type = "checkbox";    // make the element a checkbox
   checkbox.name = hourSpent[values];      // give it a name we can check on the server side
@@ -184,14 +286,32 @@ Object.keys(hourSpent).forEach(function(values) {
   document.getElementById('timeSpentCheckboxes').appendChild(br);
 })
 
+d3.selectAll("#event").on("change",eventUpdate);
+      //eventUpdate();
 
-// Below code basically parses the studentGrade data to create normalized scores of the students till that date
-d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
-  if (error) throw error;
-  
+  function eventUpdate(){
+    var choices = [];
+      d3.selectAll("#event").each(function(d){
+        cb = d3.select(this);
+        if(cb.property("checked")){
+          choices.push(cb.property("value"));
+        } 
+      });
+
+
+    var newfilteredSet
+    var newHelpSeekingData
+    if(choices.length > 0){
+      newHelpSeekingData = helpSeekingCSVdata.filter(function(d,i){return choices.includes(d.event);});
+      newfilteredSet = newHelpSeekingData.map(function(d) {return parseInt(d.username)})
+    } else {
+      newfilteredSet = filteredSet;     
+    }
+
+  filteredSet = newfilteredSet
+
   studentGradeData.forEach(function(d,i) {
     if(filteredSet.length === 0 || filteredSet.includes(parseInt(d.Username))) {
-      //console.log(d.Username)
       var total = 0
       for (var i = 0; i < dateList.length; i++) {
         var x = (calendarData[dateList[i]].description)
@@ -199,30 +319,15 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
         total = total + d[x]
         d[x] = total/y*100
       }
-    columns.push(d.Username)
+      if(!columns.includes(d.Username))
+        {
+          columns.push(d.Username)
+        }
     }
   })
-
-  console.log(columns)
 
 // Below code contains the logic to transform the student data into time based data that will be used to create the visualization
   var dataForVisualization = []
-
-  dateList.forEach(function(d,i) {
-    var element = {}
-    element["date"] = parseTime(d)
-    var x = calendarData[d].description
-    for (var i = 0; i < studentGradeData.length; i++) {
-
-      var username = studentGradeData[i]["Username"] 
-      if(filteredSet.length===0 || filteredSet.includes(parseInt(username))) {
-        element[username] = studentGradeData[i][x]
-      }
-    }
-      dataForVisualization.push(element)
-  })
-
-  data = dataForVisualization
 
   var students = columns.slice(1).map(function(id) {
     return {
@@ -263,12 +368,15 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
   .style("z-index", "10")
   .style("visibility", "hidden")
 
-  var city = g.selectAll(".city")
+  var studentData = g.selectAll(".studentData")
     .data(students)
     .enter().append("g")
-    .attr("class", "city");
+    .attr("class", "studentData");
 
-  city.append("path")
+  studentData.exit()
+    .remove(); 
+
+  studentData.append("path")
     .attr("class", "line")
     .attr("d", function(d) { return line(d.values); })
     .style("stroke", function(d) { return z(d.id); })
@@ -277,13 +385,29 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     .on("mouseout", mouseOutFunction)
     .on("mousemove", mouseMoveFunction)
 
-  city.append("text")
+  studentData.append("text")
     .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
     .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"; })
     .attr("x", 3)
     .attr("dy", "0.35em")
     .style("font", "10px")
     .text(function(d) { return d.id; });
+
+  }
+
+d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
+      hourSpentUpdate();
+
+  function hourSpentUpdate(){
+    var choices = [];
+      d3.selectAll("#hourSpent").each(function(d){
+        cb = d3.select(this);
+        if(cb.property("checked")){
+          choices.push(cb.property("value"));
+        }
+      });
+  }
+
 
   function mouseOutFunction() {
     d3.select(this)
@@ -321,9 +445,7 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     }
   }
 
-  function getJsDateFromExcel(excelDate) {
-    return new Date((excelDate - (25567 + 1))*86400*1000);
-  }
+  
 
 });
 
@@ -331,6 +453,45 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     d.date = parseTime(d.date);
     for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
     return d;
+  }
+
+  function convertIrregToReg(dataForVisualization,dateList,studentGradeData,calendarData) {
+
+    var dataForVisualization = []
+    var date_i = dateList[0];
+    var date_j = 0;
+    var counter = 0;
+    var dateSet = new Set()
+
+
+    while(parseTime(date_i) <= parseTime(dateList[dateList.length-1]) && date_j < dateList.length) {
+      if(!dateSet.has(parseTime(date_i).toString())) {
+        console.log(parseTime(date_i)+" --> "+parseTime(dateList[date_j]))
+        dateSet.add(parseTime(date_i).toString())
+        var element = {}
+        element["date"] = parseTime(date_i)
+        
+        if(parseTime(date_i) >= parseTime(dateList[date_j+1]-1)) {
+          date_j = date_j + 1;
+        }
+        
+        if(dateList[date_j] !== undefined) {
+          var x = calendarData[dateList[date_j]].description
+          for (var i = 0; i < studentGradeData.length; i++) {
+            var username = studentGradeData[i]["Username"] 
+            if(filteredSet.length===0 || filteredSet.includes(parseInt(username))) {
+              element[username] = studentGradeData[i][x]
+            }
+          }
+
+          dataForVisualization.push(element)  
+          counter = counter + 1
+        }  
+      }
+      date_i = date_i + 1
+    }
+    
+    return dataForVisualization
   }
 
 
