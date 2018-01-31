@@ -33,7 +33,7 @@ body {
 
 	<h1>Effect of Help Seeking Behavior on Student Grades</h1>
 
-	<div class="col-sm-1">
+	<!-- <div class="col-sm-1">
 		<h4><strong>Time Spent in Office Hours</strong></h4>
 		<div id="timeSpentCheckboxes"></div>
 
@@ -41,16 +41,14 @@ body {
 
 		<h4><strong>Topic Discussed</strong></h4>
 		<div id="eventsCheckboxes"></div>
+	</div> -->
 
-
-		
-	</div>
 	<div class="col-sm-8">
 		<svg width="1000" height="610"></svg>
 	</div>
 
 
-	<div class="col-sm-3">
+	<!-- <div class="col-sm-3">
 		<h3>Statistics</h3>
 		<hr>
 		<h3>Student Details</h3>
@@ -61,8 +59,8 @@ body {
 		Highest Score without Assistance : HW3 - 85%<br>
 		Lowest Score with Assistance : Midterm - 70%<br>
 		Lowest Score without Assistance : Lab1 - 72%<br>
+	</div> -->
 
-	</div>
 </div>
 <script src="http://d3js.org/d3.v4.min.js"></script>
 <script>
@@ -84,9 +82,9 @@ var yellow = d3.interpolateYlGn(), // "rgb(255, 255, 229)"
 		green = d3.interpolateYlGn(1); // "rgb(0, 69, 41)"
 
 var line = d3.line()
+		.curve(d3.curveBasis)
 		.x(function(d) { return x(d.date); })
 		.y(function(d) { return y(d.scores); });
-		// .curve(d3.curveBasis)
 		
 var tipBox
 // -----------------------------------------------------------------------------------------
@@ -207,7 +205,7 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
 		};
 	});
 
-	clusters = 2
+	clusters = 35
 	iterations = 10
 	studentClusters = kmeans(students,clusters,iterations)
 
@@ -249,7 +247,7 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
 	studentData.append("path")
 		.attr("class", "line")
 		.attr("d", function(d) { return line(d.values); })
-		.style("stroke", function(d) {return z(d.total); })
+		.style("stroke", function(d) {return z(d.id); })
 		.style("stroke-width", "2px")
 		.on("mouseover", mouseOverFunction)
 		.on("mouseout", mouseOutFunction)
@@ -263,45 +261,45 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
 		.style("font", "10px")
 		.text(function(d) { return d.id; });
 
-	listOfEvents.forEach(function(values) {
-	// create the necessary elements
-	var br = document.createElement("br");
-	var label= document.createElement("label");
-	var description = document.createTextNode(values);
-	var checkbox = document.createElement("input");
+// 	listOfEvents.forEach(function(values) {
+// 		// create the necessary elements
+// 		var br = document.createElement("br");
+// 		var label= document.createElement("label");
+// 		var description = document.createTextNode(values);
+// 		var checkbox = document.createElement("input");
 
-	checkbox.type = "checkbox";    // make the element a checkbox
-	checkbox.name = values;      // give it a name we can check on the server side
-	checkbox.value = values;         // make its value "pair"
-	checkbox.id = "event"
+// 		checkbox.type = "checkbox";    // make the element a checkbox
+// 		checkbox.name = values;      // give it a name we can check on the server side
+// 		checkbox.value = values;         // make its value "pair"
+// 		checkbox.id = "event"
 
-	label.appendChild(checkbox);   // add the box to the element
-	label.appendChild(description);// add the description to the element
-	
-	// add the label element to your div
-	document.getElementById('eventsCheckboxes').appendChild(label);
-	document.getElementById('eventsCheckboxes').appendChild(br);
-})
+// 		label.appendChild(checkbox);   // add the box to the element
+// 		label.appendChild(description);// add the description to the element
+		
+// 		// add the label element to your div
+// 		document.getElementById('eventsCheckboxes').appendChild(label);
+// 		document.getElementById('eventsCheckboxes').appendChild(br);
+// 	})
 
-Object.keys(hourSpent).forEach(function(values) {
-	// create the necessary elements
-	var br = document.createElement("br");
-	var label= document.createElement("label");
-	var description = document.createTextNode(hourSpent[values]);
-	var checkbox = document.createElement("input");
-	checkbox.id = "hourSpent"
+// Object.keys(hourSpent).forEach(function(values) {
+// 	// create the necessary elements
+// 	var br = document.createElement("br");
+// 	var label= document.createElement("label");
+// 	var description = document.createTextNode(hourSpent[values]);
+// 	var checkbox = document.createElement("input");
+// 	checkbox.id = "hourSpent"
 
-	checkbox.type = "checkbox";    // make the element a checkbox
-	checkbox.name = hourSpent[values];      // give it a name we can check on the server side
-	checkbox.value = hourSpent[values];         // make its value "pair"
+// 	checkbox.type = "checkbox";    // make the element a checkbox
+// 	checkbox.name = hourSpent[values];      // give it a name we can check on the server side
+// 	checkbox.value = hourSpent[values];         // make its value "pair"
 
-	label.appendChild(checkbox);   // add the box to the element
-	label.appendChild(description);// add the description to the element
+// 	label.appendChild(checkbox);   // add the box to the element
+// 	label.appendChild(description);// add the description to the element
 
-	// add the label element to your div
-	document.getElementById('timeSpentCheckboxes').appendChild(label);
-	document.getElementById('timeSpentCheckboxes').appendChild(br);
-})
+// 	// add the label element to your div
+// 	document.getElementById('timeSpentCheckboxes').appendChild(label);
+// 	document.getElementById('timeSpentCheckboxes').appendChild(br);
+// })
 
 d3.selectAll("#event").on("change",eventUpdate);
 			//eventUpdate();
@@ -531,10 +529,128 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
 	// 
 	//   
 	// ----------------------------------------------------------------------------------------------
-	function kmeans(students,clusters,maxIterations) {
-		var numFeatures = 1
+	function kmeans(dataset,clusters,maxIterations) {
+		var numFeatures = dataset[0]["values"].map(function(d) {
+			return d.date;
+		})
+		var centroids = getRandomCentroids(numFeatures, clusters)
+		
+		// Initialize book keeping vars.
+    iterations = 0
+    oldCentroids = null
 
+    // while(!shouldStop(oldCentroids, centroids, iterations)) {
+    	 	// Save old centroids for convergence test. Book keeping.
+        oldCentroids = centroids
+        iterations = iterations + 1
+        
+        // Assign labels to each datapoint based on centroids
+        labels = getLabels(dataset, centroids)
+        // Assign centroids based on datapoint labels
+        centroids = getCentroids(dataset, labels, clusters, numFeatures)
+        
+    // We can get the labels too by calling getLabels(dataset, centroids)
+    // }
+       
+    return centroids
 
+	}
+	
+	function getRandomCentroids(numFeatures, k) {
+		var result = []
+		for (var i = 0; i < k; i++) {
+			result[i] = []
+			numFeatures.map(function(d) {
+				var x = {}
+
+				x["date"] = d;
+				x["scores"] = Math.random()*100;
+				result[i].push(x)
+			})
+		}
+		console.log("Original Clusters")
+		console.log(result)
+		return result;
+	}
+
+	function shouldStop(oldCentroids, centroids, iterations, maxIterations){
+    if (iterations > maxIterations) {
+    	return true	
+    }
+    return oldCentroids == centroids
+	}
+
+	function getLabels(dataset, centroids) {
+		var result = []
+		var labelSet = {}
+		for (var id = 0; id < dataset.length; id++) {
+			var min = Infinity
+			for (var j = 0; j < centroids.length; j++) {
+				var dist = DTWDistance(dataset[id]["values"],centroids[j])
+				if(dist < min) {
+					min = dist;
+					result[id] = j;
+				}
+			}
+			if(labelSet[result[id]] == undefined) {
+				labelSet[result[id]] = []
+			}
+			labelSet[result[id]].push(id)
+		}		
+		return labelSet
+	}
+
+	function DTWDistance(s1, s2) {
+		var DTW = []
+		for (var i = 0; i < s1.length; i++) {
+			DTW[i] = {}
+		  for (var j = 0; j < s2.length; j++) {
+		  	DTW[i][j] = 0;
+			}
+		}
+
+		for(var i=1;i<s1.length;i++) {
+		 DTW[i][0] = Infinity
+		}
+		for(var i=1;i<s2.length;i++) {
+		 DTW[0][i] = Infinity
+		}
+		
+		for (var i = 1; i < s1.length; i++) {
+			for (var j = 1; j < s2.length; j++) {
+				var dist = (s1[i].scores - s2[j].scores)*(s1[i].scores - s2[j].scores)
+		  	DTW[i][j] = dist + Math.min(DTW[i-1][j],DTW[i][j-1],DTW[i-1][j-1]);
+			}
+		}
+
+		return Math.sqrt(DTW[s1.length-1][s2.length-1])
+
+	}
+
+	function getCentroids(dataset, labels, k, numFeatures) {
+
+		console.log("Entire Dataset")
+		console.log(dataset)
+		console.log("Number of Clusters : "+k)
+		console.log("Labels")
+		console.log(labels)
+		var keys = Object.keys(labels)
+		var result = []
+		for (var i = 0; i < k; i++) {
+			if(labels[i] == undefined) {
+				result[i] = []
+				numFeatures.map(function(d) {
+					var x = {}
+					x["date"] = d;
+					x["scores"] = Math.random()*100;
+					result[i].push(x)
+				})
+			} else {
+				
+			}
+
+		}
+		console.log(result)
 	}
 
 </script>
