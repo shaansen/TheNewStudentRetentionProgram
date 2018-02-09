@@ -618,7 +618,6 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
   }
 
   function processQuartileData(quartile) {
-    console.log("Quartile Data")
     quartilePostData = []
     quartile.map(function(q) {
       numFeatures.map(function(date) {
@@ -634,13 +633,5 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
         
 
       })
-      console.log("=====================================================================")
-      console.log(q)
-      console.log(quartilePostData)
     })
-
-
-
-
-
   }
