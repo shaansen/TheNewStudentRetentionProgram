@@ -1,4 +1,3 @@
-
 var svg = d3.select("svg"),
     margin = {top: 10, right: 50, bottom: 20, left: 25},
     width = svg.attr("width") - margin.left - margin.right,
@@ -130,6 +129,8 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
   var dataForVisualization = convertIrregToReg(dataForVisualization,completeDateList,studentGradeData,calendarData)
   data = dataForVisualization
 
+
+
   var students = columns.slice(1).map(function(id) {
     return {
       id: id,
@@ -142,7 +143,8 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     };
   });
 
-  clusters = 5
+
+  clusters = 10
   maxiterations = 10
 
   studentClusters = kmeans(students,clusters,maxiterations)
@@ -154,10 +156,9 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     };
   })
 
+
   students = clusteredData
   processQuartileData(quartilePreData)
-
-
   x.domain(d3.extent(data, function(d) {return d.date; }));
 
   y.domain([
@@ -192,6 +193,21 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     .data(students)
     .enter().append("g")
     .attr("class", "studentData");
+
+  // studentData.append("path")
+  //   .attr("class", "line")
+  //   .attr("d", function(d) { return line(d.values); })
+  //   .style("stroke", function(d,i) {
+  //     var x = getRGBIndex(i)
+  //     var r = Math.floor((x/Object.keys(labels).length*123)%255);
+  //     var g = Math.floor((x/Object.keys(labels).length*456)%255);
+  //     var b = Math.floor((x/Object.keys(labels).length*789)%255);
+  //     return "rgb("+r+","+g+","+b+")"
+  //   })
+  //   .style("stroke-width", "2px")
+  //   .on("mouseover", mouseOverFunction)
+  //   .on("mouseout", mouseOutFunction)
+  //   .on("mousemove", mouseMoveFunction)
 
   studentData.append("path")
     .attr("class", "line")
@@ -501,11 +517,7 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
         
     // We can get the labels too by calling getLabels(dataset, centroids)
     }
-    
-    console.log("Labels for the Centroids")
-    console.log(labels)
     return centroids
-
   }
   
   function getRandomCentroids(numFeatures, k) {
@@ -635,3 +647,12 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
       })
     })
   }
+
+  function getRGBIndex(d) {
+    for (var i = 0; i < Object.keys(labels).length; i++) {
+      if(labels[Object.keys(labels)[i]].includes(d)) {
+        return i
+      }
+    }
+  }
+

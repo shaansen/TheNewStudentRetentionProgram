@@ -4,12 +4,14 @@
 <head>
 	<!-- <link href='https://fonts.googleapis.com/css?family=Roboto Condensed' rel='stylesheet'> -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
 	<script src="https://d3js.org/d3-color.v1.min.js"></script>
 	<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
 	<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
 	</head>
 
 <style>
@@ -18,7 +20,7 @@
 }
 
 body {
-		font-family: 'Roboto Condensed';
+		font-family: 'Rubik','Roboto Condensed';
 }
 
 
@@ -36,7 +38,7 @@ body {
   }
 
   .axis text {
-      font-family: sans-serif;
+      font-family: 'Rubik','Roboto Condensed',sans-serif;
       font-size: 11px;
   }
 
@@ -84,10 +86,9 @@ body {
 
 </style>
 <div class="container-fluid">
-
 	<h1>Effect of Help Seeking Behavior on Student Grades</h1>
-
-	<!-- <div class="col-sm-1">
+<!-- 
+	<div class="col-sm-1">
 		<h4><strong>Time Spent in Office Hours</strong></h4>
 		<div id="timeSpentCheckboxes"></div>
 
@@ -115,18 +116,22 @@ body {
 		Lowest Score with Assistance : Midterm - 70%<br>
 		Lowest Score without Assistance : Lab1 - 72%<br>
 	</div> -->
-
+	
 </div>
 
 
 <!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+<script>
+_u = _.noConflict(); // lets call ourselves _u
+</script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/d3-timer.v1.min.js"></script>
-<!-- <script src="linechart.js"></script> -->
+<script src="linechart.js"></script>
 <script src="d3-tip.js"></script>
 <script src="box.js"></script>
-<script src="boxplot.js"></script>
+<!-- <script src="boxplot.js"></script> -->
 
 <!-- <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="heatmap.js"></script> -->
