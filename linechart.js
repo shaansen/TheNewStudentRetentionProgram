@@ -144,10 +144,12 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
   });
 
 
-  clusters = 10
-  maxiterations = 10
+  clusters = 8
+  maxiterations = 20
 
   studentClusters = kmeans(students,clusters,maxiterations)
+  //findOptimalCluster(students, maxiterations)
+  // calculateSumSquareDistance(studentClusters,students)
 
   var clusteredData = studentClusters.map(function(d,i) {
     return {
@@ -156,7 +158,7 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     };
   })
 
-
+  console.log(clusteredData)
   students = clusteredData
   processQuartileData(quartilePreData)
   x.domain(d3.extent(data, function(d) {return d.date; }));
@@ -539,7 +541,7 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
     var result = []
     var labelSet = {}
     for (var id = 0; id < dataset.length; id++) {
-      var min = Infinity
+      var min = 100
 
       for (var j = 0; j < centroids.length; j++) {
         var dist = DTWDistance(dataset[id]["values"],centroids[j])
@@ -564,22 +566,22 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
         DTW[i][j] = 0;
       }
     }
-
     for(var i=1;i<s1.length;i++) {
-     DTW[i][0] = 100
+     DTW[i][0] = 1000
     }
     for(var i=1;i<s2.length;i++) {
-     DTW[0][i] = 100
+     DTW[0][i] = 1000
     }
     
     for (var i = 1; i < s1.length; i++) {
       for (var j = 1; j < s2.length; j++) {
         var dist = (s1[i].scores - s2[j].scores)*(s1[i].scores - s2[j].scores)
-        DTW[i][j] = dist + Math.min(DTW[i-1][j],DTW[i][j-1],DTW[i-1][j-1]);
+        DTW[i][j] = dist + Math.sqrt(Math.min(DTW[i-1][j],DTW[i][j-1],DTW[i-1][j-1]));
       }
     }
 
-    return Math.sqrt(DTW[s1.length-1][s2.length-1])
+    var result = Math.sqrt(DTW[s1.length-1][s2.length-1])
+    return result
 
   }
 
@@ -616,16 +618,18 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
           x["date"] = d;
           var y = 1
           labels[i].forEach(function(d1) {
-            y = y * dataset[d1]["values"][i1]["scores"]
+            if(dataset[d1]["values"][i1]["scores"]!=0) {
+              y = y * dataset[d1]["values"][i1]["scores"]
+            }
             quartilePreData[i][d].push(dataset[d1]["values"][i1]["scores"])
           });
+
           x["scores"] = Math.pow(y,1/labels[i].length)
           result[i].push(x)
         })
       }
 
     }
-
     return result
   }
 
@@ -656,3 +660,32 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
     }
   }
 
+  function findOptimalCluster(students, iterations) {
+    // For Clusters ranging from 1 - 20, find the sum of square differences and store in a map
+    var elbowMap = {}
+    for (var i = 1; i <= 50; i++) {
+      var clusters = kmeans(students,i,iterations)
+      elbowMap[i] = calculateSumSquareDistance(clusters, students)
+    }
+    console.log(elbowMap)
+  }
+
+  function calculateSumSquareDistance(clusters, studentData) {
+    var label_iterator = Object.keys(labels)
+    var x = 0
+    label_iterator.forEach(function(d,i1) {
+      labels[d].forEach(function(e,i2) {
+        x = x + getSquareDifference(d,e,studentData[e]["values"],clusters[i1])
+      })
+    })
+    return x
+  }
+
+
+  function getSquareDifference(i1, i2, arr1, arr2) {
+    var result = 0
+    arr1.forEach(function(d,i) {
+      result = result + Math.sqrt(Math.abs(arr1[i].scores - arr2[i].scores))
+    })
+    return result
+  }
