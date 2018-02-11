@@ -8,7 +8,7 @@ var parseTime = d3.timeParse("%Y%m%d");
 
 var x = d3.scaleTime().range([0, width]),
     y = d3.scaleLinear().range([height, 0]),
-    z = d3.scaleOrdinal(d3.schemePastel1);
+    z = d3.scaleOrdinal(d3.schemeCategory10);
 
 var yellow = d3.interpolateYlGn(), // "rgb(255, 255, 229)"
     yellowGreen = d3.interpolateYlGn(0.5), // "rgb(120, 197, 120)"
@@ -106,7 +106,7 @@ d3.csv('data/tahours2.csv')
 
 
 // Below code basically parses the studentGrade data to create normalized scores of the students till that date
-d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
+d3.csv("data/grades3.csv", type, function(error, studentGradeData) {
   if (error) throw error;
   
 
@@ -145,7 +145,7 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
 
 
   clusters = 8
-  maxiterations = 20
+  maxiterations = 8
 
   studentClusters = kmeans(students,clusters,maxiterations)
   //findOptimalCluster(students, maxiterations)
@@ -158,7 +158,6 @@ d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     };
   })
 
-  console.log(clusteredData)
   students = clusteredData
   processQuartileData(quartilePreData)
   x.domain(d3.extent(data, function(d) {return d.date; }));
@@ -567,10 +566,10 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
       }
     }
     for(var i=1;i<s1.length;i++) {
-     DTW[i][0] = 1000
+     DTW[i][0] = Infinity
     }
     for(var i=1;i<s2.length;i++) {
-     DTW[0][i] = 1000
+     DTW[0][i] = Infinity
     }
     
     for (var i = 1; i < s1.length; i++) {
@@ -618,9 +617,9 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
           x["date"] = d;
           var y = 1
           labels[i].forEach(function(d1) {
-            if(dataset[d1]["values"][i1]["scores"]!=0) {
+            // if(dataset[d1]["values"][i1]["scores"]!=0) {
               y = y * dataset[d1]["values"][i1]["scores"]
-            }
+            // }
             quartilePreData[i][d].push(dataset[d1]["values"][i1]["scores"])
           });
 
@@ -667,7 +666,6 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
       var clusters = kmeans(students,i,iterations)
       elbowMap[i] = calculateSumSquareDistance(clusters, students)
     }
-    console.log(elbowMap)
   }
 
   function calculateSumSquareDistance(clusters, studentData) {
@@ -689,3 +687,146 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
     })
     return result
   }
+
+var box_labels = true; // show the text box_labels beside individual boxplots?
+
+var box_margin = {top: 30, right: 50, bottom: 70, left: 50};
+var box_width = 800 - box_margin.left - box_margin.right;
+var box_height = 400 - box_margin.top - box_margin.bottom;
+  
+var box_min = Infinity,
+  box_max = -Infinity;
+  
+// parse in the box_data  
+d3.csv("data/boxplotdata.csv", function(error, csv) {
+  // using an array of arrays with
+  // box_data[n][2] 
+  // where n = number of columns in the csv file 
+  // box_data[i][0] = name of the ith column
+  // box_data[i][1] = array of values of ith column
+
+  var box_data = [];
+  box_data[0] = [];
+  box_data[1] = [];
+  box_data[2] = [];
+  box_data[3] = [];
+  // add more rows if your csv file has more columns
+
+  // add here the header of the csv file
+  box_data[0][0] = "Q1";
+  box_data[1][0] = "Q2";
+  box_data[2][0] = "Q3";
+  box_data[3][0] = "Q4";
+  // add more rows if your csv file has more columns
+
+  box_data[0][1] = [];
+  box_data[1][1] = [];
+  box_data[2][1] = [];
+  box_data[3][1] = [];
+  
+  csv.forEach(function(x) {
+    var box_v1 = Math.floor(x.Q1),
+      box_v2 = Math.floor(x.Q2),
+      box_v3 = Math.floor(x.Q3),
+      box_v4 = Math.floor(x.Q4);
+      // add more variables if your csv file has more columns
+      
+    var rowbox_max = Math.max(box_v1, Math.max(box_v2, Math.max(box_v3,box_v4)));
+    var rowbox_min = Math.min(box_v1, Math.min(box_v2, Math.min(box_v3,box_v4)));
+
+    box_data[0][1].push(box_v1);
+    box_data[1][1].push(box_v2);
+    box_data[2][1].push(box_v3);
+    box_data[3][1].push(box_v4);
+     // add more rows if your csv file has more columns
+     
+    if (rowbox_max > box_max) box_max = rowbox_max;
+    if (rowbox_min < box_min) box_min = rowbox_min; 
+  });
+  
+  var box_chart = d3.box()
+    .whiskers(iqr(1.5))
+    .height(box_height) 
+    .domain([box_min, box_max])
+    .showLabels(box_labels);
+
+  console.log(box_margin.left+","+box_margin.top)
+
+  var box_svg = d3.select("body").append("svg")
+    .attr("width", box_width + box_margin.left + box_margin.right)
+    .attr("height", box_height + box_margin.top + box_margin.bottom)
+    .attr("class", "box")    
+    .append("g")
+    .attr("transform", "translate(" + box_margin.left + "," + box_margin.top + ")");
+  
+  // the x-axis
+  var box_x = d3.scaleBand()   
+    .domain( box_data.map(function(d) { return d[0] } ) )     
+    .range([0 , box_width], 0.7, 0.3)
+    .padding(0.1); 
+
+  var box_xAxis = d3.axisBottom(box_x)
+
+  // the y-axis
+  var box_y = d3.scaleLinear()
+    .domain([box_min, box_max])
+    .range([box_height + box_margin.top, 0 + box_margin.top]);
+  
+  var box_yAxis = d3.axisLeft(box_y)
+
+  // draw the boxplots  
+  box_svg.selectAll(".box")    
+    .data(box_data)
+    .enter().append("g")
+    .attr("transform", function(d) { return "translate(" +  box_x(d[0])  + "," + box_margin.top + ")"; } )
+    .call(box_chart.width(box_x.bandwidth()/4)); 
+  
+      
+  // add a title
+  box_svg.append("text")
+    .attr("x", (box_width / 2))             
+    .attr("y", 0 + (box_margin.top / 2))
+    .attr("text-anchor", "middle")  
+    .style("font-size", "18px") 
+    //.style("text-decoration", "underline")  
+    .text("Revenue 2012");
+ 
+   // draw y axis
+  box_svg.append("g")
+    .attr("class", "y axis")
+    .call(box_yAxis)
+    .append("text") // and text1
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .style("font-size", "16px") 
+    .text("Revenue in €");    
+  
+  // draw x axis  
+  box_svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + (box_height  + box_margin.top + 10) + ")")
+    .call(box_xAxis)
+    .append("text")             // text label for the x axis
+    .attr("x", (box_width / 2) )
+    .attr("y",  10 )
+    .attr("dy", ".71em")
+    .style("text-anchor", "middle")
+    .style("font-size", "16px") 
+    .text("Quarter"); 
+});
+
+// Returns a function to compute the interquartile range.
+function iqr(k) {
+  return function(d, i) {
+  var q1 = d.quartiles[0],
+    q3 = d.quartiles[2],
+    iqr = (q3 - q1) * k,
+    i = -1,
+    j = d.length;
+  while (d[++i] < q1 - iqr);
+  while (d[--j] > q3 + iqr);
+  return [i, j];
+  };
+}
