@@ -108,7 +108,7 @@ d3.csv('data/tahours2.csv')
 
 
 // Below code basically parses the studentGrade data to create normalized scores of the students till that date
-d3.csv("data/grades3.csv", type, function(error, studentGradeData) {
+d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
   if (error) throw error;
   
 
@@ -804,15 +804,12 @@ function getBoxPlotData(arr) {
 
     // the y-axis
 
-    box_y = d3.scaleLinear().range([box_height, 0])
-    box_y.domain([
-      d3.min(students, function(c) { return d3.min(c.values, function(d) { return d.scores; }); }),
-      d3.max(students, function(c) { return d3.max(c.values, function(d) { return d.scores; }); })
-    ]);
+    // box_y = d3.scaleLinear().range([box_height, 0])
+    // box_y.domain([0,100]);
 
-    // var box_y = d3.scaleLinear()
-    //   .domain([box_min, box_max])
-    //   .range([box_height + box_margin.top, 0 + box_margin.top]);
+    var box_y = d3.scaleLinear()
+      .domain([box_min, box_max])
+      .range([box_height + box_margin.top, 0 + box_margin.top]);
     
     var box_yAxis = d3.axisLeft(box_y)
 
