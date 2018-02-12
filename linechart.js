@@ -699,6 +699,8 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
 
 function getBoxPlotData(arr) {
 
+  d3.selectAll(".box").remove()
+
   var t = d3.transition()
       .duration(750);
 
@@ -710,14 +712,13 @@ function getBoxPlotData(arr) {
     return x
   })
 
-  var box_labels = true; // show the text box_labels beside individual boxplots?
-
-  var box_margin = {top: 10, right: 50, bottom: 20, left: 50};
-  var box_width = 1500 - box_margin.left - box_margin.right;
-  var box_height = 410 - box_margin.top - box_margin.bottom;
+  var box_labels = true
+  var box_margin = {top: 10, right: 50, bottom: 20, left: 50}
+  var box_width = 1500 - box_margin.left - box_margin.right
+  var box_height = 410 - box_margin.top - box_margin.bottom
     
-  var box_min = Infinity,
-    box_max = -Infinity;
+  var box_min = Infinity
+  var box_max = -Infinity
     
   // parse in the box_data  
   // d3.csv("data/grades3.csv", function(error, csv) {
@@ -727,18 +728,18 @@ function getBoxPlotData(arr) {
     // box_data[i][0] = name of the ith column
     // box_data[i][1] = array of values of ith column
 
-    var box_data = [];
-    // add more rows if your csv file has more columns
+  var box_data = [];
+  // add more rows if your csv file has more columns
 
-    // add here the header of the csv file
-    numFeatures.map(function(d,i) {
-      box_data[i] = []
-    })
+  // add here the header of the csv file
+  numFeatures.map(function(d,i) {
+    box_data[i] = []
+  })
 
-    numFeatures.map(function(d,i) {
-      box_data[i][0] = d
-      box_data[i][1] = []
-    })
+  numFeatures.map(function(d,i) {
+    box_data[i][0] = d
+    box_data[i][1] = []
+  })
 
 
     // box_data[0][0] = "Q1";
@@ -752,49 +753,49 @@ function getBoxPlotData(arr) {
     // box_data[2][1] = [];
     // box_data[3][1] = [];
     
-    result.forEach(function(x) {
+  result.forEach(function(x) {
 
-      var box_v = []
+    var box_v = []
 
-      numFeatures.map(function(d,i) {
-        box_v[i] = x[d]
-      })
+    numFeatures.map(function(d,i) {
+      box_v[i] = x[d]
+    })
 
-      box_v.sort()
+    box_v.sort()
 
-        
-      var rowbox_max = box_v[box_v.length-1]
-      var rowbox_min = box_v[0]
+      
+    var rowbox_max = box_v[box_v.length-1]
+    var rowbox_min = box_v[0]
 
 
-      box_v.forEach(function(d,i) {
-        box_data[i][1].push(d);
-      })
+    box_v.forEach(function(d,i) {
+      box_data[i][1].push(d);
+    })
 
-       // add more rows if your csv file has more columns
-       
-      if (rowbox_max > box_max) box_max = rowbox_max;
-      if (rowbox_min < box_min) box_min = rowbox_min; 
-    });
+     // add more rows if your csv file has more columns
+     
+    if (rowbox_max > box_max) box_max = rowbox_max;
+    if (rowbox_min < box_min) box_min = rowbox_min; 
+  });
     
-    var box_chart = d3.box()
-      .whiskers(iqr(1.5))
-      .height(box_height) 
-      .domain([box_min, box_max])
-      .showLabels(box_labels);
+  var box_chart = d3.box()
+    .whiskers(iqr(1.5))
+    .height(box_height) 
+    .domain([box_min, box_max])
+    .showLabels(box_labels);
 
-    var box_svg = d3.select("body").append("svg")
-      .attr("width", box_width + box_margin.left + box_margin.right)
-      .attr("height", box_height + box_margin.top + box_margin.bottom)
-      .attr("class", "box")    
-      .append("g")
-      .attr("transform", "translate(" + box_margin.left + "," + box_margin.top + ")");
-    
-    // the x-axis
-    // var box_x = d3.scaleBand()   
-    //   .domain( box_data.map(function(d) { console.log(d);return d[0] } ) )     
-    //   .range([0 , box_width], 0.7, 0.3)
-    //   .padding(0.1); 
+  var box_svg = d3.select("body").append("svg")
+    .attr("width", box_width + box_margin.left + box_margin.right)
+    .attr("height", box_height + box_margin.top + box_margin.bottom)
+    .attr("class", "box")    
+    .append("g")
+    .attr("transform", "translate(" + box_margin.left + "," + box_margin.top + ")");
+  
+  // the x-axis
+  // var box_x = d3.scaleBand()   
+  //   .domain( box_data.map(function(d) { console.log(d);return d[0] } ) )     
+  //   .range([0 , box_width], 0.7, 0.3)
+  //   .padding(0.1); 
 
     box_x = d3.scaleTime().range([0, box_width])
     box_x.domain(d3.extent(box_data, function(d) {return d[0]; }));
@@ -817,14 +818,14 @@ function getBoxPlotData(arr) {
 
     // draw the boxplots  
 
+    console.log(box_data)
 
     box_svg.selectAll(".box")    
       .data(box_data)
       .enter().append("g")
       .attr("transform", function(d) { return "translate(" +  box_x(d[0])  + "," + box_margin.top + ")"; } )
-      .call(box_chart.width(5)); 
-    
-        
+      .call(box_chart.width(5));
+   
     // add a title
     box_svg.append("text")
       .attr("x", (box_width / 2))             
