@@ -43,6 +43,8 @@ var irregDatesToRegDates = []
 var quartilePreData
 var quartilePostData
 var numFeatures
+var boxplotdata
+var originalStudentData
 
 
 // Below code parses the calendar csv to mark events on the basis of the date
@@ -131,7 +133,7 @@ d3.csv("data/grades3.csv", type, function(error, studentGradeData) {
 
 
 
-  var students = columns.slice(1).map(function(id) {
+  students = columns.slice(1).map(function(id) {
     return {
       id: id,
       values: data.map(function(d) {
@@ -145,7 +147,7 @@ d3.csv("data/grades3.csv", type, function(error, studentGradeData) {
 
 
   clusters = 8
-  maxiterations = 8
+  maxiterations = 20
 
   studentClusters = kmeans(students,clusters,maxiterations)
   //findOptimalCluster(students, maxiterations)
@@ -158,6 +160,7 @@ d3.csv("data/grades3.csv", type, function(error, studentGradeData) {
     };
   })
 
+  originalStudentData = students
   students = clusteredData
   processQuartileData(quartilePreData)
   x.domain(d3.extent(data, function(d) {return d.date; }));
@@ -398,9 +401,12 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
     tooltip.style("visibility", "hidden") 
   }
 
-  function mouseOverFunction() {
+  function mouseOverFunction(d,i) {
     d3.select(this)
-      .style("stroke-width","10px")   
+      .style("stroke-width","10px") 
+
+    boxplotdata = getBoxPlotData(labels[i])
+
   }
 
   function mouseMoveFunction() {
@@ -688,145 +694,187 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
     return result
   }
 
-var box_labels = true; // show the text box_labels beside individual boxplots?
 
-var box_margin = {top: 30, right: 50, bottom: 70, left: 50};
-var box_width = 800 - box_margin.left - box_margin.right;
-var box_height = 400 - box_margin.top - box_margin.bottom;
+
+
+function getBoxPlotData(arr) {
+
+  var t = d3.transition()
+      .duration(750);
+
+  var result = arr.map(function(d) {
+    var x = {}
+    originalStudentData[d]["values"].forEach(function(e) {
+        x[e.date]= e.scores
+    })
+    return x
+  })
+
+  var box_labels = true; // show the text box_labels beside individual boxplots?
+
+  var box_margin = {top: 10, right: 50, bottom: 20, left: 50};
+  var box_width = 1500 - box_margin.left - box_margin.right;
+  var box_height = 410 - box_margin.top - box_margin.bottom;
+    
+  var box_min = Infinity,
+    box_max = -Infinity;
+    
+  // parse in the box_data  
+  // d3.csv("data/grades3.csv", function(error, csv) {
+    // using an array of arrays with
+    // box_data[n][2] 
+    // where n = number of columns in the csv file 
+    // box_data[i][0] = name of the ith column
+    // box_data[i][1] = array of values of ith column
+
+    var box_data = [];
+    // add more rows if your csv file has more columns
+
+    // add here the header of the csv file
+    numFeatures.map(function(d,i) {
+      box_data[i] = []
+    })
+
+    numFeatures.map(function(d,i) {
+      box_data[i][0] = d
+      box_data[i][1] = []
+    })
+
+
+    // box_data[0][0] = "Q1";
+    // box_data[1][0] = "Q2";
+    // box_data[2][0] = "Q3";
+    // box_data[3][0] = "Q4";
+    // // add more rows if your csv file has more columns
+
+    // box_data[0][1] = [];
+    // box_data[1][1] = [];
+    // box_data[2][1] = [];
+    // box_data[3][1] = [];
+    
+    result.forEach(function(x) {
+
+      var box_v = []
+
+      numFeatures.map(function(d,i) {
+        box_v[i] = x[d]
+      })
+
+      box_v.sort()
+
+        
+      var rowbox_max = box_v[box_v.length-1]
+      var rowbox_min = box_v[0]
+
+
+      box_v.forEach(function(d,i) {
+        box_data[i][1].push(d);
+      })
+
+       // add more rows if your csv file has more columns
+       
+      if (rowbox_max > box_max) box_max = rowbox_max;
+      if (rowbox_min < box_min) box_min = rowbox_min; 
+    });
+    
+    var box_chart = d3.box()
+      .whiskers(iqr(1.5))
+      .height(box_height) 
+      .domain([box_min, box_max])
+      .showLabels(box_labels);
+
+    var box_svg = d3.select("body").append("svg")
+      .attr("width", box_width + box_margin.left + box_margin.right)
+      .attr("height", box_height + box_margin.top + box_margin.bottom)
+      .attr("class", "box")    
+      .append("g")
+      .attr("transform", "translate(" + box_margin.left + "," + box_margin.top + ")");
+    
+    // the x-axis
+    // var box_x = d3.scaleBand()   
+    //   .domain( box_data.map(function(d) { console.log(d);return d[0] } ) )     
+    //   .range([0 , box_width], 0.7, 0.3)
+    //   .padding(0.1); 
+
+    box_x = d3.scaleTime().range([0, box_width])
+    box_x.domain(d3.extent(box_data, function(d) {return d[0]; }));
+
+    var box_xAxis = d3.axisBottom(box_x)
+
+    // the y-axis
+
+    box_y = d3.scaleLinear().range([box_height, 0])
+    box_y.domain([
+      d3.min(students, function(c) { return d3.min(c.values, function(d) { return d.scores; }); }),
+      d3.max(students, function(c) { return d3.max(c.values, function(d) { return d.scores; }); })
+    ]);
+
+    // var box_y = d3.scaleLinear()
+    //   .domain([box_min, box_max])
+    //   .range([box_height + box_margin.top, 0 + box_margin.top]);
+    
+    var box_yAxis = d3.axisLeft(box_y)
+
+    // draw the boxplots  
+
+
+    box_svg.selectAll(".box")    
+      .data(box_data)
+      .enter().append("g")
+      .attr("transform", function(d) { return "translate(" +  box_x(d[0])  + "," + box_margin.top + ")"; } )
+      .call(box_chart.width(5)); 
+    
+        
+    // add a title
+    box_svg.append("text")
+      .attr("x", (box_width / 2))             
+      .attr("y", 0 + (box_margin.top / 2))
+      .attr("text-anchor", "middle")  
+      .style("font-size", "18px") 
+      //.style("text-decoration", "underline")  
+      .text("Distribution of Scores within Cluster");
+   
+     // draw y axis
+    box_svg.append("g")
+      .attr("class", "y axis")
+      .call(box_yAxis)
+      .append("text") // and text1
+      .attr("transform", "rotate(+90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .style("font-size", "16px") 
+      .text("Scores");    
+    
+    // draw x axis  
+    box_svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + (box_height  + box_margin.top + 10) + ")")
+      .call(box_xAxis)
+      .append("text")             // text label for the x axis
+      .attr("x", (box_width / 2) )
+      .attr("y",  10 )
+      .attr("dy", ".71em")
+      .style("text-anchor", "middle")
+      .style("font-size", "16px") 
+      .text("Quarter"); 
+  // });
+
   
-var box_min = Infinity,
-  box_max = -Infinity;
-  
-// parse in the box_data  
-d3.csv("data/boxplotdata.csv", function(error, csv) {
-  // using an array of arrays with
-  // box_data[n][2] 
-  // where n = number of columns in the csv file 
-  // box_data[i][0] = name of the ith column
-  // box_data[i][1] = array of values of ith column
 
-  var box_data = [];
-  box_data[0] = [];
-  box_data[1] = [];
-  box_data[2] = [];
-  box_data[3] = [];
-  // add more rows if your csv file has more columns
+  // Returns a function to compute the interquartile range.
+  function iqr(k) {
+    return function(d, i) {
+    var q1 = d.quartiles[0],
+      q3 = d.quartiles[2],
+      iqr = (q3 - q1) * k,
+      i = -1,
+      j = d.length;
+    while (d[++i] < q1 - iqr);
+    while (d[--j] > q3 + iqr);
+    return [i, j];
+    };
+  }
 
-  // add here the header of the csv file
-  box_data[0][0] = "Q1";
-  box_data[1][0] = "Q2";
-  box_data[2][0] = "Q3";
-  box_data[3][0] = "Q4";
-  // add more rows if your csv file has more columns
 
-  box_data[0][1] = [];
-  box_data[1][1] = [];
-  box_data[2][1] = [];
-  box_data[3][1] = [];
-  
-  csv.forEach(function(x) {
-    var box_v1 = Math.floor(x.Q1),
-      box_v2 = Math.floor(x.Q2),
-      box_v3 = Math.floor(x.Q3),
-      box_v4 = Math.floor(x.Q4);
-      // add more variables if your csv file has more columns
-      
-    var rowbox_max = Math.max(box_v1, Math.max(box_v2, Math.max(box_v3,box_v4)));
-    var rowbox_min = Math.min(box_v1, Math.min(box_v2, Math.min(box_v3,box_v4)));
-
-    box_data[0][1].push(box_v1);
-    box_data[1][1].push(box_v2);
-    box_data[2][1].push(box_v3);
-    box_data[3][1].push(box_v4);
-     // add more rows if your csv file has more columns
-     
-    if (rowbox_max > box_max) box_max = rowbox_max;
-    if (rowbox_min < box_min) box_min = rowbox_min; 
-  });
-  
-  var box_chart = d3.box()
-    .whiskers(iqr(1.5))
-    .height(box_height) 
-    .domain([box_min, box_max])
-    .showLabels(box_labels);
-
-  console.log(box_margin.left+","+box_margin.top)
-
-  var box_svg = d3.select("body").append("svg")
-    .attr("width", box_width + box_margin.left + box_margin.right)
-    .attr("height", box_height + box_margin.top + box_margin.bottom)
-    .attr("class", "box")    
-    .append("g")
-    .attr("transform", "translate(" + box_margin.left + "," + box_margin.top + ")");
-  
-  // the x-axis
-  var box_x = d3.scaleBand()   
-    .domain( box_data.map(function(d) { return d[0] } ) )     
-    .range([0 , box_width], 0.7, 0.3)
-    .padding(0.1); 
-
-  var box_xAxis = d3.axisBottom(box_x)
-
-  // the y-axis
-  var box_y = d3.scaleLinear()
-    .domain([box_min, box_max])
-    .range([box_height + box_margin.top, 0 + box_margin.top]);
-  
-  var box_yAxis = d3.axisLeft(box_y)
-
-  // draw the boxplots  
-  box_svg.selectAll(".box")    
-    .data(box_data)
-    .enter().append("g")
-    .attr("transform", function(d) { return "translate(" +  box_x(d[0])  + "," + box_margin.top + ")"; } )
-    .call(box_chart.width(box_x.bandwidth()/4)); 
-  
-      
-  // add a title
-  box_svg.append("text")
-    .attr("x", (box_width / 2))             
-    .attr("y", 0 + (box_margin.top / 2))
-    .attr("text-anchor", "middle")  
-    .style("font-size", "18px") 
-    //.style("text-decoration", "underline")  
-    .text("Revenue 2012");
- 
-   // draw y axis
-  box_svg.append("g")
-    .attr("class", "y axis")
-    .call(box_yAxis)
-    .append("text") // and text1
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .style("font-size", "16px") 
-    .text("Revenue in €");    
-  
-  // draw x axis  
-  box_svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + (box_height  + box_margin.top + 10) + ")")
-    .call(box_xAxis)
-    .append("text")             // text label for the x axis
-    .attr("x", (box_width / 2) )
-    .attr("y",  10 )
-    .attr("dy", ".71em")
-    .style("text-anchor", "middle")
-    .style("font-size", "16px") 
-    .text("Quarter"); 
-});
-
-// Returns a function to compute the interquartile range.
-function iqr(k) {
-  return function(d, i) {
-  var q1 = d.quartiles[0],
-    q3 = d.quartiles[2],
-    iqr = (q3 - q1) * k,
-    i = -1,
-    j = d.length;
-  while (d[++i] < q1 - iqr);
-  while (d[--j] > q3 + iqr);
-  return [i, j];
-  };
 }
