@@ -45,7 +45,10 @@ var quartilePostData
 var numFeatures
 var boxplotdata
 var originalStudentData
-
+var helpSeekingCSVdata = []
+var catWiseStudentData = []
+var choices = new Set()
+var currentLabel
 
 // Below code parses the calendar csv to mark events on the basis of the date
 // and give descriptions of the events that have occured
@@ -73,7 +76,7 @@ d3.csv('data/calendar.csv')
     }
   });
 
-var helpSeekingCSVdata = []
+
 var listOfEvents = ["HW1","LAB2","OTHERS","HW2","HW3","LAB3","LAB4","HW4","LAB5","PROJ1","LAB6","LAB7",
                     "Midterm","HW5","LAB8","PROJ2","LAB9","HW6","LAB10","PROJ3","LAB13"]
 var hourSpent = {
@@ -82,366 +85,354 @@ var hourSpent = {
   3: "16 - 30 minutes",
   4: "31 - 60 minutes",
   5: "> 60 minutes",
+  6: "Not Attended",
 }
+
+
+Object.keys(hourSpent).map(function(d,i) {
+  catWiseStudentData[hourSpent[d]] = new Set()
+})
+
 var filteredSet = []
 
+d3.csv('data/tahours3.csv', function(error, tadata) {
 
-d3.csv('data/tahours2.csv')
-  .row(function(d) {
-    return {
-      username: d["Username"],
-      timeStamp: new Date(d["Timestamp"]),
-      event: d["Events"],
-      TimeSpentCat: d["Time Spent"],
-      description: d["Time Helped"]
-    };
+  tadata.forEach(function(d,i) {
+    catWiseStudentData[d["Time Spent"]].add(d["Username"])
   })
-  .get(function(error, csv) {
-    if (!error) {
-      csv.forEach(function(d,i) {
-        helpSeekingCSVdata.push(d)
-      });
-    } else {
-      // handle error
-    }
-  });
-
-
-// Below code basically parses the studentGrade data to create normalized scores of the students till that date
-d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
-  if (error) throw error;
   
-
-  studentGradeData.forEach(function(d,i) {
-    if(filteredSet.length === 0 || filteredSet.includes(parseInt(d.Username))) {
-      var total = 0
-      for (var i = 0; i < dateList.length; i++) {
-        var x = (calendarData[dateList[i]].description)
-        var y = (calendarData[dateList[i]].total)
-        total = total + d[x]
-        d[x] = total/y*100
-      }
-    columns.push(d.Username)
-    }
-  })
-
-// Below code contains the logic to transform the student data into time based data that will be used to create the visualization
-  
-  var completeDateList = getCompleteDateList(dateList)
-  var dataForVisualization = convertIrregToReg(dataForVisualization,completeDateList,studentGradeData,calendarData)
-  data = dataForVisualization
-
-
-
-  students = columns.slice(1).map(function(id) {
-    return {
-      id: id,
-      values: data.map(function(d) {
-        return {date: d.date, scores: d[id]};
-      }),
-      /*total: studentGradeData.find(function(d,i) {
-        return id==d["Username"]
-      })["TOTAL%"]*/
-    };
-  });
-
-
-  clusters = 8
-  maxiterations = 20
-
-  studentClusters = kmeans(students,clusters,maxiterations)
-  //findOptimalCluster(students, maxiterations)
-  // calculateSumSquareDistance(studentClusters,students)
-
-  var clusteredData = studentClusters.map(function(d,i) {
-    return {
-      id: "C"+i,
-      values: d
-    };
-  })
-
-  originalStudentData = students
-  students = clusteredData
-  processQuartileData(quartilePreData)
-  x.domain(d3.extent(data, function(d) {return d.date; }));
-
-  y.domain([
-    d3.min(students, function(c) { return d3.min(c.values, function(d) { return d.scores; }); }),
-    d3.max(students, function(c) { return d3.max(c.values, function(d) { return d.scores; }); })
-  ]);
-
-  z.domain(students.map(function(c) {return c.total; }));
-
-  g.append("g")
-    .attr("class", "axis axis--x")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x));
-
-  g.append("g")
-    .attr("class", "axis axis--y")
-    .call(d3.axisLeft(y))
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", "0.71em")
-    .attr("fill", "#000")
-    .text("Scores");
-
-  var tooltip = d3.select("body")
-  .append("div")
-  .style("position", "absolute")
-  .style("z-index", "10")
-  .style("visibility", "hidden")
-
-  var studentData = g.selectAll(".studentData")
-    .data(students)
-    .enter().append("g")
-    .attr("class", "studentData");
-
-  // studentData.append("path")
-  //   .attr("class", "line")
-  //   .attr("d", function(d) { return line(d.values); })
-  //   .style("stroke", function(d,i) {
-  //     var x = getRGBIndex(i)
-  //     var r = Math.floor((x/Object.keys(labels).length*123)%255);
-  //     var g = Math.floor((x/Object.keys(labels).length*456)%255);
-  //     var b = Math.floor((x/Object.keys(labels).length*789)%255);
-  //     return "rgb("+r+","+g+","+b+")"
-  //   })
-  //   .style("stroke-width", "2px")
-  //   .on("mouseover", mouseOverFunction)
-  //   .on("mouseout", mouseOutFunction)
-  //   .on("mousemove", mouseMoveFunction)
-
-  studentData.append("path")
-    .attr("class", "line")
-    .attr("d", function(d) { return line(d.values); })
-    .style("stroke", function(d) {return z(d.id); })
-    .style("stroke-width", "2px")
-    .on("mouseover", mouseOverFunction)
-    .on("mouseout", mouseOutFunction)
-    .on("mousemove", mouseMoveFunction)
-
-  studentData.append("text")
-    .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-    .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"; })
-    .attr("x", 3)
-    .attr("dy", "0.35em")
-    .style("font", "10px")
-    .text(function(d) { return d.id; });
-
-//  listOfEvents.forEach(function(values) {
-//    // create the necessary elements
-//    var br = document.createElement("br");
-//    var label= document.createElement("label");
-//    var description = document.createTextNode(values);
-//    var checkbox = document.createElement("input");
-
-//    checkbox.type = "checkbox";    // make the element a checkbox
-//    checkbox.name = values;      // give it a name we can check on the server side
-//    checkbox.value = values;         // make its value "pair"
-//    checkbox.id = "event"
-
-//    label.appendChild(checkbox);   // add the box to the element
-//    label.appendChild(description);// add the description to the element
+  // Below code basically parses the studentGrade data to create normalized scores of the students till that date
+  d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
+    if (error) throw error;
     
-//    // add the label element to your div
-//    document.getElementById('eventsCheckboxes').appendChild(label);
-//    document.getElementById('eventsCheckboxes').appendChild(br);
-//  })
 
-// Object.keys(hourSpent).forEach(function(values) {
-//  // create the necessary elements
-//  var br = document.createElement("br");
-//  var label= document.createElement("label");
-//  var description = document.createTextNode(hourSpent[values]);
-//  var checkbox = document.createElement("input");
-//  checkbox.id = "hourSpent"
-
-//  checkbox.type = "checkbox";    // make the element a checkbox
-//  checkbox.name = hourSpent[values];      // give it a name we can check on the server side
-//  checkbox.value = hourSpent[values];         // make its value "pair"
-
-//  label.appendChild(checkbox);   // add the box to the element
-//  label.appendChild(description);// add the description to the element
-
-//  // add the label element to your div
-//  document.getElementById('timeSpentCheckboxes').appendChild(label);
-//  document.getElementById('timeSpentCheckboxes').appendChild(br);
-// })
-
-d3.selectAll("#event").on("change",eventUpdate);
-      //eventUpdate();
-
-  function eventUpdate(){
-    var choices = [];
-      d3.selectAll("#event").each(function(d){
-        cb = d3.select(this);
-        if(cb.property("checked")){
-          choices.push(cb.property("value"));
-        } 
-      });
-
-
-    var newfilteredSet
-    var newHelpSeekingData
-    if(choices.length > 0){
-      newHelpSeekingData = helpSeekingCSVdata.filter(function(d,i){return choices.includes(d.event);});
-      newfilteredSet = newHelpSeekingData.map(function(d) {return parseInt(d.username)})
-    } else {
-      newfilteredSet = filteredSet;     
-    }
-
-  filteredSet = newfilteredSet
-
-  studentGradeData.forEach(function(d,i) {
-    if(filteredSet.length === 0 || filteredSet.includes(parseInt(d.Username))) {
-      var total = 0
-      for (var i = 0; i < dateList.length; i++) {
-        var x = (calendarData[dateList[i]].description)
-        var y = (calendarData[dateList[i]].total)
-        total = total + d[x]
-        d[x] = total/y*100
-      }
-      if(!columns.includes(d.Username))
-        {
-          columns.push(d.Username)
+    studentGradeData.forEach(function(d,i) {
+      if(filteredSet.length === 0 || filteredSet.includes(parseInt(d.Username))) {
+        var total = 0
+        for (var i = 0; i < dateList.length; i++) {
+          var x = (calendarData[dateList[i]].description)
+          var y = (calendarData[dateList[i]].total)
+          total = total + d[x]
+          d[x] = total/y*100
         }
+      columns.push(d.Username)
+      }
+    })
+
+    var completeDateList = getCompleteDateList(dateList)
+    var dataForVisualization = convertIrregToReg(dataForVisualization,completeDateList,studentGradeData,calendarData)
+    data = dataForVisualization
+
+    students = columns.slice(1).map(function(id) {
+      return {
+        id: id,
+        values: data.map(function(d) {
+          return {date: d.date, scores: d[id]};
+        })
+      };
+    });
+
+    clusters = 8
+    maxiterations = 3
+
+    studentClusters = kmeans(students,clusters,maxiterations)
+    //findOptimalCluster(students, maxiterations)
+    // calculateSumSquareDistance(studentClusters,students)
+
+    var clusteredData = studentClusters.map(function(d,i) {
+      return {
+        id: "C"+i,
+        values: d
+      };
+    })
+
+    originalStudentData = students
+    students = clusteredData
+    // processQuartileData(quartilePreData)
+    x.domain(d3.extent(data, function(d) {return d.date; }));
+
+    y.domain([
+      d3.min(students, function(c) { return d3.min(c.values, function(d) { return d.scores; }); }),
+      d3.max(students, function(c) { return d3.max(c.values, function(d) { return d.scores; }); })
+    ]);
+
+    z.domain(students.map(function(c) {return c.total; }));
+
+    g.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    g.append("g")
+      .attr("class", "axis axis--y")
+      .call(d3.axisLeft(y))
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", "0.71em")
+      .attr("fill", "#000")
+      .text("Scores");
+
+    var tooltip = d3.select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+
+    var studentData = g.selectAll(".studentData")
+      .data(students)
+      .enter().append("g")
+      .attr("class", "studentData");
+
+    // studentData.append("path")
+    //   .attr("class", "line")
+    //   .attr("d", function(d) { return line(d.values); })
+    //   .style("stroke", function(d,i) {
+    //     var x = getRGBIndex(i)
+    //     var r = Math.floor((x/Object.keys(labels).length*123)%255);
+    //     var g = Math.floor((x/Object.keys(labels).length*456)%255);
+    //     var b = Math.floor((x/Object.keys(labels).length*789)%255);
+    //     return "rgb("+r+","+g+","+b+")"
+    //   })
+    //   .style("stroke-width", "2px")
+    //   .on("mouseover", mouseOverFunction)
+    //   .on("mouseout", mouseOutFunction)
+    //   .on("mousemove", mouseMoveFunction)
+
+    studentData.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d.values); })
+      .style("stroke", function(d) {return z(d.id); })
+      .style("stroke-width", "2px")
+      .on("mouseover", mouseOverFunction)
+      .on("mouseout", mouseOutFunction)
+      .on("mousemove", mouseMoveFunction)
+
+    studentData.append("text")
+      .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"; })
+      .attr("x", 3)
+      .attr("dy", "0.35em")
+      .style("font", "10px")
+      .text(function(d) { return d.id; });
+
+  //  listOfEvents.forEach(function(values) {
+  //    // create the necessary elements
+  //    var br = document.createElement("br");
+  //    var label= document.createElement("label");
+  //    var description = document.createTextNode(values);
+  //    var checkbox = document.createElement("input");
+
+  //    checkbox.type = "checkbox";    // make the element a checkbox
+  //    checkbox.name = values;      // give it a name we can check on the server side
+  //    checkbox.value = values;         // make its value "pair"
+  //    checkbox.id = "event"
+
+  //    label.appendChild(checkbox);   // add the box to the element
+  //    label.appendChild(description);// add the description to the element
+      
+  //    // add the label element to your div
+  //    document.getElementById('eventsCheckboxes').appendChild(label);
+  //    document.getElementById('eventsCheckboxes').appendChild(br);
+  //  })
+
+    Object.keys(hourSpent).forEach(function(values) {
+     // create the necessary elements
+     var br = document.createElement("br");
+     var label= document.createElement("label");
+     var description = document.createTextNode(hourSpent[values]);
+     var checkbox = document.createElement("input");
+     checkbox.id = "hourSpent"
+
+     checkbox.type = "checkbox";    // make the element a checkbox
+     checkbox.name = hourSpent[values];      // give it a name we can check on the server side
+     checkbox.value = hourSpent[values];         // make its value "pair"
+
+     label.appendChild(checkbox);   // add the box to the element
+     label.appendChild(description);// add the description to the element
+
+     // add the label element to your div
+     document.getElementById('timeSpentCheckboxes').appendChild(label);
+     document.getElementById('timeSpentCheckboxes').appendChild(br);
+    })
+
+  /*d3.selectAll("#event").on("change",eventUpdate);
+        //eventUpdate();
+
+    function eventUpdate(){
+      var choices = [];
+        d3.selectAll("#event").each(function(d){
+          cb = d3.select(this);
+          if(cb.property("checked")){
+            choices.push(cb.property("value"));
+          } 
+        });
+
+
+      var newfilteredSet
+      var newHelpSeekingData
+      if(choices.length > 0){
+        newHelpSeekingData = helpSeekingCSVdata.filter(function(d,i){return choices.includes(d.event);});
+        newfilteredSet = newHelpSeekingData.map(function(d) {return parseInt(d.username)})
+      } else {
+        newfilteredSet = filteredSet;     
+      }
+
+    filteredSet = newfilteredSet
+
+    studentGradeData.forEach(function(d,i) {
+      if(filteredSet.length === 0 || filteredSet.includes(parseInt(d.Username))) {
+        var total = 0
+        for (var i = 0; i < dateList.length; i++) {
+          var x = (calendarData[dateList[i]].description)
+          var y = (calendarData[dateList[i]].total)
+          total = total + d[x]
+          d[x] = total/y*100
+        }
+        if(!columns.includes(d.Username))
+          {
+            columns.push(d.Username)
+          }
+      }
+    })
+
+    // ----------------------------------------------------------------------------------------------
+    // Below code contains the logic to transform the student data into time based data that will be used to create the visualization
+    var dataForVisualization = []
+
+    var students = columns.slice(1).map(function(id) {
+      return {
+        id: id,
+        values: data.map(function(d) {
+          return {date: d.date, scores: d[id]};
+        })
+      };
+    });
+
+    x.domain(d3.extent(data, function(d) {return d.date; }));
+
+    y.domain([
+      d3.min(students, function(c) { return d3.min(c.values, function(d) { return d.scores; }); }),
+      d3.max(students, function(c) { return d3.max(c.values, function(d) { return d.scores; }); })
+    ]);
+
+    z.domain(students.map(function(c) { return c.id; }));
+
+    g.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    g.append("g")
+      .attr("class", "axis axis--y")
+      .call(d3.axisLeft(y))
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", "0.71em")
+      .attr("fill", "#000")
+      .text("Scores");
+
+    var tooltip = d3.select(".viz-body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden")
+
+    var studentData = g.selectAll(".studentData")
+      .data(students)
+      .enter().append("g")
+      .attr("class", "studentData");
+
+    studentData.exit()
+      .remove(); 
+
+    studentData.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d.values); })
+      .style("stroke", function(d) { return z(d.id); })
+      .style("stroke-width", "2px")
+      .on("mouseover", mouseOverFunction)
+      .on("mouseout", mouseOutFunction)
+      .on("mousemove", mouseMoveFunction)
+
+    studentData.append("text")
+      .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"; })
+      .attr("x", 3)
+      .attr("dy", "0.35em")
+      .style("font", "10px")
+      .text(function(d) { return d.id; });
+
+    }*/
+
+    d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
+    hourSpentUpdate();
+
+    function hourSpentUpdate(){
+         d3.selectAll("#hourSpent").each(function(d){
+          cb = d3.select(this);
+          if(cb.property("checked")){
+            choices.add(cb.property("value"));
+          } else {
+            choices.delete(cb.property("value"));
+          }
+        });
+         console.log(choices)
+         getBoxPlotData()
     }
-  })
 
-  // ----------------------------------------------------------------------------------------------
-  // Below code contains the logic to transform the student data into time based data that will be used to create the visualization
-  var dataForVisualization = []
 
-  var students = columns.slice(1).map(function(id) {
-    return {
-      id: id,
-      values: data.map(function(d) {
-        return {date: d.date, scores: d[id]};
-      })
+    function mouseOutFunction() {
+      d3.select(this)
+        .style("stroke-width","2px")   
+
+      tooltip.style("visibility", "hidden") 
+    }
+
+    function mouseOverFunction(d,i) {
+      d3.select(this)
+        .style("stroke-width","10px") 
+      currentLabel = labels[i]
+      boxplotdata = getBoxPlotData()
+
+    }
+
+    function mouseMoveFunction() {
+      var year = x.invert(d3.mouse(this)[0])
+      var y = getEventName(year)
+
+      tooltip.style("top", (event.pageY-30)+"px")
+      .style("visibility", "visible") 
+      .style("left",(event.pageX - 50)+"px")
+      .text(y)
+      .style("background-color","grey")
+      .style("padding","5px 5px 5px 5px")
+      .style("color","white")
+      .style("font-family","Cabin")
+      .style("font-size","11px")
+    }
+
+    
+    function getEventName(year) {
+      var y = new Date(year)
+      y.setHours( 0,0,0,0 )
+      return calendarData[irregDatesToRegDates[y].yyyymmdd()]["description"] + " - "+y.getMonth()+"/"+y.getDay()+"/"+y.getFullYear()
+    }
+
+    Date.prototype.yyyymmdd = function() {
+    var mm = this.getMonth() + 1; // getMonth() is zero-based
+    var dd = this.getDate();
+
+    return [this.getFullYear(),
+            (mm>9 ? '' : '0') + mm,
+            (dd>9 ? '' : '0') + dd
+           ].join('');
     };
   });
-
-  x.domain(d3.extent(data, function(d) {return d.date; }));
-
-  y.domain([
-    d3.min(students, function(c) { return d3.min(c.values, function(d) { return d.scores; }); }),
-    d3.max(students, function(c) { return d3.max(c.values, function(d) { return d.scores; }); })
-  ]);
-
-  z.domain(students.map(function(c) { return c.id; }));
-
-  g.append("g")
-    .attr("class", "axis axis--x")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x));
-
-  g.append("g")
-    .attr("class", "axis axis--y")
-    .call(d3.axisLeft(y))
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", "0.71em")
-    .attr("fill", "#000")
-    .text("Scores");
-
-  var tooltip = d3.select("body")
-  .append("div")
-  .style("position", "absolute")
-  .style("z-index", "10")
-  .style("visibility", "hidden")
-
-  var studentData = g.selectAll(".studentData")
-    .data(students)
-    .enter().append("g")
-    .attr("class", "studentData");
-
-  studentData.exit()
-    .remove(); 
-
-  studentData.append("path")
-    .attr("class", "line")
-    .attr("d", function(d) { return line(d.values); })
-    .style("stroke", function(d) { return z(d.id); })
-    .style("stroke-width", "2px")
-    .on("mouseover", mouseOverFunction)
-    .on("mouseout", mouseOutFunction)
-    .on("mousemove", mouseMoveFunction)
-
-  studentData.append("text")
-    .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-    .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"; })
-    .attr("x", 3)
-    .attr("dy", "0.35em")
-    .style("font", "10px")
-    .text(function(d) { return d.id; });
-
-  }
-
-d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
-      hourSpentUpdate();
-
-  function hourSpentUpdate(){
-    var choices = [];
-      d3.selectAll("#hourSpent").each(function(d){
-        cb = d3.select(this);
-        if(cb.property("checked")){
-          choices.push(cb.property("value"));
-        }
-      });
-  }
+})
 
 
-  function mouseOutFunction() {
-    d3.select(this)
-      .style("stroke-width","2px")   
-
-    tooltip.style("visibility", "hidden") 
-  }
-
-  function mouseOverFunction(d,i) {
-    d3.select(this)
-      .style("stroke-width","10px") 
-
-    boxplotdata = getBoxPlotData(labels[i])
-
-  }
-
-  function mouseMoveFunction() {
-    var year = x.invert(d3.mouse(this)[0])
-    var y = getEventName(year)
-    tooltip.style("top", (event.pageY-30)+"px")
-    .style("left",(event.pageX-10)+"px")
-    .text(y)
-    .style("background-color","grey")
-    .style("padding","5px 5px 5px 5px")
-    .style("color","white")
-
-  }
-
-  
-  function getEventName(year) {
-
-    var y = new Date(year)
-    y.setHours( 0,0,0,0 )
-    return calendarData[irregDatesToRegDates[y].yyyymmdd()]["description"]
-  }
-
-  Date.prototype.yyyymmdd = function() {
-  var mm = this.getMonth() + 1; // getMonth() is zero-based
-  var dd = this.getDate();
-
-  return [this.getFullYear(),
-          (mm>9 ? '' : '0') + mm,
-          (dd>9 ? '' : '0') + dd
-         ].join('');
-};
-
-  
-
-});
 
   function type(d, _, columns) {
     d.date = parseTime(d.date);
@@ -697,10 +688,12 @@ d3.selectAll("#hourSpent").on("change",hourSpentUpdate);
 
 
 
-function getBoxPlotData(arr) {
+function getBoxPlotData() {
+  
 
-  d3.selectAll(".box").remove()
-
+  arr = getFilteredUsers(currentLabel,choices)
+  console.log(currentLabel)
+  
   var t = d3.transition()
       .duration(750);
 
@@ -712,26 +705,17 @@ function getBoxPlotData(arr) {
     return x
   })
 
+  console.log(result)
+  d3.selectAll(".box").remove()
+
   var box_labels = true
   var box_margin = {top: 10, right: 50, bottom: 20, left: 50}
-  var box_width = 1500 - box_margin.left - box_margin.right
-  var box_height = 410 - box_margin.top - box_margin.bottom
-    
+  var box_width = 1300 - box_margin.left - box_margin.right
+  var box_height = 300 - box_margin.top - box_margin.bottom
   var box_min = Infinity
   var box_max = -Infinity
-    
-  // parse in the box_data  
-  // d3.csv("data/grades3.csv", function(error, csv) {
-    // using an array of arrays with
-    // box_data[n][2] 
-    // where n = number of columns in the csv file 
-    // box_data[i][0] = name of the ith column
-    // box_data[i][1] = array of values of ith column
-
   var box_data = [];
-  // add more rows if your csv file has more columns
 
-  // add here the header of the csv file
   numFeatures.map(function(d,i) {
     box_data[i] = []
   })
@@ -740,42 +724,30 @@ function getBoxPlotData(arr) {
     box_data[i][0] = d
     box_data[i][1] = []
   })
-
-
-    // box_data[0][0] = "Q1";
-    // box_data[1][0] = "Q2";
-    // box_data[2][0] = "Q3";
-    // box_data[3][0] = "Q4";
-    // // add more rows if your csv file has more columns
-
-    // box_data[0][1] = [];
-    // box_data[1][1] = [];
-    // box_data[2][1] = [];
-    // box_data[3][1] = [];
     
   result.forEach(function(x) {
 
-    var box_v = []
+  var box_v = []
 
-    numFeatures.map(function(d,i) {
-      box_v[i] = x[d]
-    })
+  numFeatures.map(function(d,i) {
+    box_v[i] = x[d]
+  })
 
-    box_v.sort()
+  box_v.sort()
 
-      
-    var rowbox_max = box_v[box_v.length-1]
-    var rowbox_min = box_v[0]
+    
+  var rowbox_max = box_v[box_v.length-1]
+  var rowbox_min = box_v[0]
 
 
-    box_v.forEach(function(d,i) {
-      box_data[i][1].push(d);
-    })
+  box_v.forEach(function(d,i) {
+    box_data[i][1].push(d);
+  })
 
-     // add more rows if your csv file has more columns
-     
-    if (rowbox_max > box_max) box_max = rowbox_max;
-    if (rowbox_min < box_min) box_min = rowbox_min; 
+   // add more rows if your csv file has more columns
+   
+  if (rowbox_max > box_max) box_max = rowbox_max;
+  if (rowbox_min < box_min) box_min = rowbox_min; 
   });
     
   var box_chart = d3.box()
@@ -784,28 +756,17 @@ function getBoxPlotData(arr) {
     .domain([box_min, box_max])
     .showLabels(box_labels);
 
-  var box_svg = d3.select("body").append("svg")
+  var box_svg = d3.select(".viz-body").append("svg")
     .attr("width", box_width + box_margin.left + box_margin.right)
     .attr("height", box_height + box_margin.top + box_margin.bottom)
     .attr("class", "box")    
     .append("g")
     .attr("transform", "translate(" + box_margin.left + "," + box_margin.top + ")");
   
-  // the x-axis
-  // var box_x = d3.scaleBand()   
-  //   .domain( box_data.map(function(d) { console.log(d);return d[0] } ) )     
-  //   .range([0 , box_width], 0.7, 0.3)
-  //   .padding(0.1); 
-
     box_x = d3.scaleTime().range([0, box_width])
     box_x.domain(d3.extent(box_data, function(d) {return d[0]; }));
 
     var box_xAxis = d3.axisBottom(box_x)
-
-    // the y-axis
-
-    // box_y = d3.scaleLinear().range([box_height, 0])
-    // box_y.domain([0,100]);
 
     var box_y = d3.scaleLinear()
       .domain([box_min, box_max])
@@ -813,26 +774,20 @@ function getBoxPlotData(arr) {
     
     var box_yAxis = d3.axisLeft(box_y)
 
-    // draw the boxplots  
-
-    console.log(box_data)
-
     box_svg.selectAll(".box")    
       .data(box_data)
       .enter().append("g")
       .attr("transform", function(d) { return "translate(" +  box_x(d[0])  + "," + box_margin.top + ")"; } )
       .call(box_chart.width(5));
    
-    // add a title
     box_svg.append("text")
       .attr("x", (box_width / 2))             
       .attr("y", 0 + (box_margin.top / 2))
       .attr("text-anchor", "middle")  
-      .style("font-size", "18px") 
-      //.style("text-decoration", "underline")  
-      .text("Distribution of Scores within Cluster");
-   
-     // draw y axis
+      .style("font-size", "18px")
+      .style("font-family", "Cabin") 
+      .text("Distribution of Scores within Cluster")
+
     box_svg.append("g")
       .attr("class", "y axis")
       .call(box_yAxis)
@@ -844,7 +799,6 @@ function getBoxPlotData(arr) {
       .style("font-size", "16px") 
       .text("Scores");    
     
-    // draw x axis  
     box_svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + (box_height  + box_margin.top + 10) + ")")
@@ -856,11 +810,7 @@ function getBoxPlotData(arr) {
       .style("text-anchor", "middle")
       .style("font-size", "16px") 
       .text("Quarter"); 
-  // });
 
-  
-
-  // Returns a function to compute the interquartile range.
   function iqr(k) {
     return function(d, i) {
     var q1 = d.quartiles[0],
@@ -872,6 +822,36 @@ function getBoxPlotData(arr) {
     while (d[--j] > q3 + iqr);
     return [i, j];
     };
+  }
+
+  function getFilteredUsers(currentLabel,choices) {
+    // Returm Array of Indices
+    if(choices.size == 0) {
+      return currentLabel
+    } else {
+      // console.log(catWiseStudentData)
+      var results = new Set()
+      choices.forEach(function(d,i) {
+        catWiseStudentData[d].forEach(function(d1,i1) {
+        var index = getStudentIndex(d1,currentLabel)
+        if(index != -1) {
+          results.add(index)
+        }
+        })
+      })
+      let array = Array.from(results);
+      console.log(array)
+      return array
+    }
+  }
+
+  function getStudentIndex(student,currentLabel) {
+    for (var i = 0; i < originalStudentData.length; i++) {
+      if(originalStudentData[i]["id"] == student && currentLabel.includes(i)) {
+        return i
+      }
+    }
+    return -1
   }
 
 

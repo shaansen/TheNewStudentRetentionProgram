@@ -4,7 +4,8 @@
 <head>
 	<!-- <link href='https://fonts.googleapis.com/css?family=Roboto Condensed' rel='stylesheet'> -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
+	<link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet'>
+	<link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -15,12 +16,38 @@
 	</head>
 
 <style>
+
+.main-header {
+	background-color: grey;
+	color: white;
+	font-family: "Satisfy";
+}
+
+.left {
+    width: 13%;
+    height: 100%;
+    position: fixed;
+    outline: 1px solid;
+    padding: 10px 10px 10px 10px;
+    background-color: silver
+
+}
+.right {
+    width: 87%;
+    height: 100%;
+    outline: 1px solid;
+    position: absolute;
+    right: 0;
+    padding: 10px 10px 10px 10px;
+}
+
+
 .axis--x path {
 	display: none;
 }
 
 body {
-		font-family: 'Rubik','Roboto Condensed';
+		font-family: 'Cabin','Roboto Condensed';
 }
 
 
@@ -38,7 +65,7 @@ body {
   }
 
   .axis text {
-      font-family: 'Rubik','Roboto Condensed',sans-serif;
+      font-family: 'Cabin','Roboto Condensed',sans-serif;
       font-size: 11px;
   }
 
@@ -85,45 +112,26 @@ body {
 }
 
 </style>
-<div class="container-fluid">
-	<h1>Effect of Help Seeking Behavior on Student Grades</h1>
-	<hr>
-<!-- 
-	<div class="col-sm-1">
+<div>
+	<div class="container-fluid main-header" >
+		<h1 align="center">Visualization of Clustered Time Series Data</h1>
+		<!-- <h4 align="center">Created By <strong>Shantanu Sengupta</strong></h4> -->
+	</div>
+	<div class="left">
 		<h4><strong>Time Spent in Office Hours</strong></h4>
 		<div id="timeSpentCheckboxes"></div>
-
-		<hr>
-
-		<h4><strong>Topic Discussed</strong></h4>
-		<div id="eventsCheckboxes"></div>
-	</div> -->
-
-	<div>
-		<svg width="1500" height="410"></svg>
 	</div>
-	<!-- <div width="1350" height="410" class="heatmap"></div> -->
+	<div class="right">
+		<div class="viz-body">
+			<svg width="1300" height="300"></svg>
+		</div>
+	</div>
 
-
-	<!-- <div class="col-sm-3">
-		<h3>Statistics</h3>
-		<hr>
-		<h3>Student Details</h3>
-		Student ID : 220<br>
-		Overall Grade : +A<br>
-		Overall Score : 98%<br>
-		Highest Score with Assistance : HW1 - 90%<br>
-		Highest Score without Assistance : HW3 - 85%<br>
-		Lowest Score with Assistance : Midterm - 70%<br>
-		Lowest Score without Assistance : Lab1 - 72%<br>
-	</div> -->
-	
 </div>
 
 
 <!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
 
-<script src="lodash.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/d3-timer.v1.min.js"></script>
 <script src="linechart.js"></script>
