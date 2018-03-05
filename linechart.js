@@ -15,9 +15,9 @@ var yellow = d3.interpolateYlGn(), // "rgb(255, 255, 229)"
     green = d3.interpolateYlGn(1); // "rgb(0, 69, 41)"
 
 var line = d3.line()
-    .curve(d3.curveBasis)
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.scores); });
+    // .curve(d3.curveBasis)
     
 var tipBox
 // -----------------------------------------------------------------------------------------
@@ -132,12 +132,12 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
       };
     });
 
-    clusters = 8
-    maxiterations = 3
+    // clusters = 8
+    maxiterations = 10
 
-    studentClusters = kmeans(students,clusters,maxiterations)
-    //findOptimalCluster(students, maxiterations)
-    // calculateSumSquareDistance(studentClusters,students)
+    // studentClusters = kmeans(students,clusters,maxiterations)
+    findOptimalCluster(students, maxiterations)
+    calculateSumSquareDistance(studentClusters,students)
 
     var clusteredData = studentClusters.map(function(d,i) {
       return {
@@ -190,8 +190,8 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
     //   .style("stroke", function(d,i) {
     //     var x = getRGBIndex(i)
     //     var r = Math.floor((x/Object.keys(labels).length*123)%255);
-    //     var g = Math.floor((x/Object.keys(labels).length*456)%255);
-    //     var b = Math.floor((x/Object.keys(labels).length*789)%255);
+    //     var g = Math.floor((x/Object.keys(labels).length*345)%255);
+    //     var b = Math.floor((x/Object.keys(labels).length*567)%255);
     //     return "rgb("+r+","+g+","+b+")"
     //   })
     //   .style("stroke-width", "2px")
@@ -378,7 +378,6 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
             choices.delete(cb.property("value"));
           }
         });
-         console.log(choices)
          getBoxPlotData()
     }
 
@@ -537,10 +536,11 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
     var result = []
     var labelSet = {}
     for (var id = 0; id < dataset.length; id++) {
-      var min = 100
+      var min = 1000
 
       for (var j = 0; j < centroids.length; j++) {
         var dist = DTWDistance(dataset[id]["values"],centroids[j])
+        // var dist = EuclideanDistance(dataset[id]["values"],centroids[j])
         if(dist < min) {
           min = dist;
           result[id] = j;
@@ -578,7 +578,16 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
 
     var result = Math.sqrt(DTW[s1.length-1][s2.length-1])
     return result
+  }
 
+  function EuclideanDistance(s1, s2) {
+    var result = 0;
+
+    for (var i = 0; i < s1.length; i++) {
+      var x = (s1[i].scores - s2[i].scores)
+      result +=  x*x; 
+    }
+    return Math.sqrt(result/s1.length)
   }
 
   function getCentroids(dataset, labels, k) {
@@ -612,15 +621,20 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
         numFeatures.map(function(d,i1) {
           var x = {}
           x["date"] = d;
-          var y = 1
+          // var y = 1
+          // labels[i].forEach(function(d1) {
+          //   y = y * dataset[d1]["values"][i1]["scores"]
+          //   quartilePreData[i][d].push(dataset[d1]["values"][i1]["scores"])
+          // });
+          // x["scores"] = Math.pow(y,1/labels[i].length)
+          // result[i].push(x)
+
+          var y = 0
           labels[i].forEach(function(d1) {
-            // if(dataset[d1]["values"][i1]["scores"]!=0) {
-              y = y * dataset[d1]["values"][i1]["scores"]
-            // }
+            y = y + dataset[d1]["values"][i1]["scores"]
             quartilePreData[i][d].push(dataset[d1]["values"][i1]["scores"])
           });
-
-          x["scores"] = Math.pow(y,1/labels[i].length)
+          x["scores"] = y/labels[i].length
           result[i].push(x)
         })
       }
@@ -659,10 +673,11 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
   function findOptimalCluster(students, iterations) {
     // For Clusters ranging from 1 - 20, find the sum of square differences and store in a map
     var elbowMap = {}
-    for (var i = 1; i <= 50; i++) {
+    for (var i = 1; i <= 40; i++) {
       var clusters = kmeans(students,i,iterations)
       elbowMap[i] = calculateSumSquareDistance(clusters, students)
     }
+    console.log(elbowMap)
   }
 
   function calculateSumSquareDistance(clusters, studentData) {
@@ -692,7 +707,6 @@ function getBoxPlotData() {
   
 
   arr = getFilteredUsers(currentLabel,choices)
-  console.log(currentLabel)
   
   var t = d3.transition()
       .duration(750);
@@ -705,7 +719,6 @@ function getBoxPlotData() {
     return x
   })
 
-  console.log(result)
   d3.selectAll(".box").remove()
 
   var box_labels = true
@@ -829,7 +842,6 @@ function getBoxPlotData() {
     if(choices.size == 0) {
       return currentLabel
     } else {
-      // console.log(catWiseStudentData)
       var results = new Set()
       choices.forEach(function(d,i) {
         catWiseStudentData[d].forEach(function(d1,i1) {
@@ -840,7 +852,6 @@ function getBoxPlotData() {
         })
       })
       let array = Array.from(results);
-      console.log(array)
       return array
     }
   }
