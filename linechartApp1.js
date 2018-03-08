@@ -703,11 +703,7 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
     return result
   }
 
-
-
-
 function getBoxPlotData() {
-  
 
   arr = getFilteredUsers(currentLabel,choices)
   
@@ -721,9 +717,6 @@ function getBoxPlotData() {
     })
     return x
   })
-
-  console.log("Result")
-  console.log(result)
 
   d3.selectAll(".box").remove()
 
@@ -746,40 +739,40 @@ function getBoxPlotData() {
     
   result.forEach(function(x) {
 
-  var box_v = []
+    var box_v = []
 
-  numFeatures.map(function(d,i) {
-    box_v[i] = x[d]
-  })
+    numFeatures.map(function(d,i) {
+      box_v[i] = x[d]
+    })
 
-  box_v.sort()
-  
-  var rowbox_max = box_v[box_v.length-1]
-  var rowbox_min = box_v[0]
-
-
-  box_v.forEach(function(d,i) {
-    box_data[i][1].push(d);
-  })
-
-   // add more rows if your csv file has more columns
-   
-  if (rowbox_max > box_max) box_max = rowbox_max;
-  if (rowbox_min < box_min) box_min = rowbox_min; 
-  });
+    box_v.sort()
     
-  var box_chart = d3.box()
-    .whiskers(iqr(1.5))
-    .height(box_height) 
-    .domain([box_min, box_max])
-    .showLabels(box_labels);
+    var rowbox_max = box_v[box_v.length-1]
+    var rowbox_min = box_v[0]
 
-  var box_svg = d3.select(".viz-body").append("svg")
-    .attr("width", box_width + box_margin.left + box_margin.right)
-    .attr("height", box_height + box_margin.top + box_margin.bottom)
-    .attr("class", "box")    
-    .append("g")
-    .attr("transform", "translate(" + box_margin.left + "," + box_margin.top + ")");
+
+    box_v.forEach(function(d,i) {
+      box_data[i][1].push(d);
+    })
+
+     // add more rows if your csv file has more columns
+     
+    if (rowbox_max > box_max) box_max = rowbox_max;
+    if (rowbox_min < box_min) box_min = rowbox_min; 
+    });
+      
+    var box_chart = d3.box()
+      .whiskers(iqr(1.5))
+      .height(box_height) 
+      .domain([box_min, box_max])
+      .showLabels(box_labels);
+
+    var box_svg = d3.select(".viz-body").append("svg")
+      .attr("width", box_width + box_margin.left + box_margin.right)
+      .attr("height", box_height + box_margin.top + box_margin.bottom)
+      .attr("class", "box")    
+      .append("g")
+      .attr("transform", "translate(" + box_margin.left + "," + box_margin.top + ")");
   
     box_x = d3.scaleTime().range([0, box_width])
     box_x.domain(d3.extent(box_data, function(d) {return d[0]; }));
@@ -869,6 +862,4 @@ function getBoxPlotData() {
     }
     return -1
   }
-
-
 }

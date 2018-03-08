@@ -1,3 +1,5 @@
+var choices = new Set()
+
 var svg = d3.select("svg"),
     margin = {top: 20, right: 80, bottom: 30, left: 50},
     width = svg.attr("width") - margin.left - margin.right,
@@ -28,8 +30,8 @@ d3.csv("data/temperature4.csv", type, function(error, data) {
   });
 
 
-  clusters = 2
-  maxiterations = 50
+  clusters = 4
+  maxiterations = 20
 
   dataClusters = kmeans(dataToRepresent,clusters,maxiterations)
   // findOptimalCluster(dataToRepresent, maxiterations)
@@ -43,7 +45,7 @@ d3.csv("data/temperature4.csv", type, function(error, data) {
   })
 
   originalData = dataToRepresent
-  // dataToRepresent = clusteredData
+  dataToRepresent = clusteredData
  
   x.domain(d3.extent(data, function(d) { return d.date; }));
 
@@ -74,28 +76,28 @@ d3.csv("data/temperature4.csv", type, function(error, data) {
     .enter().append("g")
       .attr("class", "city");
 
-  // city.append("path")
-  //     .attr("class", "line")
-  //     .attr("d", function(d) { return line(d.values); })
-  //     .style("stroke", function(d) { return z(d.id); })
-  //     .on("mouseover", mouseOverFunction)
-  //     .on("mouseout", mouseOutFunction)
-  //     .on("mousemove", mouseMoveFunction)
-
   city.append("path")
-    .attr("class", "line")
-    .attr("d", function(d) { return line(d.values); })
-    .style("stroke", function(d,i) {
-      var x = getRGBIndex(i)
-      var r = Math.floor((x/Object.keys(labels).length*123)%255);
-      var g = Math.floor((x/Object.keys(labels).length*345)%255);
-      var b = Math.floor((x/Object.keys(labels).length*567)%255);
-      return "rgb("+r+","+g+","+b+")"
-    })
-    .style("stroke-width", "2px")
-    .on("mouseover", mouseOverFunction)
-    .on("mouseout", mouseOutFunction)
-    .on("mousemove", mouseMoveFunction)
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d.values); })
+      .style("stroke", function(d) { return z(d.id); })
+      .on("mouseover", mouseOverFunction)
+      .on("mouseout", mouseOutFunction)
+      .on("mousemove", mouseMoveFunction)
+
+  // city.append("path")
+  //   .attr("class", "line")
+  //   .attr("d", function(d) { return line(d.values); })
+  //   .style("stroke", function(d,i) {
+  //     var x = getRGBIndex(i)
+  //     var r = Math.floor((x/Object.keys(labels).length*123)%255);
+  //     var g = Math.floor((x/Object.keys(labels).length*345)%255);
+  //     var b = Math.floor((x/Object.keys(labels).length*567)%255);
+  //     return "rgb("+r+","+g+","+b+")"
+  //   })
+  //   .style("stroke-width", "2px")
+  //   .on("mouseover", mouseOverFunction)
+  //   .on("mouseout", mouseOutFunction)
+  //   .on("mousemove", mouseMoveFunction)
 
   city.append("text")
       .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
@@ -113,7 +115,11 @@ function mouseOutFunction() {
 
 function mouseOverFunction(d,i) {
   d3.select(this)
-    .style("stroke-width","5px") 
+    .style("stroke-width","10px") 
+  currentLabel = labels[i]
+  // console.log(currentLabel)
+  boxplotdata = getBoxPlotData()
+
 }
 
 function mouseMoveFunction(d,i) {
@@ -161,7 +167,7 @@ function getRandomCentroids(numFeatures, k) {
       var x = {}
 
       x["date"] = d;
-      x["temperature"] = Math.random()*30;
+      x["temperature"] = (Math.random()*46.69) + 250.32;
       result[i].push(x)
     })
   }
@@ -316,3 +322,167 @@ function findOptimalCluster(students, iterations) {
       }
     }
   }
+
+
+function getBoxPlotData() {
+
+  arr = getFilteredUsers(currentLabel,choices)
+  
+  var t = d3.transition()
+      .duration(750);
+
+  var result = arr.map(function(d) {
+    var x = {}
+    originalData[d]["values"].forEach(function(e) {
+        x[e.date]= e.temperature
+    })
+    return x
+  })
+
+  console.log(result)
+
+  d3.selectAll(".box").remove()
+
+  var box_labels = true
+  var box_margin = {top: 10, right: 50, bottom: 20, left: 50}
+  var box_width = 1500 - box_margin.left - box_margin.right
+  var box_height = 300 - box_margin.top - box_margin.bottom
+  var box_min = Infinity
+  var box_max = -Infinity
+  var box_data = [];
+
+  numFeatures.map(function(d,i) {
+    box_data[i] = []
+  })
+
+  numFeatures.map(function(d,i) {
+    box_data[i][0] = d
+    box_data[i][1] = []
+  })
+    
+  result.forEach(function(x) {
+
+    var box_v = []
+
+    numFeatures.map(function(d,i) {
+      box_v[i] = x[d]
+    })
+
+    box_v.sort()
+    
+    var rowbox_max = box_v[box_v.length-1]
+    var rowbox_min = box_v[0]
+
+
+    box_v.forEach(function(d,i) {
+      box_data[i][1].push(d);
+    })
+
+     // add more rows if your csv file has more columns
+     
+    if (rowbox_max > box_max) box_max = rowbox_max;
+    if (rowbox_min < box_min) box_min = rowbox_min; 
+    });
+      
+    var box_chart = d3.box()
+      .whiskers(iqr(1.5))
+      .height(box_height) 
+      .domain([box_min, box_max])
+      .showLabels(box_labels);
+
+    var box_svg = d3.select(".viz-body").append("svg")
+      .attr("width", box_width + box_margin.left + box_margin.right)
+      .attr("height", box_height + box_margin.top + box_margin.bottom)
+      .attr("class", "box")    
+      .append("g")
+      .attr("transform", "translate(" + box_margin.left + "," + box_margin.top + ")");
+  
+    box_x = d3.scaleTime().range([0, box_width])
+    box_x.domain(d3.extent(box_data, function(d) {return d[0]; }));
+
+    var box_xAxis = d3.axisBottom(box_x)
+
+    var box_y = d3.scaleLinear()
+      .domain([box_min, box_max])
+      .range([box_height + box_margin.top, 0 + box_margin.top]);
+    
+    var box_yAxis = d3.axisLeft(box_y)
+
+    box_svg.selectAll(".box")    
+      .data(box_data)
+      .enter().append("g")
+      .attr("transform", function(d) { return "translate(" +  box_x(d[0])  + "," + box_margin.top + ")"; } )
+      .call(box_chart.width(5));
+   
+    box_svg.append("text")
+      .attr("x", (box_width / 2))             
+      .attr("y", 0 + (box_margin.top / 2))
+      .attr("text-anchor", "middle")  
+      .style("font-size", "18px")
+      .style("font-family", "Cabin") 
+      .text("Distribution of Scores within Cluster")
+
+    box_svg.append("g")
+      .attr("class", "y axis")
+      .call(box_yAxis)
+      .append("text") // and text1
+      .attr("transform", "rotate(+90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .style("font-size", "16px") 
+      .text("Scores");    
+    
+    box_svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + (box_height  + box_margin.top + 10) + ")")
+      .call(box_xAxis)
+      .append("text")             // text label for the x axis
+      .attr("x", (box_width / 2) )
+      .attr("y",  10 )
+      .attr("dy", ".71em")
+      .style("text-anchor", "middle")
+      .style("font-size", "16px") 
+      .text("Quarter"); 
+
+  function iqr(k) {
+    return function(d, i) {
+    var q1 = d.quartiles[0],
+      q3 = d.quartiles[2],
+      iqr = (q3 - q1) * k,
+      i = -1,
+      j = d.length;
+    while (d[++i] < q1 - iqr);
+    while (d[--j] > q3 + iqr);
+    return [i, j];
+    };
+  }
+
+  function getFilteredUsers(currentLabel,choices) {
+    // Returm Array of Indices
+    if(choices.size == 0) {
+      return currentLabel
+    } else {
+      var results = new Set()
+      choices.forEach(function(d,i) {
+        catWiseStudentData[d].forEach(function(d1,i1) {
+        var index = getStudentIndex(d1,currentLabel)
+        if(index != -1) {
+          results.add(index)
+        }
+        })
+      })
+      let array = Array.from(results);
+      return array
+    }
+  }
+
+  function getStudentIndex(student,currentLabel) {
+    for (var i = 0; i < originalData.length; i++) {
+      if(originalData[i]["id"] == student && currentLabel.includes(i)) {
+        return i
+      }
+    }
+    return -1
+  }
+}
