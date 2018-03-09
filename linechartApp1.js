@@ -723,7 +723,7 @@ function getBoxPlotData() {
   var box_labels = true
   var box_margin = {top: 10, right: 50, bottom: 20, left: 50}
   var box_width = 1500 - box_margin.left - box_margin.right
-  var box_height = 300 - box_margin.top - box_margin.bottom
+  var box_height = 250 - box_margin.top - box_margin.bottom
   var box_min = Infinity
   var box_max = -Infinity
   var box_data = [];
