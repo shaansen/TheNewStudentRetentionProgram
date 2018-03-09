@@ -35,7 +35,7 @@
 		});
 
 
-		clusters = 6
+		clusters = 4
 		maxiterations = 30
 		dataClusters = kmeans(dataToRepresent,clusters,maxiterations)
 		// findOptimalCluster(dataToRepresent, maxiterations)
@@ -90,6 +90,7 @@
 				.on("mouseover", mouseOverFunction)
 				.on("mouseout", mouseOutFunction)
 				.on("mousemove", mouseMoveFunction)
+				.on("click", selectLine)
 
 		// city.append("path")
 		//   .attr("class", "line")
@@ -126,17 +127,22 @@
 	}
 
 	function mouseOverFunction(d,i) {
+		d3.select(this)
+			.style("stroke-width","5px")
+	}
+
+	function selectLine(d,i) {
 		d3.selectAll(".line")
 			.style("stroke-width",function(d1,i1) {
 				if(i == i1) {
 					return "5px";
 				} else {
-					return "1px"
+					return "2px"
 				}
 			}) 
 			.style("stroke-opacity",function(d1,i1) {
 				if(i != i1) {
-					return "0.25";
+					return "0.10";
 				}
 			}) 
 			.style("stroke", "black")
@@ -565,7 +571,10 @@ function getStackedBarData(currentLabel) {
 		.attr("x", function(d) { return x(d.data.date); })
 		.attr("y", function(d) { return y(d[1]); })
 		.attr("height", function(d) { return y(d[0]) - y(d[1]); })
-		.attr("width", 3);
+		.attr("width", 3)
+		.on("mouseover", mouseOverRectFunction)
+		.on("mouseout", mouseOutRectFunction)
+		
 
 		// g.append("g")
 		// 	.attr("class", "axis axis--x")
@@ -627,4 +636,21 @@ function getRectangleColors(i) {
 			return "#720202";
     
 	}
+}
+
+function mouseOverRectFunction(d,i) {
+	console.log("IN")
+	console.log(d)
+	d3.select(this)
+		.attr("fill-opacity", "1")
+		.attr("width", 5)
+
+}
+
+function mouseOutRectFunction(d,i) {
+	console.log("OUT")
+	console.log(d)
+	d3.select(this)
+		.attr("fill-opacity", "0.5")
+		.attr("width", 3)
 }
