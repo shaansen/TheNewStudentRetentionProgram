@@ -31,7 +31,7 @@
 
 
 		clusters = 4
-		maxiterations = 10
+		maxiterations = 50
 		dataClusters = kmeans(dataToRepresent,clusters,maxiterations)
 		// findOptimalCluster(dataToRepresent, maxiterations)
 		// calculateSumSquareDistance(studentClusters,students)
@@ -510,7 +510,7 @@ function getStackedBarData(currentLabel) {
 	d3.select("#stacked").select("g").remove()
 	d3.select(".stream-body").append("svg")
 	var svg = d3.select(".stream-body").select("svg").attr("id","stacked"),
-		margin = {top: 20, right: 180, bottom: 30, left: 40},
+		margin = {top: 20, right: 80, bottom: 30, left: 50},
 		width = +svg.attr("width") - margin.left - margin.right,
 		height = +svg.attr("height") - margin.top - margin.bottom,
 	
@@ -528,10 +528,7 @@ function getStackedBarData(currentLabel) {
 		//   .append("g")
 		//     .attr("transform", "translate(" + marginStacked.left + "," + marginStacked.top + ")");
 
-	var x = d3.scaleBand()
-			.rangeRound([0, width])
-			.padding(0.3)
-			.align(0.3);
+	var x = d3.scaleTime().range([0, width])
 
 	var y = d3.scaleLinear()
 			.rangeRound([height, 0]);
@@ -553,11 +550,14 @@ function getStackedBarData(currentLabel) {
 		data = result
 		var columns = Object.keys(result[0])
 		
-		x.domain(data.map(function(d) { return d.date; }));
+		x.domain(d3.extent(data, function(d) { return d.date; }));
+
 		// y.domain([0, d3.max(data, function(d) { console.log(d); return d.total; })]).nice();
 
 		y.domain([0,75]);
 		z.domain(columns.slice(1));
+
+
 
 		g.selectAll(".serie")
 			.data(stack.keys(columns.slice(1))(data))
@@ -569,8 +569,8 @@ function getStackedBarData(currentLabel) {
 			.enter().append("rect")
 			.attr("x", function(d) { return x(d.data.date); })
 			.attr("y", function(d) { return y(d[1]); })
-			.attr("height", function(d) {return y(d[0]) - y(d[1]); })
-			.attr("width", x.bandwidth());
+			.attr("height", function(d) { return y(d[0]) - y(d[1]); })
+			.attr("width", 3);
 
 		g.append("g")
 			.attr("class", "axis axis--x")
@@ -586,7 +586,7 @@ function getStackedBarData(currentLabel) {
 			.attr("dy", "0.35em")
 			.attr("text-anchor", "start")
 			.attr("fill", "#000")
-			.text("Population");
+			.text("Temperature");
 
 		var legend = g.selectAll(".legend")
 			.data(columns.slice(1).reverse())
