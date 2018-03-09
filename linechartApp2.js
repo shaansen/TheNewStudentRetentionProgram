@@ -6,6 +6,8 @@
 			height = svg.attr("height") - margin.top - margin.bottom,
 			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+	var lines;
+
 	var parseTime = d3.timeParse("%Y%m%d%H%M");
 
 	var x = d3.scaleTime().range([0, width]),
@@ -17,7 +19,10 @@
 			.x(function(d) { var temp = new Date(d.date); return x(temp); })
 			.y(function(d) { return y(d.temperature); });
 
-	d3.csv("data/temperature5.csv", type, function(error, data) {
+	getLineData()
+
+	function getLineData() {
+		d3.csv("data/temperature5.csv", type, function(error, data) {
 		if (error) throw error;
 
 		var dataToRepresent = data.columns.slice(1).map(function(id) {
@@ -30,8 +35,8 @@
 		});
 
 
-		clusters = 4
-		maxiterations = 50
+		clusters = 6
+		maxiterations = 30
 		dataClusters = kmeans(dataToRepresent,clusters,maxiterations)
 		// findOptimalCluster(dataToRepresent, maxiterations)
 		// calculateSumSquareDistance(studentClusters,students)
@@ -75,12 +80,13 @@
 		var city = g.selectAll(".city")
 			.data(dataToRepresent)
 			.enter().append("g")
-				.attr("class", "city");
+			.attr("class", "city");
 
 		city.append("path")
 				.attr("class", "line")
 				.attr("d", function(d) { return line(d.values); })
-				.style("stroke", function(d) { return z(d.id); })
+				.style("stroke", "black")
+				.style("stroke-width","2px") 
 				.on("mouseover", mouseOverFunction)
 				.on("mouseout", mouseOutFunction)
 				.on("mousemove", mouseMoveFunction)
@@ -107,19 +113,37 @@
 				.attr("dy", "0.35em")
 				.style("font", "10px sans-serif")
 				.text(function(d) { return d.id; });
-	});
+
+		lines = d3.selectAll(".line")
+		});
+	}
 
 	function mouseOutFunction() {
 		d3.select(this)
-			.style("stroke-width","1px")   
+			.style("stroke-width","2px") 
+			.style("stroke", "black")
+			  
 	}
 
 	function mouseOverFunction(d,i) {
-		d3.select(this)
-			.style("stroke-width","10px") 
+		d3.selectAll(".line")
+			.style("stroke-width",function(d1,i1) {
+				if(i == i1) {
+					return "5px";
+				} else {
+					return "1px"
+				}
+			}) 
+			.style("stroke-opacity",function(d1,i1) {
+				if(i != i1) {
+					return "0.25";
+				}
+			}) 
+			.style("stroke", "black")
+				
 		currentLabel = labels[i]
 		// boxplotdata = getBoxPlotData()
-		stackbardata = 	getStackedBarData(currentLabel)
+		getStackedBarData(currentLabel)
 
 	}
 
@@ -275,11 +299,11 @@
 	function findOptimalCluster(students, iterations) {
 			// For Clusters ranging from 1 - 20, find the sum of square differences and store in a map
 			var elbowMap = {}
-			for (var i = 1; i <= 10; i++) {
+			for (var i = 1; i <= 20; i++) {
 				var clusters = kmeans(students,i,iterations)
 				elbowMap[i] = calculateSumSquareDistance(clusters, students)
+				console.log(elbowMap[i])
 			}
-			console.log(elbowMap)
 		}
 
 		function calculateSumSquareDistance(clusters, studentData) {
@@ -505,109 +529,79 @@
 	}
 
 function getStackedBarData(currentLabel) {
-
 	var result = getQuartileData(currentLabel)
-	d3.select("#stacked").select("g").remove()
+	d3.selectAll(".serie").remove()
 	d3.select(".stream-body").append("svg")
-	var svg = d3.select(".stream-body").select("svg").attr("id","stacked"),
-		margin = {top: 20, right: 80, bottom: 30, left: 50},
-		width = +svg.attr("width") - margin.left - margin.right,
-		height = +svg.attr("height") - margin.top - margin.bottom,
+	// var svgStacked = d3.select(".stream-body").select("svg").attr("id","stacked"),
+	// 	margin = {top: 20, right: 80, bottom: 30, left: 50},
+	// 	width = +svg.attr("width") - margin.left - margin.right,
+	// 	height = +svg.attr("height") - margin.top - margin.bottom,
 	
 	g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-		// var margin = {top: 20, right: 150, bottom: 50, left: 40},
-		//     width = 600 - margin.left - marginStacked.right,
-		//     height = 500 - margin.top - marginStacked.bottom;
-		//
-		//
-		// var svg = d3.select("#stacked").append("svg")
-		//     .attr("width", widthStacked + marginStacked.left + marginStacked.right)
-		//     .attr("height", heightStacked + marginStacked.top + marginStacked.bottom)
-		//   .append("g")
-		//     .attr("transform", "translate(" + marginStacked.left + "," + marginStacked.top + ")");
+	// d3.select(".serie").moveToBack();
+	// d3.selectAll(".line").moveToFront();
 
 	var x = d3.scaleTime().range([0, width])
 
 	var y = d3.scaleLinear()
 			.rangeRound([height, 0]);
 
-	var z = d3.scaleOrdinal(d3.schemeCategory20);
-			// .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
+	var z = d3.interpolateRdYlBu();
 	var stack = d3.stack();
+	data = result
+	var columns = Object.keys(result[0])
+	
+	x.domain(d3.extent(data, function(d) { return d.date; }));
+	y.domain([0,75]);
+	g.selectAll(".serie")
+		.data(stack.keys(columns.slice(1))(data))
+		.enter().append("g")
+		.attr("class", "serie")
+		.attr("fill", function(d,i) { return getRectangleColors(i) })
+		.attr("fill-opacity", "0.5")
+		.selectAll("rect")
+		.data(function(d) { return d; })
+		.enter().append("rect")
+		.attr("x", function(d) { return x(d.data.date); })
+		.attr("y", function(d) { return y(d[1]); })
+		.attr("height", function(d) { return y(d[0]) - y(d[1]); })
+		.attr("width", 3);
 
-	// d3.csv("data/segments_table2.csv", type, function(error, data) {
-	//   if (error) throw error;
+		// g.append("g")
+		// 	.attr("class", "axis axis--x")
+		// 	.attr("transform", "translate(0," + height + ")")
+		// 	.call(d3.axisBottom(x));
 
-	  // console.log(data)
-	  // data.sort(function(a, b) { return b.total - a.total; });
-	  // var columns = data.columns;
+		// g.append("g")
+		// 	.attr("class", "axis axis--y")
+		// 	.call(d3.axisLeft(y).ticks(10, "s"))
+		// 	.append("text")
+		// 	.attr("x", 2)
+		// 	.attr("y", y(y.ticks(10).pop()))
+		// 	.attr("dy", "0.35em")
+		// 	.attr("text-anchor", "start")
+		// 	.attr("fill", "#000")
+		// 	.text("Temperature");
 
-		// console.log(result)
+	// var legend = g.selectAll(".legend")
+	// 	.data(columns.slice(1).reverse())
+	// 	.enter().append("g")
+	// 	.attr("class", "legend")
+	// 	.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; })
+	// 	.style("font", "10px sans-serif");
 
-		data = result
-		var columns = Object.keys(result[0])
-		
-		x.domain(d3.extent(data, function(d) { return d.date; }));
+	// legend.append("rect")
+	// 	.attr("x", width + 18)
+	// 	.attr("width", 18)
+	// 	.attr("height", 18)
+	// 	.attr("fill", z);
 
-		// y.domain([0, d3.max(data, function(d) { console.log(d); return d.total; })]).nice();
-
-		y.domain([0,75]);
-		z.domain(columns.slice(1));
-
-
-
-		g.selectAll(".serie")
-			.data(stack.keys(columns.slice(1))(data))
-			.enter().append("g")
-			.attr("class", "serie")
-			.attr("fill", function(d) { return z(d.key); })
-			.selectAll("rect")
-			.data(function(d) { return d; })
-			.enter().append("rect")
-			.attr("x", function(d) { return x(d.data.date); })
-			.attr("y", function(d) { return y(d[1]); })
-			.attr("height", function(d) { return y(d[0]) - y(d[1]); })
-			.attr("width", 3);
-
-		g.append("g")
-			.attr("class", "axis axis--x")
-			.attr("transform", "translate(0," + height + ")")
-			.call(d3.axisBottom(x));
-
-		g.append("g")
-			.attr("class", "axis axis--y")
-			.call(d3.axisLeft(y).ticks(10, "s"))
-			.append("text")
-			.attr("x", 2)
-			.attr("y", y(y.ticks(10).pop()))
-			.attr("dy", "0.35em")
-			.attr("text-anchor", "start")
-			.attr("fill", "#000")
-			.text("Temperature");
-
-		var legend = g.selectAll(".legend")
-			.data(columns.slice(1).reverse())
-			.enter().append("g")
-			.attr("class", "legend")
-			.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; })
-			.style("font", "10px sans-serif");
-
-		legend.append("rect")
-			.attr("x", width + 18)
-			.attr("width", 18)
-			.attr("height", 18)
-			.attr("fill", z);
-
-		legend.append("text")
-			.attr("x", width + 44)
-			.attr("y", 9)
-			.attr("dy", ".35em")
-			.attr("text-anchor", "start")
-			.text(function(d) { return d; });
-	// });
+	// legend.append("text")
+	// 	.attr("x", width + 44)
+	// 	.attr("y", 9)
+	// 	.attr("dy", ".35em")
+	// 	.attr("text-anchor", "start")
+	// 	.text(function(d) { return d; });
 
 	function type(d, i, columns) {
 		for (i = 1, t = 0; i < columns.length; ++i) t += d[columns[i]] = +d[columns[i]];
@@ -616,3 +610,21 @@ function getStackedBarData(currentLabel) {
 	}
 } 
 
+
+function getRectangleColors(i) {
+	switch (i) {
+    case 0:
+      return "#fff";
+    case 1:
+    	// return "#fff";
+      return "#000068";
+    case 2:
+      return "#0000ff";
+    case 3:
+      return "#ff0000";
+    case 4:
+			// return "#fff";
+			return "#720202";
+    
+	}
+}
