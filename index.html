@@ -111,6 +111,17 @@ body {
   shape-rendering: crispEdges;
 }
 
+.toolTip {
+  position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  background: none repeat scroll 0 0 #ffffff;
+  border: 1px solid #6F257F;
+  padding: 14px;
+  text-align: center;
+}
+
 </style>
 <div>
 <!-- 	<div class="container-fluid main-header" >
@@ -121,12 +132,16 @@ body {
 		<div id="timeSpentCheckboxes"></div>
 	</div> -->
 	<!-- <div class="right"> -->
-		<div class="viz-body">
-      <svg width="1500" height="700"></svg>
+    <div class="filter-body">
+      <svg width="1500" height="350"></svg>
     </div>
-    <div class="stream-body">
+    <div class="viz-body">
+      <svg width="1500" height="350"></svg>
+    </div>
+
+<!--     <div class="stream-body">
       <svg id="stacked" width="1500" height="700"></svg>
-    </div>
+    </div> -->
 	<!-- </div> -->
 
 </div>

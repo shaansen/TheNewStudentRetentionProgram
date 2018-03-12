@@ -1,12 +1,27 @@
 	var choices = new Set()
 
-	var svg = d3.select("svg"),
+	var svg = d3.select(".viz-body").select("svg"),
 			margin = {top: 20, right: 80, bottom: 30, left: 50},
 			width = svg.attr("width") - margin.left - margin.right,
 			height = svg.attr("height") - margin.top - margin.bottom,
 			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	var lines;
+	var tooltip = g.append("g")
+		.attr("class", "tooltip")
+		.style("display", "none");
+			
+	tooltip.append("rect")
+		.attr("width", 60)
+		.attr("height", 20)
+		.attr("fill", "white")
+		.style("opacity", 0.5);
+
+	tooltip.append("text")
+		.attr("x", 30)
+		.attr("dy", "1.2em")
+		.style("text-anchor", "middle")
+		.attr("font-size", "12px")
+		.attr("font-weight", "bold");
 
 	var parseTime = d3.timeParse("%Y%m%d%H%M");
 
@@ -19,9 +34,11 @@
 			.x(function(d) { var temp = new Date(d.date); return x(temp); })
 			.y(function(d) { return y(d.temperature); });
 
-	getLineData()
+	getFilterData()
+	getLineData()	
 
 	function getLineData() {
+
 		d3.csv("data/temperature5.csv", type, function(error, data) {
 		if (error) throw error;
 
@@ -36,10 +53,11 @@
 
 
 		clusters = 4
-		maxiterations = 30
+		maxiterations = 5
+
 		dataClusters = kmeans(dataToRepresent,clusters,maxiterations)
 		// findOptimalCluster(dataToRepresent, maxiterations)
-		// calculateSumSquareDistance(studentClusters,students)
+		// calculateSumSquareDistance(dataClusters,dataToRepresent)
 
 		var clusteredData = dataClusters.map(function(d,i) {
 			return {
@@ -115,7 +133,6 @@
 				.style("font", "10px sans-serif")
 				.text(function(d) { return d.id; });
 
-		lines = d3.selectAll(".line")
 		});
 	}
 
@@ -123,7 +140,7 @@
 		d3.select(this)
 			.style("stroke-width","2px") 
 			.style("stroke", "black")
-			  
+				
 	}
 
 	function mouseOverFunction(d,i) {
@@ -132,20 +149,20 @@
 	}
 
 	function selectLine(d,i) {
-		d3.selectAll(".line")
-			.style("stroke-width",function(d1,i1) {
-				if(i == i1) {
-					return "5px";
-				} else {
-					return "2px"
-				}
-			}) 
+		d3.select(".viz-body").selectAll(".line")
 			.style("stroke-opacity",function(d1,i1) {
 				if(i != i1) {
 					return "0.10";
 				}
 			}) 
 			.style("stroke", "black")
+			// .style("stroke-width",function(d1,i1) {
+			// 	if(i == i1) {
+			// 		return "5px";
+			// 	} else {
+			// 		return "2px"
+			// 	}
+			// }) 
 				
 		currentLabel = labels[i]
 		// boxplotdata = getBoxPlotData()
@@ -305,12 +322,13 @@
 	function findOptimalCluster(students, iterations) {
 			// For Clusters ranging from 1 - 20, find the sum of square differences and store in a map
 			var elbowMap = {}
-			for (var i = 1; i <= 20; i++) {
+			for (var i = 1; i <= 10; i++) {
 				var clusters = kmeans(students,i,iterations)
 				elbowMap[i] = calculateSumSquareDistance(clusters, students)
-				console.log(elbowMap[i])
 			}
+			console.log(elbowMap)
 		}
+
 
 		function calculateSumSquareDistance(clusters, studentData) {
 			var label_iterator = Object.keys(labels)
@@ -327,9 +345,9 @@
 
 			var result = 0
 			arr1.forEach(function(d,i) {
-				result = result + Math.sqrt(Math.abs(arr1[i].temperature - arr2[i].temperature))
+				result = result + (arr1[i].temperature - arr2[i].temperature)*(arr1[i].temperature - arr2[i].temperature)
 			})
-			return result
+			return Math.sqrt(result)
 		}
 
 		function getRGBIndex(d) {
@@ -373,7 +391,7 @@
 	}
 
 
-	function getBoxPlotData() {
+	/*function getBoxPlotData() {
 
 		arr = getFilteredUsers(currentLabel,choices)
 	
@@ -532,7 +550,7 @@
 			}
 			return -1
 		}
-	}
+	}*/
 
 function getStackedBarData(currentLabel) {
 	var result = getQuartileData(currentLabel)
@@ -572,8 +590,6 @@ function getStackedBarData(currentLabel) {
 		.attr("y", function(d) { return y(d[1]); })
 		.attr("height", function(d) { return y(d[0]) - y(d[1]); })
 		.attr("width", 3)
-		.on("mouseover", mouseOverRectFunction)
-		.on("mouseout", mouseOutRectFunction)
 		
 
 		// g.append("g")
@@ -622,35 +638,147 @@ function getStackedBarData(currentLabel) {
 
 function getRectangleColors(i) {
 	switch (i) {
-    case 0:
-      return "#fff";
-    case 1:
-    	// return "#fff";
-      return "#000068";
-    case 2:
-      return "#0000ff";
-    case 3:
-      return "#ff0000";
-    case 4:
+		case 0:
+			return "#fff";
+		case 1:
+			// return "#fff";
+			return "#000068";
+		case 2:
+			return "#0000ff";
+		case 3:
+			return "#ff0000";
+		case 4:
 			// return "#fff";
 			return "#720202";
-    
+		
 	}
 }
 
-function mouseOverRectFunction(d,i) {
-	console.log("IN")
-	console.log(d)
-	d3.select(this)
-		.attr("fill-opacity", "1")
-		.attr("width", 5)
+function getFilterData() {
 
-}
+	d3.csv("data/temperature5.csv", type, function(error, data) {
+		if (error) throw error;
 
-function mouseOutRectFunction(d,i) {
-	console.log("OUT")
-	console.log(d)
-	d3.select(this)
-		.attr("fill-opacity", "0.5")
-		.attr("width", 3)
+		var svg = d3.select(".filter-body").select("svg"),
+			margin = {top: 20, right: 80, bottom: 30, left: 50},
+			width = svg.attr("width") - margin.left - margin.right,
+			height = svg.attr("height") - margin.top - margin.bottom,
+			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+		var brush = d3.brush().on("end", brushended),
+    idleTimeout,
+    idleDelay = 350;
+
+		var dataToRepresent = data.columns.slice(1).map(function(id) {
+			return {
+				id: id,
+				values: data.map(function(d) {
+					return {date: new Date(d.date), temperature: d[id]};
+				})
+			};
+		});
+
+		console.log(dataToRepresent)
+
+		x.domain(d3.extent(data, function(d) { return d.date; }));
+
+		// y.domain([
+		// 	d3.min(dataToRepresent, function(c) { return d3.min(c.values, function(d) { return d.temperature; }); }),
+		// 	d3.max(dataToRepresent, function(c) { return d3.max(c.values, function(d) { return d.temperature; }); })
+		// ]);
+
+		y.domain([0,100]);
+
+		z.domain(dataToRepresent.map(function(c,i) { return c.id; }));
+
+		g.append("g")
+				.attr("class", "axis axis--x")
+				.attr("transform", "translate(0," + height + ")")
+				.call(d3.axisBottom(x));
+
+		g.append("g")
+				.attr("class", "axis axis--y")
+				.call(d3.axisLeft(y))
+				.append("text")
+				.attr("transform", "rotate(-90)")
+				.attr("y", 6)
+				.attr("dy", "0.71em")
+				.attr("fill", "#000")
+				.text("Humidity");
+
+		var city = g.selectAll(".filter-city")
+			.data(dataToRepresent)
+			.enter().append("g")
+			.attr("class", "filter-city");
+
+		city.append("path")
+				.attr("class", "line")
+				.attr("d", function(d) { return line(d.values); })
+				.style("stroke", function(d,i) {return z(d.id)})
+				.style("stroke-width","1px") 
+
+
+		// city.append("path")
+		//   .attr("class", "line")
+		//   .attr("d", function(d) { return line(d.values); })
+		//   .style("stroke", function(d,i) {
+		//     var x = getRGBIndex(i)
+		//     var r = Math.floor((x/Object.keys(labels).length*123)%255);
+		//     var g = Math.floor((x/Object.keys(labels).length*345)%255);
+		//     var b = Math.floor((x/Object.keys(labels).length*567)%255);
+		//     return "rgb("+r+","+g+","+b+")"
+		//   })
+		//   .style("stroke-width", "2px")
+		//   .on("mouseover", mouseOverFunction)
+		//   .on("mouseout", mouseOutFunction)
+		//   .on("mousemove", mouseMoveFunction)
+
+		city.append("text")
+				.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+				.attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+				.attr("x", 3)
+				.attr("dy", "0.35em")
+				.style("font", "10px sans-serif")
+				.text(function(d) { return d.id; });
+
+
+		svg.append("g")
+    .attr("class", "brush")
+    .call(brush);
+
+		function brushended() {
+		  var s = d3.event.selection;
+		  if (!s) {
+		    if (!idleTimeout) return idleTimeout = setTimeout(idled, idleDelay);
+		    x.domain(x0);
+		    y.domain(y0);
+		  } else {
+		    // x.domain([s[0][0], s[1][0]].map(x.invert, x));
+		    // y.domain([s[1][1], s[0][1]].map(y.invert, y));
+		    // svg.select(".brush").call(brush.move, null);
+		  }
+		  zoom();
+		}
+
+		function idled() {
+		  idleTimeout = null;
+		}
+
+		function zoom() {
+		  
+		}
+
+		function mouseOutFilterFunction() {
+			d3.select(this)
+				.style("stroke-width","2px") 
+		}
+
+		function mouseOverFilterFunction(d,i) {
+			d3.select(this)
+				.style("stroke-width","5px")
+		}
+
+	});
+
+
 }
