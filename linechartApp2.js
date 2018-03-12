@@ -6,23 +6,6 @@
 			height = svg.attr("height") - margin.top - margin.bottom,
 			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	var tooltip = g.append("g")
-		.attr("class", "tooltip")
-		.style("display", "none");
-			
-	tooltip.append("rect")
-		.attr("width", 60)
-		.attr("height", 20)
-		.attr("fill", "white")
-		.style("opacity", 0.5);
-
-	tooltip.append("text")
-		.attr("x", 30)
-		.attr("dy", "1.2em")
-		.style("text-anchor", "middle")
-		.attr("font-size", "12px")
-		.attr("font-weight", "bold");
-
 	var parseTime = d3.timeParse("%Y%m%d%H%M");
 
 	var x = d3.scaleTime().range([0, width]),
@@ -76,7 +59,7 @@
 		// 	d3.max(dataToRepresent, function(c) { return d3.max(c.values, function(d) { return d.temperature; }); })
 		// ]);
 
-		y.domain([0,75]);
+		y.domain([10,65]);
 
 		z.domain(dataToRepresent.map(function(c) { return c.id; }));
 
@@ -656,6 +639,15 @@ function getRectangleColors(i) {
 
 function getFilterData() {
 
+	var x = d3.scaleTime().range([0, width]),
+			y = d3.scaleLinear().range([height, 0]),
+			z = d3.scaleOrdinal(d3.schemeCategory20);
+
+	var line = d3.line()
+			.curve(d3.curveBasis)
+			.x(function(d) { var temp = new Date(d.date); return x(temp); })
+			.y(function(d) { return y(d.temperature); });
+
 	d3.csv("data/temperature5.csv", type, function(error, data) {
 		if (error) throw error;
 
@@ -667,7 +659,7 @@ function getFilterData() {
 
 		var brush = d3.brush().on("end", brushended),
     idleTimeout,
-    idleDelay = 350;
+    idleDelay = 10000;
 
 		var dataToRepresent = data.columns.slice(1).map(function(id) {
 			return {
@@ -679,6 +671,8 @@ function getFilterData() {
 		});
 
 		console.log(dataToRepresent)
+		x.range([0, width]),
+		y.range([height, 0]),
 
 		x.domain(d3.extent(data, function(d) { return d.date; }));
 
@@ -717,22 +711,6 @@ function getFilterData() {
 				.style("stroke", function(d,i) {return z(d.id)})
 				.style("stroke-width","1px") 
 
-
-		// city.append("path")
-		//   .attr("class", "line")
-		//   .attr("d", function(d) { return line(d.values); })
-		//   .style("stroke", function(d,i) {
-		//     var x = getRGBIndex(i)
-		//     var r = Math.floor((x/Object.keys(labels).length*123)%255);
-		//     var g = Math.floor((x/Object.keys(labels).length*345)%255);
-		//     var b = Math.floor((x/Object.keys(labels).length*567)%255);
-		//     return "rgb("+r+","+g+","+b+")"
-		//   })
-		//   .style("stroke-width", "2px")
-		//   .on("mouseover", mouseOverFunction)
-		//   .on("mouseout", mouseOutFunction)
-		//   .on("mousemove", mouseMoveFunction)
-
 		city.append("text")
 				.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
 				.attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
@@ -741,41 +719,41 @@ function getFilterData() {
 				.style("font", "10px sans-serif")
 				.text(function(d) { return d.id; });
 
-
 		svg.append("g")
     .attr("class", "brush")
     .call(brush);
 
 		function brushended() {
-		  var s = d3.event.selection;
+			var s = d3.event.selection;
 		  if (!s) {
 		    if (!idleTimeout) return idleTimeout = setTimeout(idled, idleDelay);
-		    x.domain(x0);
-		    y.domain(y0);
+		    // x.domain(x0);
+		    // y.domain(y0);
 		  } else {
-		    // x.domain([s[0][0], s[1][0]].map(x.invert, x));
-		    // y.domain([s[1][1], s[0][1]].map(y.invert, y));
-		    // svg.select(".brush").call(brush.move, null);
+		  	// console.log(s)
+		  	var x0 = x.invert(s[0][0])
+		  	var x1 = x.invert(s[1][0])
+		  	var y0 = y.invert(s[0][1])
+		  	var y1 = y.invert(s[1][1])
+
+
+		  	console.log((y0+7))
+		  	console.log((y1+7))
+		  	
+		  	
+		  	console.log("=======================================")
+
+
 		  }
-		  zoom();
+		  update();
 		}
 
 		function idled() {
 		  idleTimeout = null;
 		}
 
-		function zoom() {
+		function update() {
 		  
-		}
-
-		function mouseOutFilterFunction() {
-			d3.select(this)
-				.style("stroke-width","2px") 
-		}
-
-		function mouseOverFilterFunction(d,i) {
-			d3.select(this)
-				.style("stroke-width","5px")
 		}
 
 	});
