@@ -17,14 +17,16 @@
 			.x(function(d) { var temp = new Date(d.date); return x(temp); })
 			.y(function(d) { return y(d.temperature); });
 
-	var filterCriteria = {
+	var filterLimits = {
 		"x0" : new Date('December 17, 1995 03:24:00'),
 		"x1" : new Date('December 17, 2995 03:24:00'),
 		"y0" : 0,
 		"y1" : 300
 	}
 
+	var filterCriteria = []
 	var currentLabel
+	var dataSecondary
 
 	getFilterData()
 	getLineData()	
@@ -42,7 +44,6 @@
 				})
 			};
 		});
-
 
 		clusters = 4
 		maxiterations = 5
@@ -232,6 +233,7 @@
 			}
 			labelSet[result[id]].push(id)
 		}   
+		console.log(labelSet)
 		return labelSet
 	}
 
@@ -351,23 +353,22 @@
 		}
 
 	function getQuartileData(indexes,filterCriteria) {
+		console.log("filterCriteria : "+filterCriteria)
 		result = []
 		var inter = {}
 		numFeatures.forEach(function(d,i) {
 			inter[d] = []
 		})
 
-		var x0 = filterCriteria["x0"]
-		var x1 = filterCriteria["x1"]
-		var y0 = filterCriteria["y0"]
-		var y1 = filterCriteria["y1"]
+		var x0 = filterLimits["x0"]
+		var x1 = filterLimits["x1"]
+		var y0 = filterLimits["y0"]
+		var y1 = filterLimits["y1"]
 
 		originalData.forEach(function(d,i) {
-			if(indexes.includes(i)) {
+			if(filterCriteria!=undefined && indexes.includes(i) && (filterCriteria.length == 0 || filterCriteria.includes(i))) {
 				d.values.forEach(function(d1,i1) {
-					if(d1.date > x0 && d1.date < x1 && d1.temperature > y0 && d1.temperature < y1) {
-						inter[d1.date].push(d1.temperature)	
-					}
+					inter[d1.date].push(d1.temperature)	
 				})
 			}
 		})
@@ -663,7 +664,7 @@ function getFilterData() {
 			.x(function(d) { var temp = new Date(d.date); return x(temp); })
 			.y(function(d) { return y(d.temperature); });
 
-	d3.csv("data/temperature5.csv", type, function(error, data) {
+	d3.csv("data/humidity.csv", type, function(error, data) {
 		if (error) throw error;
 
 		var svg = d3.select(".filter-body").select("svg"),
@@ -680,16 +681,22 @@ function getFilterData() {
 			return {
 				id: id,
 				values: data.map(function(d) {
-					return {date: new Date(d.date), temperature: d[id]};
+					return {date: new Date(d.date), humidity: d[id]};
 				})
 			};
 		});
+
+		dataSecondary = dataToRepresent
 
 		x.range([0, width]),
 		y.range([height, 0]),
 		x.domain(d3.extent(data, function(d) { return d.date; }));
 		y.domain([0,100]);
 		z.domain(dataToRepresent.map(function(c,i) { return c.id; }));
+		var line = d3.line()
+			.curve(d3.curveBasis)
+			.x(function(d) { var temp = new Date(d.date); return x(temp); })
+			.y(function(d) { return y(d.humidity); });
 
 		g.append("g")
 				.attr("class", "axis axis--x")
@@ -719,7 +726,7 @@ function getFilterData() {
 
 		city.append("text")
 				.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-				.attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+				.attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.humidity) + ")"; })
 				.attr("x", 3)
 				.attr("dy", "0.35em")
 				.style("font", "10px sans-serif")
@@ -738,24 +745,48 @@ function getFilterData() {
 		  } else {
 		  	var x0 = x.invert(s[0][0])
 		  	var x1 = x.invert(s[1][0])
+		  	x0.setHours(x0.getHours() - 12);
+		  	x1.setHours(x1.getHours() - 12);
 		  	var y0 = y.invert(s[0][1])+7
 		  	var y1 = y.invert(s[1][1])+7
-		  	var filterCriteria = {
+		  	var filterLimits = {
 		  		"x0" : x0,
 		  		"y0" : y0,
 		  		"x1" : x1,
 		  		"y1" : y1,
 		  	}
 		  }
-		  update(filterCriteria);
+		  update(filterLimits);
 		}
 
 		function idled() {
 		  idleTimeout = null;
 		}
 
-		function update(filterCriteria) {
+		function update(filterLimits) {
+			filterCriteria = getFilteredLabels(dataSecondary, filterLimits)
 			getStackedBarData(currentLabel, filterCriteria)
+		}
+
+		function getFilteredLabels(data, filters) {
+
+			var x0 = filters["x0"]
+			var x1 = filters["x1"]
+			var y0 = filters["y0"]
+			var y1 = filters["y1"]
+
+			var set = new Set()
+
+			data.forEach(function(d,i) {
+				d.values.forEach(function(d1,i1) {
+					if(d1.date > x0 && d1.date < x1 && d1.humidity < y0 && d1.humidity > y1) {
+						set.add(i)
+					}
+				})
+			})
+
+			var result = Array.from(set);
+			return result
 		}
 
 	});
