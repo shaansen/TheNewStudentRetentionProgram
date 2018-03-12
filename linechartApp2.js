@@ -17,6 +17,15 @@
 			.x(function(d) { var temp = new Date(d.date); return x(temp); })
 			.y(function(d) { return y(d.temperature); });
 
+	var filterCriteria = {
+		"x0" : new Date('December 17, 1995 03:24:00'),
+		"x1" : new Date('December 17, 2995 03:24:00'),
+		"y0" : 0,
+		"y1" : 300
+	}
+
+	var currentLabel
+
 	getFilterData()
 	getLineData()	
 
@@ -149,7 +158,7 @@
 				
 		currentLabel = labels[i]
 		// boxplotdata = getBoxPlotData()
-		getStackedBarData(currentLabel)
+		getStackedBarData(currentLabel,filterCriteria)
 
 	}
 
@@ -341,18 +350,24 @@
 			}
 		}
 
-	function getQuartileData(indexes) {
+	function getQuartileData(indexes,filterCriteria) {
 		result = []
 		var inter = {}
 		numFeatures.forEach(function(d,i) {
 			inter[d] = []
 		})
 
+		var x0 = filterCriteria["x0"]
+		var x1 = filterCriteria["x1"]
+		var y0 = filterCriteria["y0"]
+		var y1 = filterCriteria["y1"]
 
 		originalData.forEach(function(d,i) {
 			if(indexes.includes(i)) {
 				d.values.forEach(function(d1,i1) {
-					inter[d1.date].push(d1.temperature)	
+					if(d1.date > x0 && d1.date < x1 && d1.temperature > y0 && d1.temperature < y1) {
+						inter[d1.date].push(d1.temperature)	
+					}
 				})
 			}
 		})
@@ -535,8 +550,8 @@
 		}
 	}*/
 
-function getStackedBarData(currentLabel) {
-	var result = getQuartileData(currentLabel)
+function getStackedBarData(currentLabel,filterCriteria) {
+	var result = getQuartileData(currentLabel,filterCriteria)
 	d3.selectAll(".serie").remove()
 	d3.select(".stream-body").append("svg")
 	// var svgStacked = d3.select(".stream-body").select("svg").attr("id","stacked"),
@@ -670,19 +685,10 @@ function getFilterData() {
 			};
 		});
 
-		console.log(dataToRepresent)
 		x.range([0, width]),
 		y.range([height, 0]),
-
 		x.domain(d3.extent(data, function(d) { return d.date; }));
-
-		// y.domain([
-		// 	d3.min(dataToRepresent, function(c) { return d3.min(c.values, function(d) { return d.temperature; }); }),
-		// 	d3.max(dataToRepresent, function(c) { return d3.max(c.values, function(d) { return d.temperature; }); })
-		// ]);
-
 		y.domain([0,100]);
-
 		z.domain(dataToRepresent.map(function(c,i) { return c.id; }));
 
 		g.append("g")
@@ -730,30 +736,26 @@ function getFilterData() {
 		    // x.domain(x0);
 		    // y.domain(y0);
 		  } else {
-		  	// console.log(s)
 		  	var x0 = x.invert(s[0][0])
 		  	var x1 = x.invert(s[1][0])
-		  	var y0 = y.invert(s[0][1])
-		  	var y1 = y.invert(s[1][1])
-
-
-		  	console.log((y0+7))
-		  	console.log((y1+7))
-		  	
-		  	
-		  	console.log("=======================================")
-
-
+		  	var y0 = y.invert(s[0][1])+7
+		  	var y1 = y.invert(s[1][1])+7
+		  	var filterCriteria = {
+		  		"x0" : x0,
+		  		"y0" : y0,
+		  		"x1" : x1,
+		  		"y1" : y1,
+		  	}
 		  }
-		  update();
+		  update(filterCriteria);
 		}
 
 		function idled() {
 		  idleTimeout = null;
 		}
 
-		function update() {
-		  
+		function update(filterCriteria) {
+			getStackedBarData(currentLabel, filterCriteria)
 		}
 
 	});
