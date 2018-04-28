@@ -10,7 +10,7 @@
 
 	var x = d3.scaleTime().range([0, width]),
 			y = d3.scaleLinear().range([height, 0]),
-			z = d3.scaleOrdinal(d3.schemeCategory20);
+			z = d3.scaleOrdinal(d3.schemeCategory10);
 
 	var line = d3.line()
 			.curve(d3.curveBasis)
@@ -45,8 +45,8 @@
 			};
 		});
 
-		clusters = 4
-		maxiterations = 5
+		clusters = 3
+		maxiterations = 30
 
 		dataClusters = kmeans(dataToRepresent,clusters,maxiterations)
 		// findOptimalCluster(dataToRepresent, maxiterations)
@@ -96,12 +96,13 @@
 		city.append("path")
 				.attr("class", "line")
 				.attr("d", function(d) { return line(d.values); })
-				.style("stroke", "black")
+				.style("stroke", function(d,i) {var x = 2.5*getRGBIndex(i);return z(x); })
 				.style("stroke-width","2px") 
 				.on("mouseover", mouseOverFunction)
 				.on("mouseout", mouseOutFunction)
 				.on("mousemove", mouseMoveFunction)
 				.on("click", selectLine)
+				// .style("stroke", "black")
 
 		// city.append("path")
 		//   .attr("class", "line")
@@ -233,7 +234,6 @@
 			}
 			labelSet[result[id]].push(id)
 		}   
-		console.log(labelSet)
 		return labelSet
 	}
 
@@ -353,7 +353,6 @@
 		}
 
 	function getQuartileData(indexes,filterCriteria) {
-		console.log("filterCriteria : "+filterCriteria)
 		result = []
 		var inter = {}
 		numFeatures.forEach(function(d,i) {
@@ -673,20 +672,22 @@ function getFilterData() {
 			height = svg.attr("height") - margin.top - margin.bottom,
 			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-		var brush = d3.brush().on("end", brushended),
-    idleTimeout,
-    idleDelay = 10000;
+		console.log(width+"|"+height)
+
+		var brush = d3.brush().on("end", brushended).extent([[0, 0], [width, height]]),
+	    idleTimeout,
+	    idleDelay = 10000;
 
 		var dataToRepresent = data.columns.slice(1).map(function(id) {
 			return {
-				id: id,
-				values: data.map(function(d) {
+ 				values: data.map(function(d) {
 					return {date: new Date(d.date), humidity: d[id]};
 				})
 			};
 		});
 
 		dataSecondary = dataToRepresent
+		console.log(dataToRepresent)
 
 		x.range([0, width]),
 		y.range([height, 0]),
@@ -734,7 +735,7 @@ function getFilterData() {
 
 		svg.append("g")
     .attr("class", "brush")
-    .call(brush);
+    .call(brush)
 
 		function brushended() {
 			var s = d3.event.selection;

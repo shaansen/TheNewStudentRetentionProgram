@@ -1,5 +1,5 @@
 var svg = d3.select("svg"),
-    margin = {top: 10, right: 50, bottom: 20, left: 25},
+    margin = {top: 10, right: 50, bottom: 20, left: 30},
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -105,7 +105,6 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
   d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
     if (error) throw error;
     
-
     studentGradeData.forEach(function(d,i) {
       if(filteredSet.length === 0 || filteredSet.includes(parseInt(d.Username))) {
         var total = 0
@@ -136,7 +135,6 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
     maxiterations = 25
 
     studentClusters = kmeans(students,clusters,maxiterations)
-    console.log(studentClusters)
     // findOptimalCluster(students, maxiterations)
     // calculateSumSquareDistance(studentClusters,students)
 
@@ -193,8 +191,18 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
     //     var r = Math.floor((x/Object.keys(labels).length*123)%255);
     //     var g = Math.floor((x/Object.keys(labels).length*345)%255);
     //     var b = Math.floor((x/Object.keys(labels).length*567)%255);
+    //     console.log(r+" | "+g+" | "+b)
     //     return "rgb("+r+","+g+","+b+")"
     //   })
+    //   .style("stroke-width", "2px")
+    //   .on("mouseover", mouseOverFunction)
+    //   .on("mouseout", mouseOutFunction)
+    //   .on("mousemove", mouseMoveFunction)
+
+    // studentData.append("path")
+    //   .attr("class", "line")
+    //   .attr("d", function(d) { return line(d.values); })
+    //   .style("stroke", function(d) {return z(d.id); })
     //   .style("stroke-width", "2px")
     //   .on("mouseover", mouseOverFunction)
     //   .on("mouseout", mouseOutFunction)
@@ -203,7 +211,7 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
     studentData.append("path")
       .attr("class", "line")
       .attr("d", function(d) { return line(d.values); })
-      .style("stroke", function(d) {return z(d.id); })
+      .style("stroke", function(d,i) {var x = getRGBIndex(i);return z(x); })
       .style("stroke-width", "2px")
       .on("mouseover", mouseOverFunction)
       .on("mouseout", mouseOutFunction)
@@ -432,8 +440,6 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
   });
 })
 
-
-
   function type(d, _, columns) {
     d.date = parseTime(d.date);
     for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
@@ -631,17 +637,8 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
           });
           x["scores"] = Math.pow(y,1/labels[i].length)
           result[i].push(x)
-
-          // var y = 0
-          // labels[i].forEach(function(d1) {
-          //   y = y + dataset[d1]["values"][i1]["scores"]
-          //   quartilePreData[i][d].push(dataset[d1]["values"][i1]["scores"])
-          // });
-          // x["scores"] = y/labels[i].length
-          // result[i].push(x)
         })
       }
-
     }
     return result
   }
