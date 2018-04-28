@@ -61,7 +61,8 @@
 
 		originalData = dataToRepresent
 		dataToRepresent = clusteredData
-	 
+	 	
+	 	console.log(dataToRepresent)
 		x.domain(d3.extent(data, function(d) { return d.date; }));
 
 		// y.domain([
@@ -672,7 +673,6 @@ function getFilterData() {
 			height = svg.attr("height") - margin.top - margin.bottom,
 			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-		console.log(width+"|"+height)
 
 		var brush = d3.brush().on("end", brushended).extent([[0, 0], [width, height]]),
 	    idleTimeout,
@@ -687,7 +687,6 @@ function getFilterData() {
 		});
 
 		dataSecondary = dataToRepresent
-		console.log(dataToRepresent)
 
 		x.range([0, width]),
 		y.range([height, 0]),
@@ -696,8 +695,8 @@ function getFilterData() {
 		z.domain(dataToRepresent.map(function(c,i) { return c.id; }));
 		var line = d3.line()
 			.curve(d3.curveBasis)
-			.x(function(d) { var temp = new Date(d.date); return x(temp); })
-			.y(function(d) { return y(d.humidity); });
+			.x(function(d,i) { var temp = new Date(d.date); console.log(i+"-"+(temp instanceof Date)); return x(temp); })
+			.y(function(d,i) { return y(d.humidity); });
 
 		g.append("g")
 				.attr("class", "axis axis--x")

@@ -1,8 +1,10 @@
-var svg = d3.select("svg"),
-		margin = {top: 10, right: 50, bottom: 20, left: 30},
-		width = svg.attr("width") - margin.left - margin.right,
-		height = svg.attr("height") - margin.top - margin.bottom,
-		g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	var choices = new Set()
+
+	var svg = d3.select(".viz-body").select("svg"),
+			margin = {top: 20, right: 80, bottom: 30, left: 50},
+			width = svg.attr("width") - margin.left - margin.right,
+			height = svg.attr("height") - margin.top - margin.bottom,
+			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 var parseTime = d3.timeParse("%Y%m%d");
 
@@ -77,7 +79,7 @@ var filteredSet = []
 
 
 getLineData()
-// getFilterData()
+getFilterData()
 
 function getLineData() {
 	// Below code parses the calendar csv to mark events on the basis of the date
@@ -143,8 +145,8 @@ function getLineData() {
 			};
 		});
 
-		clusters = 7
-		maxiterations = 30
+		clusters = 10
+		maxiterations = 10
 
 		studentClusters = kmeans(students,clusters,maxiterations)
 		// findOptimalCluster(students, maxiterations)
@@ -159,18 +161,10 @@ function getLineData() {
 
 		originalStudentData = students
 		students = clusteredData
-		console.log(students)
-		// processQuartileData(quartilePreData)
+		console.log()
+
 		x.domain(d3.extent(data, function(d) {return d.date; }));
-
-		// y.domain([
-		//   d3.min(students, function(c) { return d3.min(c.values, function(d) { return d.scores; }); }),
-		//   d3.max(students, function(c) { return d3.max(c.values, function(d) { return d.scores; }); })
-		// ]);
-
-
 		y.domain([0,110])
-
 		z.domain(students.map(function(c) {return c.total; }));
 
 		g.append("g")
@@ -719,24 +713,13 @@ function getDateIndex(completeDateList, date) {
 
 function getFilterData() {
 
-	var x = d3.scaleTime().range([0, width]),
-			y = d3.scaleLinear().range([height, 0]),
-			z = d3.scaleOrdinal(d3.schemeCategory20);
+	var line = d3.line()
+	.curve(d3.curveBasis)
+	.x(function(d,i) {console.log((d.date)+" -> "+x(d.date)); return x(d.date); })
+	.y(function(d,i) {return y(d.hours); });
 
 	d3.csv("data/tahours4.csv", type, function(error, TAdata) {
 		if (error) throw error;
-
-		var svg = d3.select(".filter-body").select("svg"),
-			margin = {top: 20, right: 80, bottom: 30, left: 50},
-			width = svg.attr("width") - margin.left - margin.right,
-			height = svg.attr("height") - margin.top - margin.bottom,
-			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-		
-
-		var brush = d3.brush().on("end", brushended).extent([[0, 0], [width, height]]),
-			idleTimeout,
-			idleDelay = 10000;
 
 		var data = []
 		columns.splice(1).forEach(function(studentID,id) {
@@ -744,8 +727,11 @@ function getFilterData() {
 			object["id"] = studentID;
 			object["values"] = [];
 			object["values"] = date_i_list.map(function(date,i) {
+				var x = date%100;
+				var y = (date%10000-x)/100
+				var z = 2017
 				return {
-					"date": parseTime(date),
+					"date": new Date(z,y,x),
 					"hours": 0
 				}
 			})
@@ -759,54 +745,63 @@ function getFilterData() {
 			data.push(object);
 		})
 
-		var dataToRepresent = data
+		var svg = d3.select(".filter-body").select("svg"),
+			margin = {top: 20, right: 80, bottom: 30, left: 50},
+			width = svg.attr("width") - margin.left - margin.right,
+			height = svg.attr("height") - margin.top - margin.bottom,
+			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-		dataSecondary = dataToRepresent
-		console.log(data)
-		x.range([0, width]),
-		y.range([height, 0]),
-		x.domain(d3.extent(data, function(d) { return d.date; }));
-		y.domain([0,100]);
-		z.domain(dataToRepresent.map(function(c,i) { return c.id; }));
+		var brush = d3.brush().on("end", brushended).extent([[0, 0], [width, height]]),
+			idleTimeout,
+			idleDelay = 10000;
 		
-		var line = d3.line()
-			.curve(d3.curveBasis)
-			.x(function(d) { var temp = new Date(d.date); return x(temp); })
-			.y(function(d) { return y(d.hours); });
+		var cities = data
+  	console.log(data)
 
-		g.append("g")
-				.attr("class", "axis axis--x")
-				.attr("transform", "translate(0," + height + ")")
-				.call(d3.axisBottom(x));
+  var data = [
+  {date: new Date(2017, 2, 1), value: 93.24},
+  {date: new Date(2017, 5, 15), value: 95.35}
+];
 
-		g.append("g")
-				.attr("class", "axis axis--y")
-				.call(d3.axisLeft(y))
-				.append("text")
-				.attr("transform", "rotate(-90)")
-				.attr("y", 6)
-				.attr("dy", "0.71em")
-				.attr("fill", "#000")
-				.text("Humidity");
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain([
+		d3.min(cities, function(c) { return d3.min(c.values, function(d) { return d.hours; }); }),
+		d3.max(cities, function(c) { return d3.max(c.values, function(d) { return d.hours; }); })
+  ]);
+  z.domain(cities.map(function(c) { return c.id; }));
 
-		var city = g.selectAll(".filter-city")
-			.data(dataToRepresent)
-			.enter().append("g")
-			.attr("class", "filter-city");
+	g.append("g")
+		.attr("class", "axis axis--x")
+		.attr("transform", "translate(0," + height + ")")
+		.call(d3.axisBottom(x));
 
-		city.append("path")
-				.attr("class", "line")
-				.attr("d", function(d) { return line(d.values); })
-				.style("stroke", function(d,i) {return z(d.id)})
-				.style("stroke-width","1px") 
+	g.append("g")
+		.attr("class", "axis axis--y")
+		.call(d3.axisLeft(y))
+		.append("text")
+		.attr("transform", "rotate(-90)")
+		.attr("y", 6)
+		.attr("dy", "0.71em")
+		.attr("fill", "#000")
+		.text("hours, ºF");
 
-		city.append("text")
-				.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-				.attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.hours) + ")"; })
-				.attr("x", 3)
-				.attr("dy", "0.35em")
-				.style("font", "10px sans-serif")
-				.text(function(d) { return d.id; });
+  var city = g.selectAll(".city")
+	.data(cities)
+	.enter().append("g")
+	.attr("class", "city");
+
+  city.append("path")
+  .attr("class", "line")
+  .attr("d", function(d) { return line(d.values); })
+  .style("stroke", function(d) { return z(d.id); });
+
+  city.append("text")
+  .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+  .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.hours) + ")"; })
+  .attr("x", 3)
+  .attr("dy", "0.35em")
+  .style("font", "10px sans-serif")
+  .text(function(d) { return d.id; });
 
 		svg.append("g")
 		.attr("class", "brush")
@@ -855,7 +850,7 @@ function getFilterData() {
 
 			data.forEach(function(d,i) {
 				d.values.forEach(function(d1,i1) {
-					if(d1.date > x0 && d1.date < x1 && d1.humidity < y0 && d1.humidity > y1) {
+					if(d1.date > x0 && d1.date < x1 && d1.hours < y0 && d1.hours > y1) {
 						set.add(i)
 					}
 				})
