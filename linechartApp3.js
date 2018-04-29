@@ -146,8 +146,8 @@ function getLineData() {
 			};
 		});
 
-		clusters = 10
-		maxiterations = 10
+		clusters = 8
+		maxiterations = 30
 
 		studentClusters = kmeans(students,clusters,maxiterations)
 		// findOptimalCluster(students, maxiterations)
@@ -166,7 +166,7 @@ function getLineData() {
 
 		x.domain(d3.extent(data, function(d) {return d.date; }));
 		y.domain([0,110])
-		z.domain(students.map(function(c) {return c.total; }));
+		z.domain(students.map(function(c,i) {return c.id; }));
 
 		g.append("g")
 			.attr("class", "axis axis--x")
@@ -270,13 +270,24 @@ function getLineData() {
 	}
 
 	function selectLine(d,i) {
+
 		d3.select(".viz-body").selectAll(".line")
 			.style("stroke-opacity",function(d1,i1) {
-				if(i != i1) {
-					return "0.10";
+
+				if(d.id != d1.id) {
+					return "0.60";
 				}
 			}) 
-			.style("stroke", "black")
+
+		d3.select(".filter-body").selectAll(".officeHourline")
+			.style("stroke-width",function(d1,i1) {
+				if(d.id != d1.id) {
+					return "1.5px"
+				} else {
+					return "10px"
+				}
+			}) 
+			// .style("stroke", "black")
 				
 		currentLabel = labels[i]
 		getStackedBarData(currentLabel,filterCriteria)
@@ -716,7 +727,6 @@ function getDateIndex(completeDateList, date) {
 
 function getFilterData(labelsOnBasisOfPerformance) {
 
-	console.log(labelsOnBasisOfPerformance)
 	var line = d3.line()
 	.curve(d3.curveBasis)
 	.x(function(d,i) {return x(d.date); })
@@ -760,7 +770,7 @@ function getFilterData(labelsOnBasisOfPerformance) {
 			idleDelay = 10000;
 		
 		data = clusterSimilarPerformingStudents(data, labelsOnBasisOfPerformance)
-		var cities = data
+		var officeHourData = data
 		dataSecondary = data
 
   var data = [
@@ -770,10 +780,10 @@ function getFilterData(labelsOnBasisOfPerformance) {
 
   x.domain(d3.extent(data, function(d) { return d.date; }));
   y.domain([
-		d3.min(cities, function(c) { return d3.min(c.values, function(d) { return d.hours; }); }),
-		d3.max(cities, function(c) { return d3.max(c.values, function(d) { return d.hours; }); })
+		d3.min(officeHourData, function(c) { return d3.min(c.values, function(d) { return d.hours; }); }),
+		d3.max(officeHourData, function(c) { return d3.max(c.values, function(d) { return d.hours; }); })
   ]);
-  z.domain(cities.map(function(c) { return c.id; }));
+  z.domain(officeHourData.map(function(c,i) {return c.id; }));
 
 	g.append("g")
 		.attr("class", "axis axis--x")
@@ -788,19 +798,19 @@ function getFilterData(labelsOnBasisOfPerformance) {
 		.attr("y", 6)
 		.attr("dy", "0.71em")
 		.attr("fill", "#000")
-		.text("hours, ºF");
+		.text("hours");
 
-  var city = g.selectAll(".city")
-	.data(cities)
+  var officeHourDatum = g.selectAll(".officeHourDatum")
+	.data(officeHourData)
 	.enter().append("g")
-	.attr("class", "city");
+	.attr("class", "officeHourDatum");
 
-  city.append("path")
-  .attr("class", "line")
+  officeHourDatum.append("path")
+  .attr("class", "officeHourline")
   .attr("d", function(d) { return line(d.values); })
   .style("stroke", function(d) { return z(d.id); });
 
-  city.append("text")
+  officeHourDatum.append("text")
   .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
   .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.hours) + ")"; })
   .attr("x", 3)
@@ -866,24 +876,20 @@ function getFilterData(labelsOnBasisOfPerformance) {
 
 		function clusterSimilarPerformingStudents(data, labelsOnBasisOfPerformance) {
 			var clusteredData = []
-			// console.log(data)
 			var keys = Object.keys(labelsOnBasisOfPerformance)
 			var result = []
 			keys.map(function(labelIndex,i) {
 				var object = {};
 				var studentGroup = labelsOnBasisOfPerformance[labelIndex]
-				console.log(studentGroup)
 				var clusteredOfficeHourData = clusterOfficeHourData(studentGroup,data)
 				object["id"] = "C"+i
 				object["values"] = clusteredOfficeHourData
-				// console.log(object)
 				result.push(object)
 			})
 			return result;
 		}
 
 		function clusterOfficeHourData(studentGroup, data) {
-			// console.log(studentGroup)
 			result = data[0]["values"].map(function(d,i) {
 				return {
 					"date" : d["date"],
