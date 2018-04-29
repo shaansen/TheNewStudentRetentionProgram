@@ -29,9 +29,11 @@ var filterLimits = {
 }
 		
 var tipBox
+var tooltip
 var completeDateList
 var dateSet
 var date_i_list
+var labelsOnBasisOfPerformance
 // -----------------------------------------------------------------------------------------
 //
 // Code to read Calendar and Map dates to events
@@ -79,7 +81,6 @@ var filteredSet = []
 
 
 getLineData()
-getFilterData()
 
 function getLineData() {
 	// Below code parses the calendar csv to mark events on the basis of the date
@@ -161,7 +162,7 @@ function getLineData() {
 
 		originalStudentData = students
 		students = clusteredData
-		console.log()
+		getFilterData(labelsOnBasisOfPerformance)
 
 		x.domain(d3.extent(data, function(d) {return d.date; }));
 		y.domain([0,110])
@@ -182,7 +183,7 @@ function getLineData() {
 			.attr("fill", "#000")
 			.text("Scores");
 
-		var tooltip = d3.select("body")
+		tooltip = d3.select("body")
 		.append("div")
 		.style("position", "absolute")
 		.style("z-index", "10")
@@ -237,64 +238,65 @@ function getLineData() {
 			.style("font", "10px")
 			.text(function(d) { return d.id; });
 
-		function mouseOutFunction() {
-			d3.select(this)
-				.style("stroke-width","2px")   
-
-			tooltip.style("visibility", "hidden") 
-		}
-
-		function mouseOverFunction(d,i) {
-			d3.select(this)
-				.style("stroke-width","10px") 
-			currentLabel = labels[i]
-		}
-
-		function mouseMoveFunction() {
-			var year = x.invert(d3.mouse(this)[0])
-			var y = getEventName(year)
-
-			tooltip.style("top", (event.pageY-30)+"px")
-			.style("visibility", "visible") 
-			.style("left",(event.pageX - 50)+"px")
-			.text(y)
-			.style("background-color","grey")
-			.style("padding","5px 5px 5px 5px")
-			.style("color","white")
-			.style("font-family","Cabin")
-			.style("font-size","11px")
-		}
-
-		function selectLine(d,i) {
-			d3.select(".viz-body").selectAll(".line")
-				.style("stroke-opacity",function(d1,i1) {
-					if(i != i1) {
-						return "0.10";
-					}
-				}) 
-				.style("stroke", "black")
-					
-			currentLabel = labels[i]
-			getStackedBarData(currentLabel,filterCriteria)
-
-		}
-
-		function getSimpleDate(d) {
-			var mm = d.getMonth() + 1; // getMonth() is zero-based
-			var dd = d.getDate();
-			return [d.getFullYear(),
-							(mm>9 ? '' : '0') + mm,
-							(dd>9 ? '' : '0') + dd
-						 ].join('');
-		};
-
-		function getEventName(year) {
-			var y = new Date(year)
-			y.setHours( 0,0,0,0 )
-			return calendarData[getSimpleDate(irregDatesToRegDates[y])]["description"] + " - "+y.getMonth()+"/"+y.getDay()+"/"+y.getFullYear()
-		}
+		
 	})
 }
+	
+	function mouseOutFunction() {
+		d3.select(this)
+			.style("stroke-width","2px")   
+		// tooltip.style("visibility", "hidden") 
+	}
+
+	function mouseOverFunction(d,i) {
+		d3.select(this)
+			.style("stroke-width","10px") 
+		currentLabel = labels[i]
+	}
+
+	function mouseMoveFunction() {
+		var year = x.invert(d3.mouse(this)[0])
+		var y = getEventName(year)
+
+		tooltip.style("top", (event.pageY-30)+"px")
+		.style("visibility", "visible") 
+		.style("left",(event.pageX - 50)+"px")
+		.text(y)
+		.style("background-color","grey")
+		.style("padding","5px 5px 5px 5px")
+		.style("color","white")
+		.style("font-family","Cabin")
+		.style("font-size","11px")
+	}
+
+	function selectLine(d,i) {
+		d3.select(".viz-body").selectAll(".line")
+			.style("stroke-opacity",function(d1,i1) {
+				if(i != i1) {
+					return "0.10";
+				}
+			}) 
+			.style("stroke", "black")
+				
+		currentLabel = labels[i]
+		getStackedBarData(currentLabel,filterCriteria)
+
+	}
+
+	function getSimpleDate(d) {
+		var mm = d.getMonth() + 1; // getMonth() is zero-based
+		var dd = d.getDate();
+		return [d.getFullYear(),
+						(mm>9 ? '' : '0') + mm,
+						(dd>9 ? '' : '0') + dd
+					 ].join('');
+	};
+
+	function getEventName(year) {
+		var y = new Date(year)
+		y.setHours( 0,0,0,0 )
+		return calendarData[getSimpleDate(irregDatesToRegDates[y])]["description"] + " - "+y.getMonth()+"/"+y.getDay()+"/"+y.getFullYear()
+	}
 
 	function type(d, _, columns) {
 		d.date = parseTime(d.date);
@@ -387,6 +389,7 @@ function getLineData() {
 				
 		// We can get the labels too by calling getLabels(dataset, centroids)
 		}
+		labelsOnBasisOfPerformance = labels
 		return centroids
 	}
 	
@@ -711,11 +714,12 @@ function getDateIndex(completeDateList, date) {
 	return -1;
 }
 
-function getFilterData() {
+function getFilterData(labelsOnBasisOfPerformance) {
 
+	console.log(labelsOnBasisOfPerformance)
 	var line = d3.line()
 	.curve(d3.curveBasis)
-	.x(function(d,i) {console.log((d.date)+" -> "+x(d.date)); return x(d.date); })
+	.x(function(d,i) {return x(d.date); })
 	.y(function(d,i) {return y(d.hours); });
 
 	d3.csv("data/tahours4.csv", type, function(error, TAdata) {
@@ -755,8 +759,9 @@ function getFilterData() {
 			idleTimeout,
 			idleDelay = 10000;
 		
+		data = clusterSimilarPerformingStudents(data, labelsOnBasisOfPerformance)
 		var cities = data
-  	console.log(data)
+		dataSecondary = data
 
   var data = [
   {date: new Date(2017, 2, 1), value: 93.24},
@@ -847,7 +852,6 @@ function getFilterData() {
 			var y1 = filters["y1"]
 
 			var set = new Set()
-
 			data.forEach(function(d,i) {
 				d.values.forEach(function(d1,i1) {
 					if(d1.date > x0 && d1.date < x1 && d1.hours < y0 && d1.hours > y1) {
@@ -860,6 +864,44 @@ function getFilterData() {
 			return result
 		}
 
+		function clusterSimilarPerformingStudents(data, labelsOnBasisOfPerformance) {
+			var clusteredData = []
+			// console.log(data)
+			var keys = Object.keys(labelsOnBasisOfPerformance)
+			var result = []
+			keys.map(function(labelIndex,i) {
+				var object = {};
+				var studentGroup = labelsOnBasisOfPerformance[labelIndex]
+				console.log(studentGroup)
+				var clusteredOfficeHourData = clusterOfficeHourData(studentGroup,data)
+				object["id"] = "C"+i
+				object["values"] = clusteredOfficeHourData
+				// console.log(object)
+				result.push(object)
+			})
+			return result;
+		}
+
+		function clusterOfficeHourData(studentGroup, data) {
+			// console.log(studentGroup)
+			result = data[0]["values"].map(function(d,i) {
+				return {
+					"date" : d["date"],
+					"hours" : 0
+				}
+			})
+
+			studentGroup.forEach(function(student) {
+				data.forEach(function(tadata) {
+					if(tadata["id"] == student) {
+						tadata["values"].forEach(function(d,i) {
+							result[i]["hours"] = result[i]["hours"] + (d["hours"]/studentGroup.length);
+						})
+					}
+				})
+			})
+			return result;
+		}
 	});
 
 
