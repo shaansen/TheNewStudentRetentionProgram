@@ -1,7 +1,7 @@
-	var choices = new Set()
+var choices = new Set()
 
-	var svg = d3.select(".viz-body").select("svg"),
-			margin = {top: 20, right: 80, bottom: 30, left: 50},
+var svg = d3.select(".viz-body").select("svg"),
+			margin = {top: 30, right: 80, bottom: 30, left: 50},
 			width = svg.attr("width") - margin.left - margin.right,
 			height = svg.attr("height") - margin.top - margin.bottom,
 			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -17,9 +17,8 @@ var yellow = d3.interpolateYlGn(), // "rgb(255, 255, 229)"
 		green = d3.interpolateYlGn(1); // "rgb(0, 69, 41)"
 
 var line = d3.line()
-		.curve(d3.curveBasis)
-		.x(function(d) { return x(d.date); })
-		.y(function(d) { return y(d.scores); });
+		.x(function(d) {return x(d.date); })
+		.y(function(d) {return y(d.scores); });
 		// .curve(d3.curveBasis)
 
 var filterLimits = {
@@ -66,7 +65,6 @@ var studentWiseTAdata = []
 var choices = new Set()
 var filterCriteria = []
 var currentLabel
-var dataSecondary
 var listOfEvents = ["HW1","LAB2","OTHERS","HW2","HW3","LAB3","LAB4","HW4","LAB5","PROJ1","LAB6","LAB7",
 										"Midterm","HW5","LAB8","PROJ2","LAB9","HW6","LAB10","PROJ3","LAB13"]
 var hourSpent = {
@@ -88,9 +86,9 @@ var date_i_list = [20170201,20170202,20170203,20170204,20170205,20170206,2017020
 20170508,20170509,20170510,20170511,20170512,20170513,20170514,20170515]
 
 
-getLineData()
+mainFunction()
 
-function getLineData() {
+function mainFunction() {
 	// Below code parses the calendar csv to mark events on the basis of the date
 	// and give descriptions of the events that have occured
 	// with the cummulative total score till that event
@@ -156,7 +154,7 @@ function getLineData() {
 		});
 
 		clusters = 8
-		maxiterations = 15
+		maxiterations = 20
 
 		studentClusters = kmeans(students,clusters,maxiterations)
 		// findOptimalCluster(students, maxiterations)
@@ -171,130 +169,13 @@ function getLineData() {
 
 		originalStudentData = students
 		students = clusteredData
-		getFilterData(labelsOnBasisOfPerformance)
-		console.log(labelsOnBasisOfPerformance)
 
-		x.domain(d3.extent(data, function(d) {return d.date; }));
-		y.domain([0,110])
-		z.domain(students.map(function(c,i) {return c.id; }));
-
-		g.append("g")
-			.attr("class", "axis axis--x")
-			.attr("transform", "translate(0," + height + ")")
-			.call(d3.axisBottom(x));
-
-		g.append("g")
-			.attr("class", "axis axis--y")
-			.call(d3.axisLeft(y))
-			.append("text")
-			.attr("transform", "rotate(-90)")
-			.attr("y", 6)
-			.attr("dy", "0.71em")
-			.attr("fill", "#000")
-			.text("Scores");
-
-		var pillars = g.selectAll(".pillars")
-			.data(dateList)
-			.enter()
-
-		pillars.append("rect")
-			.attr("class", "pillars")
-			.attr("x", function(d,i) {
-				var temp = parseTime(d);
-				return x(temp)
-			})
-			.attr("y","10")
-			.attr("width", 1)
-			.attr("height", 250);
-
-		var text = g.selectAll(".pillar-text")
-			.data(dateList)
-			.enter()
-		
-		text.append("text")
-				.attr("class", "pillar-text")
-				.attr("x", "10px")
-				.attr("y","10px")
-				.text(function(d) { return calendarData[d]["description"]; })
-				.attr("transform", function(d,i) {
-					return "translate("+x(parseTime(d))+") rotate(45 10 0)";
-				})
-				.attr("text-anchor","end")
-				.attr("font-size","12px")
-		text.exit().remove()
-
-
-
-		// g.append("g")
-		//   .data(dateList)
-		//   .attr("class", "axis axis--y")
-		//   .enter()
-		//   .append("rect")
-		//   .attr("x", function(d,i) {
-		//     var temp = parseTime(d);
-		//     console.log(temp+"->"+x(temp));
-		//     return x(temp)
-		//   })
-		//   .attr("y","10")
-		//   .attr("width", 10)
-		//   .attr("height", 300);
-
-
-		tooltip = d3.select("body")
-		.append("div")
-		.style("position", "absolute")
-		.style("z-index", "10")
-		.style("visibility", "hidden")
-
-		var studentData = g.selectAll(".studentData")
-			.data(students)
-			.enter().append("g")
-			.attr("class", "studentData");
-
-		// studentData.append("path")
-		//   .attr("class", "line")
-		//   .attr("d", function(d) { return line(d.values); })
-		//   .style("stroke", function(d,i) {
-		//     var x = getRGBIndex(i)
-		//     var r = Math.floor((x/Object.keys(labels).length*123)%255);
-		//     var g = Math.floor((x/Object.keys(labels).length*345)%255);
-		//     var b = Math.floor((x/Object.keys(labels).length*567)%255);
-		//   })
-		//   .style("stroke-width", "2px")
-		//   .on("mouseover", mouseOverFunction)
-		//   .on("mouseout", mouseOutFunction)
-		//   .on("mousemove", mouseMoveFunction)
-
-		studentData.append("path")
-			.attr("class", "line")
-			.attr("d", function(d) { return line(d.values); })
-			.style("stroke", function(d) {return z(d.id); })
-			.style("stroke-width", "2px")
-			.on("mouseover", mouseOverFunction)
-			.on("mouseout", mouseOutFunction)
-			.on("mousemove", mouseMoveFunction)
-			.on("click", selectLine)
-
-		// studentData.append("path")
-		// 	.attr("class", "line")
-		// 	.attr("d", function(d) { return line(d.values); })
-		// 	.style("stroke", function(d,i) {var x = getRGBIndex(i);return z(x); })
-		// 	.style("stroke-width", "2px")
-		// 	.on("mouseover", mouseOverFunction)
-		// 	.on("mouseout", mouseOutFunction)
-		// 	.on("mousemove", mouseMoveFunction)
-		// 	.on("click", selectLine)
-
-		studentData.append("text")
-			.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-			.attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"; })
-			.attr("x", 3)
-			.attr("dy", "0.35em")
-			.style("font", "10px")
-			.text(function(d) { return d.id; })
+		getFilterData(labelsOnBasisOfPerformance,data,students,getLineData)	
 		
 	})
 }
+
+
 	
 	function mouseOutFunction() {
 		d3.select(".viz-body").selectAll(".line")
@@ -790,10 +671,14 @@ function getDateIndex(completeDateList, date) {
 	return -1;
 }
 
-function getFilterData(labelsOnBasisOfPerformance) {
+function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineData) {
 
+	var x = d3.scaleTime().range([0, width]),
+		y = d3.scaleLinear().range([height, 0]),
+		z = d3.scaleOrdinal(d3.schemeCategory10);
+
+	var dataSecondary
 	var line = d3.line()
-	.curve(d3.curveBasis)
 	.x(function(d,i) {return x(d.date); })
 	.y(function(d,i) {return y(d.hours); });
 
@@ -825,7 +710,7 @@ function getFilterData(labelsOnBasisOfPerformance) {
 		})
 
 		var svg = d3.select(".filter-body").select("svg"),
-			margin = {top: 20, right: 80, bottom: 30, left: 50},
+			margin = {top: 30, right: 80, bottom: 30, left: 50},
 			width = svg.attr("width") - margin.left - margin.right,
 			height = svg.attr("height") - margin.top - margin.bottom,
 			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -886,10 +771,6 @@ function getFilterData(labelsOnBasisOfPerformance) {
 	.attr("dy", "0.35em")
 	.style("font", "10px sans-serif")
 	.text(function(d) { return d.id; });
-
-		// svg.append("g")
-		// .attr("class", "brush")
-		// .call(brush)
 
 		function brushended() {
 			var s = d3.event.selection;
@@ -978,7 +859,169 @@ function getFilterData(labelsOnBasisOfPerformance) {
 			})
 			return result;
 		}
+
+			if ( getLineData && typeof ( getLineData ) == "function" ) { 
+				getLineData(originalData,students,dataSecondary); 
+			} 
+
 	});
+	
+
+
+}
+
+function getLineData(data,students,dataSecondary) { 	
+
+
+	x.domain(d3.extent(data, function(d) {return d.date; }));
+	y.domain([0,110])
+	z.domain(students.map(function(c,i) {return c.id; }));
+
+	// console.log(students)
+	// console.log(dataSecondary)
+	var circles = []
+	students.forEach(function(studentID,i) {
+		studentID["values"].forEach(function(entry,i1) {
+			// console.log(dataSecondary[i])
+			circles.push([studentID["id"],x(entry["date"]),y(entry["scores"]),dataSecondary[i]["values"][i1]["hours"]])
+		})
+	})
+
+	console.log(circles)
+
+	g.append("g")
+		.attr("class", "axis axis--x")
+		.attr("transform", "translate(0," + height + ")")
+		.call(d3.axisBottom(x));
+
+	g.append("g")
+		.attr("class", "axis axis--y")
+		.call(d3.axisLeft(y))
+		.append("text")
+		.attr("transform", "rotate(-90)")
+		.attr("y", 6)
+		.attr("dy", "0.71em")
+		.attr("fill", "#000")
+		.text("Scores");
+
+	var officeHourDots = g.selectAll(".officeHourDots")
+	.data(circles)
+	.enter().append("g")
+	.attr("class", "officeHourDots");
+
+	officeHourDots.append("circle")
+	.attr("class", "circles")
+	.attr("cx", function(d) { return d[1]; })
+	.attr("cy", function(d) { return d[2]; })
+	.attr("r", function(d) { return d[3]; })
+	.style("fill",  function(d) {return z(d[0]); })
+
+	var pillars = g.selectAll(".pillars")
+		.data(dateList)
+		.enter()
+
+	pillars.append("rect")
+		.attr("class", "pillars")
+		.attr("x", function(d,i) {
+			var temp = parseTime(d);
+			return x(temp)
+		})
+		.attr("y","10")
+		.attr("width", 1)
+		.attr("height", height);
+
+	var text = g.selectAll(".pillar-text")
+		.data(dateList)
+		.enter()
+	
+	text.append("text")
+			.attr("class", "pillar-text")
+			.attr("x", "10px")
+			.attr("y","10px")
+			.text(function(d) { return calendarData[d]["description"]; })
+			.attr("transform", function(d,i) {
+				return "translate("+x(parseTime(d))+") rotate(45 10 0)";
+			})
+			.attr("text-anchor","end")
+			.attr("font-size","10px")
+	text.exit().remove()
+
+
+
+	// g.append("g")
+	//   .data(dateList)
+	//   .attr("class", "axis axis--y")
+	//   .enter()
+	//   .append("rect")
+	//   .attr("x", function(d,i) {
+	//     var temp = parseTime(d);
+	//     console.log(temp+"->"+x(temp));
+	//     return x(temp)
+	//   })
+	//   .attr("y","10")
+	//   .attr("width", 10)
+	//   .attr("height", 300);
+
+
+	tooltip = d3.select("body")
+	.append("div")
+	.style("position", "absolute")
+	.style("z-index", "10")
+	.style("visibility", "hidden")
+
+	var studentData = g.selectAll(".studentData")
+		.data(students)
+		.enter().append("g")
+		.attr("class", "studentData");
+
+	// studentData.append("path")
+	//   .attr("class", "line")
+	//   .attr("d", function(d) { return line(d.values); })
+	//   .style("stroke", function(d,i) {
+	//     var x = getRGBIndex(i)
+	//     var r = Math.floor((x/Object.keys(labels).length*123)%255);
+	//     var g = Math.floor((x/Object.keys(labels).length*345)%255);
+	//     var b = Math.floor((x/Object.keys(labels).length*567)%255);
+	//   })
+	//   .style("stroke-width", "2px")
+	//   .on("mouseover", mouseOverFunction)
+	//   .on("mouseout", mouseOutFunction)
+	//   .on("mousemove", mouseMoveFunction)
+
+	studentData.append("path")
+		.attr("class", "line")
+		.attr("d", function(d) { return line(d.values); })
+		.style("stroke", function(d) {return z(d.id); })
+		.style("stroke-width", "2px")
+		.on("mouseover", mouseOverFunction)
+		.on("mouseout", mouseOutFunction)
+		.on("mousemove", mouseMoveFunction)
+		.on("click", selectLine)
+
+	// studentData.append("path")
+	// 	.attr("class", "line")
+	// 	.attr("d", function(d) { return line(d.values); })
+	// 	.style("stroke", function(d,i) {var x = getRGBIndex(i);return z(x); })
+	// 	.style("stroke-width", "2px")
+	// 	.on("mouseover", mouseOverFunction)
+	// 	.on("mouseout", mouseOutFunction)
+	// 	.on("mousemove", mouseMoveFunction)
+	// 	.on("click", selectLine)
+
+	studentData.append("text")
+		.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+		.attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"; })
+		.attr("x", 3)
+		.attr("dy", "0.35em")
+		.style("font", "10px")
+		.text(function(d) { return d.id; })
+
+}
+
+function getDots(data,dataSecondary) {
+
+	
+	
 
 
 }

@@ -342,8 +342,7 @@ function getLineData() {
     //  // .style("stroke", "black")
         
     currentLabel = labels[i]
-    console.log("Label")
-    console.log(labels[i])
+
     getStackedBarData(currentLabel,filterCriteria)
 
   }
