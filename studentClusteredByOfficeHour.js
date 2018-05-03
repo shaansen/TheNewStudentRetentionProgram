@@ -32,7 +32,13 @@ var tipBox
 var tooltip
 var completeDateList
 var dateSet
-var date_i_list
+var date_i_list = [20170201,20170202,20170203,20170204,20170205,20170206,20170207,20170208,20170209,20170210,20170211,20170212,20170213,20170214,20170215,20170216,
+20170217,20170218,20170219,20170220,20170221,20170222,20170223,20170224,20170225,20170226,20170227,20170228,20170301,20170302,20170303,20170304,
+20170305,20170306,20170307,20170308,20170309,20170310,20170311,20170312,20170313,20170314,20170315,20170316,20170317,20170318,20170319,20170320,
+20170321,20170322,20170323,20170324,20170325,20170326,20170327,20170328,20170329,20170330,20170331,20170401,20170402,20170403,20170404,20170405,
+20170406,20170407,20170408,20170409,20170410,20170411,20170412,20170413,20170414,20170415,20170416,20170417,20170418,20170419,20170420,20170421,
+20170422,20170423,20170424,20170425,20170426,20170427,20170428,20170429,20170430,20170501,20170502,20170503,20170504,20170505,20170506,20170507,
+20170508,20170509,20170510,20170511,20170512,20170513,20170514,20170515]
 var labelsOnBasisOfPerformance
 // -----------------------------------------------------------------------------------------
 //
@@ -52,7 +58,11 @@ var longDateToShortDate = {}
 var cTotal = 0
 
 // this is the list of columns that need to be displayed in the visualization
-var columns = ["date"]
+var columns = ["date",106,286,288,196,181,301,154,331,300,119,283,160,296,266,324,299,220,280,349,138,258,214,236,363,211,151,248,348,145,143,322,257,276,323,
+320,159,253,167,136,252,303,217,142,351,231,259,171,369,134,221,199,261,250,133,311,198,162,186,339,271,200,290,307,230,330,291,120,184,265,202,212,157,360,107,229,135,213,256,338,315,206,325,298,104,188,115,357,268,150,126,356,147,178,305,219,267,237,105,
+254,103,232,193,131,226,146,293,197,209,192,121,335,175,264,239,328,306,361,297,117,240,148,346,169,144,182,228,140,347,272,370,114,364,210,345,368,176,113,163,295,179,287,218,309,249,161,277,255,110,222,358,241,354,124,334,365,355,128,353,350,215,170,242,
+275,125,164,112,180,224,173,156,194,284,101,247,172,132,141,149,111,235,227,102,155,129,336,337,158,183,185,174,216,127,130,289,278,269,342,282,187,312,327,340,326,263,373,123,201,116,270,109,366,152,238,122,165,207,100,244,190,329,314,205,313,153,168,274,
+308,245,352,344,225,204,108,367,118,341,137,319,262,203,304,343,234,333,281,371,317,139,191,177,302,246,223,332,273,372,292,310,321,208,233,189,279,260,243,195,318,362,316,294,251,166,285,359]
 var irregDatesToRegDates = []
 var quartilePreData
 var quartilePostData
@@ -80,7 +90,12 @@ var hourSpent = {
 var filteredSet = []
 
 
-getLineData()
+var clusters = 8
+var maxiterations = 50
+
+
+// getLineData()
+getFilterData()
 
 function getLineData() {
 	// Below code parses the calendar csv to mark events on the basis of the date
@@ -146,10 +161,8 @@ function getLineData() {
 			};
 		});
 
-		clusters = 8
-		maxiterations = 30
-
-		studentClusters = kmeans(students,clusters,maxiterations)
+		console.log(students)
+		studentClusters = kmeans(students,clusters,maxiterations,"scores")
 		// findOptimalCluster(students, maxiterations)
 		// calculateSumSquareDistance(studentClusters,students)
 
@@ -162,7 +175,7 @@ function getLineData() {
 
 		originalStudentData = students
 		students = clusteredData
-		getFilterData(labelsOnBasisOfPerformance)
+		
 
 		x.domain(d3.extent(data, function(d) {return d.date; }));
 		y.domain([0,110])
@@ -353,14 +366,6 @@ function getLineData() {
 		var date_i = dateList[0]
 		dateSet = new Set()
 		var completeDateList = []
-		date_i_list = [20170201,20170202,20170203,20170204,20170205,20170206,20170207,20170208,20170209,20170210,20170211,20170212,20170213,20170214,20170215,20170216,
-20170217,20170218,20170219,20170220,20170221,20170222,20170223,20170224,20170225,20170226,20170227,20170228,20170301,20170302,20170303,20170304,
-20170305,20170306,20170307,20170308,20170309,20170310,20170311,20170312,20170313,20170314,20170315,20170316,20170317,20170318,20170319,20170320,
-20170321,20170322,20170323,20170324,20170325,20170326,20170327,20170328,20170329,20170330,20170331,20170401,20170402,20170403,20170404,20170405,
-20170406,20170407,20170408,20170409,20170410,20170411,20170412,20170413,20170414,20170415,20170416,20170417,20170418,20170419,20170420,20170421,
-20170422,20170423,20170424,20170425,20170426,20170427,20170428,20170429,20170430,20170501,20170502,20170503,20170504,20170505,20170506,20170507,
-20170508,20170509,20170510,20170511,20170512,20170513,20170514,20170515]
-
 		date_i_list.map(function(date_i,i) {
 			if(parseTime(date_i) <= parseTime(dateList[dateList.length-1])) {
 				if(!dateSet.has(parseTime(date_i).toString())) {
@@ -378,12 +383,12 @@ function getLineData() {
 	// 
 	//   
 	// ----------------------------------------------------------------------------------------------
-	function kmeans(dataset,clusters,maxIterations) {
+	function kmeans(dataset,clusters,maxIterations,type) {
 
 		numFeatures = dataset[0]["values"].map(function(d) {
 			return d.date;
 		})
-		var centroids = getRandomCentroids(numFeatures, clusters)
+		var centroids = getRandomCentroids(numFeatures, clusters, type)
 		
 		// Initialize book keeping vars.
 		iterations = 0
@@ -396,7 +401,7 @@ function getLineData() {
 				// Assign labels to each datapoint based on centroids
 				labels = getLabels(dataset, centroids)
 				// Assign centroids based on datapoint labels
-				centroids = getCentroids(dataset, labels, clusters)
+				centroids = getCentroids(dataset, labels, clusters, type)
 				
 		// We can get the labels too by calling getLabels(dataset, centroids)
 		}
@@ -404,15 +409,16 @@ function getLineData() {
 		return centroids
 	}
 	
-	function getRandomCentroids(numFeatures, k) {
+	function getRandomCentroids(numFeatures, k, type) {
 		var result = []
 		for (var i = 0; i < k; i++) {
 			result[i] = []
 			numFeatures.map(function(d) {
 				var x = {}
-
+				var min = 0
+				var max = 50
 				x["date"] = d;
-				x["scores"] = Math.random()*100;
+				x[type] = min+Math.random()*(max - min);
 				result[i].push(x)
 			})
 		}
@@ -477,7 +483,7 @@ function getLineData() {
 		return Math.sqrt(result/s1.length)
 	}
 
-	function getCentroids(dataset, labels, k) {
+	function getCentroids(dataset, labels, k, type) {
 
 		var keys = Object.keys(labels)
 		var result = []
@@ -497,7 +503,7 @@ function getLineData() {
 				numFeatures.map(function(d) {
 					var x = {}
 					x["date"] = d;
-					x["scores"] = Math.random()*100;
+					x[type] = Math.random()*100;
 					//quartilePreData[i][d] = []
 					result[i].push(x)
 				})
@@ -510,10 +516,10 @@ function getLineData() {
 					x["date"] = d;
 					var y = 1
 					labels[i].forEach(function(d1) {
-						y = y * dataset[d1]["values"][i1]["scores"]
-						quartilePreData[i][d].push(dataset[d1]["values"][i1]["scores"])
+						y = y * dataset[d1]["values"][i1][type]
+						quartilePreData[i][d].push(dataset[d1]["values"][i1][type])
 					});
-					x["scores"] = Math.pow(y,1/labels[i].length)
+					x[type] = Math.pow(y,1/labels[i].length)
 					result[i].push(x)
 				})
 			}
@@ -745,7 +751,7 @@ function getFilterData(labelsOnBasisOfPerformance) {
 				var y = (date%10000-x)/100
 				var z = 2017
 				return {
-					"date": new Date(z,y,x),
+					"date": new Date(z,y-1,x),
 					"hours": 0
 				}
 			})
@@ -757,7 +763,9 @@ function getFilterData(labelsOnBasisOfPerformance) {
 				}
 			})
 			data.push(object);
+
 		})
+		
 
 		var svg = d3.select(".filter-body").select("svg"),
 			margin = {top: 20, right: 80, bottom: 30, left: 50},
@@ -769,13 +777,21 @@ function getFilterData(labelsOnBasisOfPerformance) {
 			idleTimeout,
 			idleDelay = 10000;
 		
-		data = clusterSimilarPerformingStudents(data, labelsOnBasisOfPerformance)
+		// data = clusterSimilarPerformingStudents(data, labelsOnBasisOfPerformance)
+		var officeClusters = kmeans(data,clusters,maxiterations,"hours")
+		var data = officeClusters.map(function(d,i) {
+			return {
+				id: "C"+i,
+				values: d
+			};
+		})
 		var officeHourData = data
 		dataSecondary = data
+		console.log(officeHourData)
 
   var data = [
-  {date: new Date(2017, 2, 1), value: 93.24},
-  {date: new Date(2017, 5, 15), value: 95.35}
+  {date: new Date(2017, 1, 1), value: 93.24},
+  {date: new Date(2017, 4, 15), value: 95.35}
 ];
 
   x.domain(d3.extent(data, function(d) { return d.date; }));
@@ -812,7 +828,7 @@ function getFilterData(labelsOnBasisOfPerformance) {
 
   officeHourDatum.append("text")
   .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-  .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.hours) + ")"; })
+  .attr("transform", function(d) { console.log(d); return "translate(" + x(d.value.date) + "," + y(d.value.hours) + ")"; })
   .attr("x", 3)
   .attr("dy", "0.35em")
   .style("font", "10px sans-serif")
