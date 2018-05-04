@@ -3,167 +3,57 @@
 
 <head>
 	<!-- <link href='https://fonts.googleapis.com/css?family=Roboto Condensed' rel='stylesheet'> -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet'>
 	<link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://d3js.org/d3-color.v1.min.js"></script>
 	<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
 	<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  
+</head>
 
-	</head>
-
-<style>
-
-.main-header {
-	background-color: grey;
-	color: white;
-	font-family: "Satisfy";
-}
-
-.left {
-    width: 13%;
-    height: 100%;
-    position: fixed;
-    outline: 1px solid;
-    padding: 10px 10px 10px 10px;
-    background-color: silver
-
-}
-.right {
-    width: 87%;
-    height: 100%;
-    outline: 1px solid;
-    position: absolute;
-    right: 0;
-    padding: 10px 10px 10px 10px;
-}
-
-
-.axis--x path {
-	display: none;
-}
-
-body {
-		font-family: 'Cabin','Roboto Condensed';
-}
-
-
-.line {
-  fill: none;
-  stroke-width: 1.5px;
-}
-
-.officeHourline {
-  fill: none;
-  stroke-width: 1.5px;
-}
-
-.axis path,
-  .axis line {
-    fill: none;
-    stroke: black;
-    shape-rendering: crispEdges;
-  }
-
-  .axis text {
-      font-family: 'Cabin','Roboto Condensed',sans-serif;
-      font-size: 11px;
-  }
-
-/*------------------------------------------------------------------------------------*/
-/* BOX PLOT CSS*/
-/*------------------------------------------------------------------------------------*/
-
-.box {
-  font: 10px sans-serif;
-}
-
-.box line,
-.box rect,
-.box circle {
-  fill: steelblue;
-  stroke: #000;
-  stroke-width: 1px;
-}
-
-.box .center {
-  stroke-dasharray: 3,3;
-}
-
-.box .outlier {
-  fill: none;
-  stroke: #000;
-}
-
-.axis {
-  font: 12px sans-serif;
-}
- 
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
- 
-.x.axis path { 
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.toolTip {
-  position: absolute;
-  display: none;
-  min-width: 80px;
-  height: auto;
-  background: none repeat scroll 0 0 #ffffff;
-  border: 1px solid #6F257F;
-  padding: 14px;
-  text-align: center;
-}
-
-</style>
 <div>
-<!-- 	<div class="container-fluid main-header" >
-		<h1 align="center">Visualization of Clustered Time Series Data</h1>
-	</div> -->
-<!-- 	<div class="left">
-		<h4><strong>Time Spent in Office Hours</strong></h4>
-		<div id="timeSpentCheckboxes"></div>
-	</div> -->
-	<!-- <div class="right"> -->
+  <div class="sidenav">
+    <button 
+      onclick="toggleTick()"
+      class="tickText">
+      Disable Ticks
+    </button>
+    <button 
+      onclick="toggleCorr()"
+      class="corrText">
+      Disable Correlation
+    </button>
+    <button 
+      onclick="toggleDist()"
+      class="distText">
+      Disable Distribution
+    </button>
     <div class="text-body">
       <!-- <svg width="1500" height="700"></svg> -->
+      <div class="text-body-cluster-content"></div>
+      <div class="text-body-cluster-description"></div>
     </div>
+  </div>
+
+  <div class="main">
     <div class="filter-body">
-      <svg width="1500" height="350"></svg>
+      <svg width="1400" height="300"></svg>
     </div>
+    <hr>
     <div class="viz-body">
-      <svg width="1500" height="350"></svg>
+      <svg width="1400" height="700"></svg>
     </div>
-
-<!--     <div class="stream-body">
-      <svg id="stacked" width="1500" height="700"></svg>
-    </div> -->
-	<!-- </div> -->
-
+  </div>
 </div>
-
-
-<!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
 
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://d3js.org/d3-timer.v1.min.js"></script>
-<!-- <script src="tahours.js"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js" charset="utf-8"></script>
-
-<script src="studentClusteredByPerformance.js"></script>
-<!-- <script src="studentWithoutAssistance.js"></script> -->
+<!-- <script src="studentClusteredByPerformance.js"></script> -->
+<script src="studentWithoutAssistance.js"></script>
 <script src="d3-tip.js"></script>
 <script src="box.js"></script>
-<!-- <script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="heatmap.js"></script> -->

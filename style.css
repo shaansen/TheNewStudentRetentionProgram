@@ -1,0 +1,156 @@
+button {
+  width: 140px;
+  margin: 10px 10px 10px 10px;
+}
+
+.main-header {
+  background-color: grey;
+  color: white;
+}
+
+.left {
+    width: 13%;
+    height: 100%;
+    position: fixed;
+    outline: 1px solid;
+    padding: 10px 10px 10px 10px;
+    background-color: silver
+
+}
+.right {
+    width: 87%;
+    height: 100%;
+    outline: 1px solid;
+    position: absolute;
+    right: 0;
+    padding: 10px 10px 10px 10px;
+}
+
+
+.axis--x path {
+  display: none;
+}
+
+body {
+    font-family: 'Cabin','Roboto Condensed';
+}
+
+
+.line {
+  fill: none;
+  stroke-width: 1.5px;
+}
+
+.officeHourline {
+  fill: none;
+  stroke-width: 1.5px;
+}
+
+.axis path,
+  .axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+  }
+
+  .axis text {
+      font-family: 'Cabin','Roboto Condensed',sans-serif;
+      font-size: 11px;
+  }
+
+/*------------------------------------------------------------------------------------*/
+/* BOX PLOT CSS*/
+/*------------------------------------------------------------------------------------*/
+
+.box {
+  font: 10px sans-serif;
+}
+
+.box line,
+.box rect,
+.box circle {
+  fill: steelblue;
+  stroke: #000;
+  stroke-width: 1px;
+}
+
+.box .center {
+  stroke-dasharray: 3,3;
+}
+
+.box .outlier {
+  fill: none;
+  stroke: #000;
+}
+
+.axis {
+  font: 12px sans-serif;
+}
+ 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+ 
+.x.axis path { 
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.toolTip {
+  position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  background: none repeat scroll 0 0 #ffffff;
+  border: 1px solid #6F257F;
+  padding: 14px;
+  text-align: center;
+}
+
+.sidenav {
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+
+.main {
+    margin-left: 160px; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+}
+
+.text-body {
+  min-height: 100px;
+  width: 140px;
+  padding: 10px 10px 10px 10px;
+  margin: 10px 10px 10px 10px;
+  background-color: white;
+  color: black;
+}
+
+.cluster-text-name {
+  font-size: 10px;
+}
