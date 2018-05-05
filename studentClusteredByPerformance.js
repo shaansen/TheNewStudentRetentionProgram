@@ -161,7 +161,7 @@ function mainFunction() {
 			};
 		});
 
-		clusters = 8
+		clusters = 10
 		maxiterations = 50
 
 		studentClusters = kmeans(students,clusters,maxiterations)
