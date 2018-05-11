@@ -4,6 +4,7 @@
 <head>
 	<!-- <link href='https://fonts.googleapis.com/css?family=Roboto Condensed' rel='stylesheet'> -->
   <link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
 	<link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -15,25 +16,27 @@
   
 </head>
 
+
 <div>
   <div class="sidenav">
-    <button 
-      onclick="toggleTick()"
+    <h4>Visualizing Correlation between Office Hour and Student Performance</h4>
+    <button type="button"
+      onclick="
+  toggleTick()"
       class="tickText">
-      Disable Ticks
+      Ticks ON
     </button>
     <button 
       onclick="toggleCorr()"
       class="corrText">
-      Disable Correlation
+      Correlation ON
     </button>
     <button 
       onclick="toggleDist()"
       class="distText">
-      Disable Distribution
+      Distribution ON
     </button>
     <div class="text-body">
-      <p> View Cluster Details here</p>
       <div class="text-body-cluster-description"></div>
       <div class="text-body-cluster-content"></div>
     </div>
@@ -54,6 +57,6 @@
 <script src="https://d3js.org/d3-timer.v1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js" charset="utf-8"></script>
 <script src="studentClusteredByPerformance.js"></script>
-<!-- <script src="studentWithoutAssistance.js"></script> -->
+<!-- <script src="studentWithAssistance.js"></script> -->
 <script src="d3-tip.js"></script>
 <script src="box.js"></script>

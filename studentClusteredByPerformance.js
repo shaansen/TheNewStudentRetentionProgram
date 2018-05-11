@@ -133,18 +133,25 @@ function mainFunction() {
 	d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
 		if (error) throw error;
 		
-		studentGradeData.forEach(function(d,i) {
-			if(filteredSet.length === 0 || filteredSet.includes(parseInt(d.Username))) {
-				var total = 0
-				for (var i = 0; i < dateList.length; i++) {
-					var x = (calendarData[dateList[i]].description)
-					var y = (calendarData[dateList[i]].total)
-					total = total + d[x]
-					d[x] = total/y*100
-				}
-			columns.push(d.Username)
-			}
-		})
+		var studentsWithAssistance = ["316","227","184","334","337","137","151","215","111","320","160","130","253","158","171","116","183","313","369","310","335","173","155","169","174","297","120","257","302","138","274","121","305",
+      "358","278","102","118","124","217","162","112","364","292","179","356","190","306","101","285","110","268","331","269","108","135","258","232","262","329","296","346","167","237","143","242",
+      "139","154","105","122","243","350","157","176","244","189","187","149","136","128","245","250","359","264","261","276","152","354","133","107","221","142","357","340","106","332","339","131",
+      "208","260","280","226","170","266","303","228","304","233","159","150","251","229","211","100","220","199","180","255","299","145","165","291","322","344","254","338","283","362","284","252",
+      "279","219"]
+    
+    studentGradeData.forEach(function(d,i) {
+      if(studentsWithAssistance.includes(d.Username)) {
+      // if(!studentsWithAssistance.includes(d.Username)) {
+        var total = 0
+        for (var i = 0; i < dateList.length; i++) {
+          var x = (calendarData[dateList[i]].description)
+          var y = (calendarData[dateList[i]].total)
+          total = total + d[x]
+          d[x] = total/y*100
+        }
+      	columns.push(d.Username)
+      }
+    })
 
 		completeDateList = getCompleteDateList(dateList)
 
@@ -188,25 +195,25 @@ function mainFunction() {
 
 function initializePanel() {
 	d3.selectAll(".tick")
-	.text("Disable Ticks")
+	.text("Ticks ON")
 	enableTicks()
 
 	d3.selectAll(".corr")
-	.text("Disable Correlation")
+	.text("Correlation ON")
 
 	d3.selectAll(".dist")
-	.text("Disable Distribution")
+	.text("Distribution ON")
 }
 
 function toggleTick() {
 	tickOn = !tickOn
 	if(!tickOn) {
 		d3.selectAll(".tickText")
-		.text("Disable Ticks")
+		.text("Ticks ON")
 		enableTicks()
 	} else {
 		d3.selectAll(".tickText")
-		.text("Enable Ticks")
+		.text("Ticks OFF")
 		disableTicks()
 	}
 }
@@ -217,7 +224,6 @@ function disableTicks() {
 }
 
 function enableTicks() {
-	console.log("Enabling Ticks")
 	var svg = d3.select(".viz-body").select("svg"),
 			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -259,11 +265,11 @@ function toggleCorr() {
 	corrOn = !corrOn
 	if(!corrOn) {
 		d3.selectAll(".corrText")
-		.text("Disable Correlation")
+		.text("Correlation ON")
 		enableCorrelation()
 	} else {
 		d3.selectAll(".corrText")
-		.text("Enable Correlation")
+		.text("Correlation OFF")
 		disableCorrelation()
 	}
 }
@@ -295,10 +301,10 @@ function toggleDist() {
 	distOn = !distOn
 	if(!distOn) {
 		d3.selectAll(".distText")
-		.text("Disable Distribution")
+		.text("Distribution ON")
 	} else {
 		d3.selectAll(".distText")
-		.text("Enable Distribution")
+		.text("Distribution OFF")
 	}
 }
 
@@ -502,16 +508,16 @@ function kmeans(dataset,clusters,maxIterations) {
 	iterations = 0
 	oldCentroids = null
 
-	while(iterations <= maxIterations) {
+	while(iterations <= maxIterations && !compareCentroidsTo(centroids,oldCentroids)) {
 			// Save old centroids for convergence test. Book keeping.
 			oldCentroids = centroids
 			iterations = iterations + 1
 			// Assign labels to each datapoint based on centroids
+
 			labels = getLabels(dataset, centroids)
 			// Assign centroids based on datapoint labels
 			centroids = getCentroids(dataset, labels, clusters)
-			
-	// We can get the labels too by calling getLabels(dataset, centroids)
+			// We can get the labels too by calling getLabels(dataset, centroids)
 	}
 	labelsOnBasisOfPerformance = labels
 	return centroids
@@ -530,6 +536,10 @@ function getRandomCentroids(numFeatures, k) {
 		})
 	}
 	return result;
+}
+
+function compareCentroidsTo(centroids, oldCentroids) {
+	return _.isEqual(centroids,oldCentroids);
 }
 
 function getLabels(dataset, centroids) {
@@ -594,39 +604,29 @@ function getCentroids(dataset, labels, k) {
 
 	var keys = Object.keys(labels)
 	var result = []
-	quartilePreData = []
 	
 	for (var i = 0; i < k; i++) {
-		quartilePreData[i] = {}
-		numFeatures.map(function(d) {
-				quartilePreData[i][d] = []
-			})
-	}
-
-	for (var i = 0; i < k; i++) {
-		//quartilePreData[i] = {}
 		if(labels[i] == undefined) {
 			result[i] = []
 			numFeatures.map(function(d) {
 				var x = {}
 				x["date"] = d;
 				x["scores"] = Math.random()*100;
-				//quartilePreData[i][d] = []
 				result[i].push(x)
 			})
 
 		} else {
 			result[i] = []
-
-			numFeatures.map(function(d,i1) {
+			numFeatures.forEach(function(d,i1) {
 				var x = {}
 				x["date"] = d;
-				var y = 1
+				// var y = 1 // Using Multiplication
+				var  y = 0; // Using log in place of multiplication
 				labels[i].forEach(function(d1) {
-					y = y * dataset[d1]["values"][i1]["scores"]
-					quartilePreData[i][d].push(dataset[d1]["values"][i1]["scores"])
+					y = y + Math.log(dataset[d1]["values"][i1]["scores"])
+					
 				});
-				x["scores"] = Math.pow(y,1/labels[i].length)
+				x["scores"] = Math.exp(y/labels[i].length)
 				result[i].push(x)
 			})
 		}
@@ -662,13 +662,14 @@ function getRGBIndex(d) {
 }
 
 function findOptimalCluster(students, iterations) {
-	// For Clusters ranging from 1 - 20, find the sum of square differences and store in a map
 	var elbowMap = {}
 	for (var i = 1; i <= 15; i++) {
 		var clusters = kmeans(students,i,iterations)
+		// console.log(clusters)
 		elbowMap[i] = calculateSumSquareDistance(clusters, students)
+
 	}
-	console.log(elbowMap)
+		console.log(elbowMap)		
 }
 
 function calculateSumSquareDistance(clusters, studentData) {
