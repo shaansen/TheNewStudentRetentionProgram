@@ -140,7 +140,7 @@ function mainFunction() {
       "279","219"]
     
     studentGradeData.forEach(function(d,i) {
-      if(studentsWithAssistance.includes(d.Username)) {
+      // if(studentsWithAssistance.includes(d.Username)) {
       // if(!studentsWithAssistance.includes(d.Username)) {
         var total = 0
         for (var i = 0; i < dateList.length; i++) {
@@ -150,7 +150,7 @@ function mainFunction() {
           d[x] = total/y*100
         }
       	columns.push(d.Username)
-      }
+      // }
     })
 
 		completeDateList = getCompleteDateList(dateList)
@@ -168,11 +168,12 @@ function mainFunction() {
 			};
 		});
 
-		clusters = 10
+		clusters = 8
 		maxiterations = 50
 
 		studentClusters = kmeans(students,clusters,maxiterations)
-		// findOptimalCluster(students, maxiterations)
+		// findOptimalClusterUsingElbow(students, maxiterations)
+		// findOptimalClusterUsingSil(students, maxiterations)
 		// calculateSumSquareDistance(studentClusters,students)
 
 		var clusteredData = studentClusters.map(function(d,i) {
@@ -661,15 +662,95 @@ function getRGBIndex(d) {
 	}
 }
 
-function findOptimalCluster(students, iterations) {
+function findOptimalClusterUsingElbow(students, iterations) {
 	var elbowMap = {}
 	for (var i = 1; i <= 15; i++) {
 		var clusters = kmeans(students,i,iterations)
-		// console.log(clusters)
 		elbowMap[i] = calculateSumSquareDistance(clusters, students)
 
 	}
 		console.log(elbowMap)		
+}
+
+function findOptimalClusterUsingSil(students, iterations) {
+	var silMap = {}
+	for (var i = 1; i <= 10; i++) {
+		var clusters = kmeans(students,i,iterations)
+		silMap[i] = calculateSilhouette(clusters, students, labelsOnBasisOfPerformance)
+
+	}
+	console.log(silMap)		
+}
+
+function calculateSilhouette(clusters, students, labels) {
+	var result = 0
+	var plot = []
+	Object.keys(labels).forEach(function(d,i) {
+		var a = calculateSilhouetteForOneClusterA(clusters, students, labels[d])
+		var b = calculateSilhouetteForOneClusterB(clusters, students, labels, d)
+		var s = a.map(function(d,i) {
+			if(d < b[i]) {
+				return (1-(d/b[i]))
+			} else if(d > b[i]) {
+				return ((b[i]/d)-1)
+			} else {
+				return 0;
+			}
+		})
+		plot[i] = _.sum(s)/s.length
+		result = result + plot[i]
+	})
+
+	console.log(plot)
+	// console.log(result/Object.keys(labels).length)
+	return (result/Object.keys(labels).length)
+}
+
+function calculateSilhouetteForOneClusterA(clusters, students, label) {
+	var a = []
+	label.forEach(function(d1,i1) {
+		a[i1] = 0
+		label.forEach(function(d2,i2) {
+			if(i1!=i2) {
+				a[i1] = a[i1] + getScoreDifferenceForSilhouette(students[d1]["values"],students[d2]["values"])/label.length
+			}
+		})	
+	})
+	return a;
+}
+
+function calculateSilhouetteForOneClusterB(clusters, students, labels, key) {
+	var a = []
+	labels[key].forEach(function(d1,i1) {
+		a[i1] = Infinity
+		Object.keys(labels).forEach(function(d2,i2) {
+			var x = 0
+			if(d2!=key) {
+				var label = labels[d2]
+				label.forEach(function(d3,i3) {
+						x = x + getScoreDifferenceForSilhouette(students[d1]["values"],students[d3]["values"])/label.length
+				})	
+				if(a[i1] > x) {
+					
+					a[i1] = x
+				}
+			} 
+		})	
+	})
+	
+
+
+	return a;
+}
+
+function getScoreDifferenceForSilhouette(score1, score2) {
+	var difference = 0
+	score1.forEach(function(d,i) {
+		var stuffToAdd = score1[i]["scores"]-score2[i]["scores"]
+		stuffToAdd = stuffToAdd >= 0 ? stuffToAdd : -stuffToAdd;
+		difference = difference + stuffToAdd
+	})
+	return difference
 }
 
 function calculateSumSquareDistance(clusters, studentData) {
