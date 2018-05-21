@@ -16,7 +16,7 @@ var yellow = d3.interpolateYlGn(), // "rgb(255, 255, 229)"
 		yellowGreen = d3.interpolateYlGn(0.5), // "rgb(120, 197, 120)"
 		green = d3.interpolateYlGn(1); // "rgb(0, 69, 41)"
 
-var line = d3.line()
+var studentline = d3.line()
 		.x(function(d) {return x(d.date); })
 		.y(function(d) {return y(d.scores); });
 		// .curve(d3.curveBasis)
@@ -27,7 +27,6 @@ var filterLimits = {
 	"y0" : 0,
 	"y1" : 300
 }
-
 
 var circles = []
 
@@ -94,9 +93,9 @@ var date_i_list = [20170201,20170202,20170203,20170204,20170205,20170206,2017020
 20170508,20170509,20170510,20170511,20170512,20170513,20170514,20170515]
 
 
-mainFunction()
+mainFunction(3)
 
-function mainFunction() {
+function mainFunction(studentFilter) {
 	// Below code parses the calendar csv to mark events on the basis of the date
 	// and give descriptions of the events that have occured
 	// with the cummulative total score till that event
@@ -133,15 +132,8 @@ function mainFunction() {
 	d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
 		if (error) throw error;
 		
-		var studentsWithAssistance = ["316","227","184","334","337","137","151","215","111","320","160","130","253","158","171","116","183","313","369","310","335","173","155","169","174","297","120","257","302","138","274","121","305",
-      "358","278","102","118","124","217","162","112","364","292","179","356","190","306","101","285","110","268","331","269","108","135","258","232","262","329","296","346","167","237","143","242",
-      "139","154","105","122","243","350","157","176","244","189","187","149","136","128","245","250","359","264","261","276","152","354","133","107","221","142","357","340","106","332","339","131",
-      "208","260","280","226","170","266","303","228","304","233","159","150","251","229","211","100","220","199","180","255","299","145","165","291","322","344","254","338","283","362","284","252",
-      "279","219"]
-    
-    studentGradeData.forEach(function(d,i) {
-      // if(studentsWithAssistance.includes(d.Username)) {
-      // if(!studentsWithAssistance.includes(d.Username)) {
+		 if(studentFilter == 1) {
+			studentGradeData.forEach(function(d,i) {
         var total = 0
         for (var i = 0; i < dateList.length; i++) {
           var x = (calendarData[dateList[i]].description)
@@ -150,12 +142,48 @@ function mainFunction() {
           d[x] = total/y*100
         }
       	columns.push(d.Username)
-      // }
-    })
+	    })
+		} else if(studentFilter == 2) {
+			var studentsWithAssistance = ["316","227","184","334","337","137","151","215","111","320","160","130","253","158","171","116","183","313","369","310","335","173","155","169","174","297","120","257","302","138","274","121","305",
+      "358","278","102","118","124","217","162","112","364","292","179","356","190","306","101","285","110","268","331","269","108","135","258","232","262","329","296","346","167","237","143","242",
+      "139","154","105","122","243","350","157","176","244","189","187","149","136","128","245","250","359","264","261","276","152","354","133","107","221","142","357","340","106","332","339","131",
+      "208","260","280","226","170","266","303","228","304","233","159","150","251","229","211","100","220","199","180","255","299","145","165","291","322","344","254","338","283","362","284","252",
+      "279","219"]
+    
+	    studentGradeData.forEach(function(d,i) {
+	      if(studentsWithAssistance.includes(d.Username)) {
+	        var total = 0
+	        for (var i = 0; i < dateList.length; i++) {
+	          var x = (calendarData[dateList[i]].description)
+	          var y = (calendarData[dateList[i]].total)
+	          total = total + d[x]
+	          d[x] = total/y*100
+	        }
+	      	columns.push(d.Username)
+	      }
+	    })
+		} else if(studentFilter == 3) {
+			var studentsWithAssistance = ["316","227","184","334","337","137","151","215","111","320","160","130","253","158","171","116","183","313","369","310","335","173","155","169","174","297","120","257","302","138","274","121","305",
+      "358","278","102","118","124","217","162","112","364","292","179","356","190","306","101","285","110","268","331","269","108","135","258","232","262","329","296","346","167","237","143","242",
+      "139","154","105","122","243","350","157","176","244","189","187","149","136","128","245","250","359","264","261","276","152","354","133","107","221","142","357","340","106","332","339","131",
+      "208","260","280","226","170","266","303","228","304","233","159","150","251","229","211","100","220","199","180","255","299","145","165","291","322","344","254","338","283","362","284","252",
+      "279","219"]
+    
+	    studentGradeData.forEach(function(d,i) {
+	      if(!studentsWithAssistance.includes(d.Username)) {
+	        var total = 0
+	        for (var i = 0; i < dateList.length; i++) {
+	          var x = (calendarData[dateList[i]].description)
+	          var y = (calendarData[dateList[i]].total)
+	          total = total + d[x]
+	          d[x] = total/y*100
+	        }
+	      	columns.push(d.Username)
+	      }
+	    })
+		}
 
 		completeDateList = getCompleteDateList(dateList)
-
-	
 		var dataForVisualization = convertIrregToReg(completeDateList,studentGradeData,calendarData)
 		data = dataForVisualization
 		
@@ -169,9 +197,13 @@ function mainFunction() {
 		});
 
 		clusters = 8
-		maxiterations = 50
-
-		studentClusters = kmeans(students,clusters,maxiterations)
+		maxiterations = 100
+		numFeatures = students[0]["values"].map(function(d) {
+			return d.date;
+		})
+		// studentClusters = kmeans(students,clusters,maxiterations)
+		labelsOnBasisOfPerformance = hierarch(students,DTWDistance, clusters)
+		studentClusters = getCentroids(students, labelsOnBasisOfPerformance, clusters)
 		// findOptimalClusterUsingElbow(students, maxiterations)
 		// findOptimalClusterUsingSil(students, maxiterations)
 		// calculateSumSquareDistance(studentClusters,students)
@@ -187,8 +219,8 @@ function mainFunction() {
 		students = clusteredData
 
 		if (getFilterData && typeof (getFilterData) == "function" && initializePanel && typeof (initializePanel) == "function") { 
-			initializePanel()
 			getFilterData(labelsOnBasisOfPerformance,data,students,getLineData)
+			initializePanel()
 		}
 	})
 }
@@ -279,10 +311,23 @@ function enableCorrelation() {
 	var svg = d3.select(".viz-body").select("svg"),
 			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
+	d3.selectAll(".officeHourDots").remove()
+	d3.selectAll(".officecircles").remove()
+
 	var officeHourDots = g.selectAll(".officeHourDots")
 	.data(circles)
 	.enter().append("g")
 	.attr("class", "officeHourDots");
+
+	// officeHourDots.append("circle")
+	// .attr("class", "officecircles")
+	// .attr("cx", function(d) { return d[1]; })
+	// .attr("cy", function(d) { return d[2]; })
+	// .attr("r", function(d) { return d[5]/7; })
+	// .style("fill",  function(d) {return z(d[0]); })
+	// .style("fill-opacity", "0.75")
+
 
 	officeHourDots.append("circle")
 	.attr("class", "officecircles")
@@ -290,6 +335,33 @@ function enableCorrelation() {
 	.attr("cy", function(d) { return d[2]; })
 	.attr("r", function(d) { return 15*d[3]/maxRadius; })
 	.style("fill",  function(d) {return z(d[0]); })
+	.style("fill-opacity", "0.85")
+
+	officeHourDots.exit().remove()
+
+
+
+	// officeHourDots.append("circle")
+	// .attr("class", "officecircles")
+	// .attr("cx", function(d) { return d[1]; })
+	// .attr("cy", function(d) { return d[2]; })
+	// .attr("r", function(d) { return d[4]/7; })
+	// .style("fill",  function(d) {return z(d[0]); })
+	// .style("fill-opacity", "1")
+
+	// officeHourDots.append("circle")
+	// .attr("class", "officecircles")
+	// .attr("cx", function(d) { return d[1]; })
+	// .attr("cy", function(d) { return d[2]; })
+	// .attr("r", function(d) { return 15*d[3]/maxRadius; })
+	// .style("fill",  function(d) {return z(d[0]); })
+
+	// officeHourDots.append("circle")
+	// .attr("class", "officecircles")
+	// .attr("cx", function(d) { return d[1]; })
+	// .attr("cy", function(d) { return d[2]; })
+	// .attr("r", function(d) { return 15*d[3]/maxRadius; })
+	// .style("fill",  function(d) {return z(d[0]); })
 
 }
 
@@ -341,14 +413,14 @@ function mouseOverFunction(d,i) {
 		 if(d.id != d1.id) {
 			 return "1.5px"
 		 } else {
-			 return "10px"
+			 return "8px"
 		 }
 	 }) 
 	 // .style("stroke", "black")
 
 	d3.select(this)
-		.style("stroke-width","10px") 
-	currentLabel = labels[i]
+		.style("stroke-width","8px") 
+	currentLabel = labelsOnBasisOfPerformance[i]
 }
 
 function mouseMoveFunction() {
@@ -386,7 +458,7 @@ function selectLine(d,i) {
 	// 	}) 
 	// 	// .style("stroke", "black")
 	
-	currentLabel = labels[i]
+	currentLabel = labelsOnBasisOfPerformance[i]
 	getTextValues(currentLabel)
 	getStackedBarData(currentLabel,filterCriteria)
 
@@ -410,7 +482,7 @@ function getTextValues(label) {
 			.attr("x", function(d, i) { return i * 32; })
 			.attr("dy", ".35em")
 			.merge(text)
-			.text(function(d) { return d+", "; });
+			.text(function(d) { return originalStudentData[d]["id"]+", "; });
 	text.exit().remove();
 }
 
@@ -500,9 +572,7 @@ function getCompleteDateList(dateList) {
 // ----------------------------------------------------------------------------------------------
 function kmeans(dataset,clusters,maxIterations) {
 
-	numFeatures = dataset[0]["values"].map(function(d) {
-		return d.date;
-	})
+	
 	var centroids = getRandomCentroids(numFeatures, clusters)
 	
 	// Initialize book keeping vars.
@@ -510,17 +580,21 @@ function kmeans(dataset,clusters,maxIterations) {
 	oldCentroids = null
 
 	while(iterations <= maxIterations && !compareCentroidsTo(centroids,oldCentroids)) {
-			// Save old centroids for convergence test. Book keeping.
-			oldCentroids = centroids
-			iterations = iterations + 1
-			// Assign labels to each datapoint based on centroids
+		
+		// Save old centroids for convergence test. Book keeping.
+		oldCentroids = centroids
+		iterations = iterations + 1
+		// Assign labels to each datapoint based on centroids
 
-			labels = getLabels(dataset, centroids)
-			// Assign centroids based on datapoint labels
-			centroids = getCentroids(dataset, labels, clusters)
-			// We can get the labels too by calling getLabels(dataset, centroids)
+		labels = getLabels(dataset, centroids)
+		// Assign centroids based on datapoint labels
+		centroids = getCentroids(dataset, labels, clusters)
+		// We can get the labels too by calling getLabels(dataset, centroids)
+
 	}
+	
 	labelsOnBasisOfPerformance = labels
+	
 	return centroids
 }
 	
@@ -547,11 +621,15 @@ function getLabels(dataset, centroids) {
 	var result = []
 	var labelSet = {}
 	for (var id = 0; id < dataset.length; id++) {
-		var min = 1000
-
+		var min = Infinity
 		for (var j = 0; j < centroids.length; j++) {
-			var dist = DTWDistance(dataset[id]["values"],centroids[j])
 			// var dist = EuclideanDistance(dataset[id]["values"],centroids[j])
+			var dist = DTWDistance(dataset[id]["values"],centroids[j])
+			// var dist = ManhattanDistance(dataset[id]["values"],centroids[j])
+			// var dist = MinkowskiDistance(dataset[id]["values"],centroids[j],10)
+			// var dist = ChebyshevDistance(dataset[id]["values"],centroids[j])
+
+			
 			if(dist < min) {
 				min = dist;
 				result[id] = j;
@@ -562,6 +640,14 @@ function getLabels(dataset, centroids) {
 		}
 		labelSet[result[id]].push(id)
 	}   
+	
+	for (var j = 0; j < centroids.length; j++) {
+		if(labelSet[j] == undefined) {
+			labelSet[j] = []
+		}		
+	}
+
+	console.log(labelSet)
 	return labelSet
 }
 
@@ -598,7 +684,40 @@ function EuclideanDistance(s1, s2) {
 		var x = (s1[i].scores - s2[i].scores)
 		result +=  x*x; 
 	}
-	return Math.sqrt(result/s1.length)
+	return Math.sqrt(result)
+}
+
+function ManhattanDistance(s1, s2) {
+	var result = 0;
+
+	for (var i = 0; i < s1.length; i++) {
+		var x = (s1[i].scores - s2[i].scores) >= 0 ? (s1[i].scores - s2[i].scores) : - (s1[i].scores - s2[i].scores)
+		result +=  x; 
+	}
+	return result
+}
+
+function MinkowskiDistance(s1, s2,p ) {
+	var result = 0;
+
+	for (var i = 0; i < s1.length; i++) {
+		var x = (s1[i].scores - s2[i].scores) >= 0 ? (s1[i].scores - s2[i].scores) : - (s1[i].scores - s2[i].scores)
+		x = Math.log(x)/p
+		x = Math.exp(x)
+		result +=  x; 
+	}
+	return Math.exp(result,p)
+}
+
+function ChebyshevDistance(s1, s2) {
+	var result = 0;
+
+	for (var i = 0; i < s1.length; i++) {
+		var x = (s1[i].scores - s2[i].scores) >= 0 ? (s1[i].scores - s2[i].scores) : - (s1[i].scores - s2[i].scores)
+		
+		result =  Math.max(x,result); 
+	}
+	return result
 }
 
 function getCentroids(dataset, labels, k) {
@@ -607,7 +726,7 @@ function getCentroids(dataset, labels, k) {
 	var result = []
 	
 	for (var i = 0; i < k; i++) {
-		if(labels[i] == undefined) {
+		if(labels[i].length == 0) {
 			result[i] = []
 			numFeatures.map(function(d) {
 				var x = {}
@@ -667,9 +786,7 @@ function findOptimalClusterUsingElbow(students, iterations) {
 	for (var i = 1; i <= 15; i++) {
 		var clusters = kmeans(students,i,iterations)
 		elbowMap[i] = calculateSumSquareDistance(clusters, students)
-
 	}
-		console.log(elbowMap)		
 }
 
 function findOptimalClusterUsingSil(students, iterations) {
@@ -679,7 +796,6 @@ function findOptimalClusterUsingSil(students, iterations) {
 		silMap[i] = calculateSilhouette(clusters, students, labelsOnBasisOfPerformance)
 
 	}
-	console.log(silMap)		
 }
 
 function calculateSilhouette(clusters, students, labels) {
@@ -701,8 +817,6 @@ function calculateSilhouette(clusters, students, labels) {
 		result = result + plot[i]
 	})
 
-	console.log(plot)
-	// console.log(result/Object.keys(labels).length)
 	return (result/Object.keys(labels).length)
 }
 
@@ -891,9 +1005,17 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 		z = d3.scaleOrdinal(d3.schemeCategory10);
 
 	var dataSecondary
-	var line = d3.line()
+	var line1 = d3.line()
 	.x(function(d,i) {return x(d.date); })
 	.y(function(d,i) {return y(d.hours); });
+
+	var line2 = d3.line()
+	.x(function(d,i) {return x(d.date); })
+	.y(function(d,i) {return y(d.min); });
+
+	var line3 = d3.line()
+	.x(function(d,i) {return x(d.date); })
+	.y(function(d,i) {return y(d.max); });
 
 	d3.csv("data/tahours4.csv", type, function(error, TAdata) {
 		if (error) throw error;
@@ -922,7 +1044,8 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 			data.push(object);
 		})
 
-		var svg = d3.select(".filter-body").select("svg"),
+		var svg = d3.select(".filter-body").select("svg").attr("width","1400px")
+    	.attr("height","300px"),
 			margin = {top: 30, right: 80, bottom: 30, left: 50},
 			width = svg.attr("width") - margin.left - margin.right,
 			height = svg.attr("height") - margin.top - margin.bottom,
@@ -961,21 +1084,42 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 		.attr("y", 6)
 		.attr("dy", "0.71em")
 		.attr("fill", "#000")
-		.text("hours");
+		.text("minutes");
 
 	var officeHourDatum = g.selectAll(".officeHourDatum")
 	.data(officeHourData)
 	.enter().append("g")
 	.attr("class", "officeHourDatum");
 
+	d3.selectAll(".officeHourline").remove()
 	officeHourDatum.append("path")
 	.attr("class", "officeHourline")
-	.attr("d", function(d) { return line(d.values); })
+	.attr("d", function(d) { return line1(d.values); })
 	.style("stroke", function(d) { return z(d.id); })
 	.on("mouseover", mouseOverFunction)
 	.on("mouseout", mouseOutFunction)
 	.on("mousemove", mouseMoveFunction)
 	.on("click", selectLine)
+
+	officeHourDatum.exit().remove()
+
+	// officeHourDatum.append("path")
+	// .attr("class", "officeHourline")
+	// .attr("d", function(d) { return line2(d.values); })
+	// .style("stroke", function(d) { return z(d.id); })
+	// .on("mouseover", mouseOverFunction)
+	// .on("mouseout", mouseOutFunction)
+	// .on("mousemove", mouseMoveFunction)
+	// .on("click", selectLine)
+
+	// officeHourDatum.append("path")
+	// .attr("class", "officeHourline")
+	// .attr("d", function(d) { return line3(d.values); })
+	// .style("stroke", function(d) { return z(d.id); })
+	// .on("mouseover", mouseOverFunction)
+	// .on("mouseout", mouseOutFunction)
+	// .on("mousemove", mouseMoveFunction)
+	// .on("click", selectLine)
 
 	officeHourDatum.append("text")
 	.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
@@ -984,94 +1128,6 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 	.attr("dy", "0.35em")
 	.style("font", "10px sans-serif")
 	.text(function(d) { return d.id; });
-
-		function brushended() {
-			var s = d3.event.selection;
-			if (!s) {
-				if (!idleTimeout) return idleTimeout = setTimeout(idled, idleDelay);
-				// x.domain(x0);
-				// y.domain(y0);
-			} else {
-				var x0 = x.invert(s[0][0])
-				var x1 = x.invert(s[1][0])
-				x0.setHours(x0.getHours() - 12);
-				x1.setHours(x1.getHours() - 12);
-				var y0 = y.invert(s[0][1])+7
-				var y1 = y.invert(s[1][1])+7
-				var filterLimits = {
-					"x0" : x0,
-					"y0" : y0,
-					"x1" : x1,
-					"y1" : y1,
-				}
-			}
-			update(filterLimits);
-		}
-
-		function idled() {
-			idleTimeout = null;
-		}
-
-		function update(filterLimits) {
-			filterCriteria = getFilteredLabels(dataSecondary, filterLimits)
-			getStackedBarData(currentLabel, filterCriteria)
-		}
-
-		function getFilteredLabels(data, filters) {
-
-			var x0 = filters["x0"]
-			var x1 = filters["x1"]
-			var y0 = filters["y0"]
-			var y1 = filters["y1"]
-
-			var set = new Set()
-			data.forEach(function(d,i) {
-				d.values.forEach(function(d1,i1) {
-					if(d1.date > x0 && d1.date < x1 && d1.hours < y0 && d1.hours > y1) {
-						set.add(i)
-					}
-				})
-			})
-
-			var result = Array.from(set);
-			return result
-		}
-
-		function clusterSimilarPerformingStudents(data, labelsOnBasisOfPerformance) {
-			var clusteredData = []
-			var keys = Object.keys(labelsOnBasisOfPerformance)
-			var result = []
-			keys.map(function(labelIndex,i) {
-				var object = {};
-				var studentGroup = labelsOnBasisOfPerformance[labelIndex]
-				var clusteredOfficeHourData = clusterOfficeHourData(studentGroup,data)
-				object["id"] = "C"+i
-				object["values"] = clusteredOfficeHourData
-				result.push(object)
-			})
-			return result;
-		}
-
-		function clusterOfficeHourData(studentGroup, data) {
-			result = data[0]["values"].map(function(d,i) {
-				return {
-					"date" : d["date"],
-					"hours" : 0
-				}
-			})
-
-			studentGroup.forEach(function(student) {
-				data.forEach(function(tadata) {
-
-					if(tadata["id"] == originalStudentData[student]["id"]) {
-						tadata["values"].forEach(function(d,i) {
-							result[i]["hours"] = result[i]["hours"] + (d["hours"]/studentGroup.length);
-						})
-					}
-				})
-			})
-			return result;
-		}
 
 		if ( getLineData && typeof ( getLineData ) == "function" ) { 
 			getLineData(originalData,students,dataSecondary); 
@@ -1083,16 +1139,109 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 
 }
 
-function getLineData(data,students,dataSecondary) { 	
+function brushended() {
+	var s = d3.event.selection;
+	if (!s) {
+		if (!idleTimeout) return idleTimeout = setTimeout(idled, idleDelay);
+		// x.domain(x0);
+		// y.domain(y0);
+	} else {
+		var x0 = x.invert(s[0][0])
+		var x1 = x.invert(s[1][0])
+		x0.setHours(x0.getHours() - 12);
+		x1.setHours(x1.getHours() - 12);
+		var y0 = y.invert(s[0][1])+7
+		var y1 = y.invert(s[1][1])+7
+		var filterLimits = {
+			"x0" : x0,
+			"y0" : y0,
+			"x1" : x1,
+			"y1" : y1,
+		}
+	}
+	update(filterLimits);
+}
 
+function idled() {
+	idleTimeout = null;
+}
+
+function update(filterLimits) {
+	filterCriteria = getFilteredLabels(dataSecondary, filterLimits)
+	getStackedBarData(currentLabel, filterCriteria)
+}
+
+function getFilteredLabels(data, filters) {
+
+	var x0 = filters["x0"]
+	var x1 = filters["x1"]
+	var y0 = filters["y0"]
+	var y1 = filters["y1"]
+
+	var set = new Set()
+	data.forEach(function(d,i) {
+		d.values.forEach(function(d1,i1) {
+			if(d1.date > x0 && d1.date < x1 && d1.hours < y0 && d1.hours > y1) {
+				set.add(i)
+			}
+		})
+	})
+
+	var result = Array.from(set);
+	return result
+}
+
+function clusterSimilarPerformingStudents(data, labelsOnBasisOfPerformance) {
+	var clusteredData = []
+	var keys = Object.keys(labelsOnBasisOfPerformance)
+	var result = []
+	keys.map(function(labelIndex,i) {
+		var object = {};
+		var studentGroup = labelsOnBasisOfPerformance[labelIndex]
+		var clusteredOfficeHourData = clusterOfficeHourData(studentGroup,data)
+		object["id"] = "C"+i
+		object["values"] = clusteredOfficeHourData
+		result.push(object)
+	})
+	return result;
+}
+
+function clusterOfficeHourData(studentGroup, data) {
+	result = data[0]["values"].map(function(d,i) {
+		return {
+			"date" : d["date"],
+			"hours" : 0,
+			"min" : 0,
+			"max" : 0
+		}
+	})
+
+	studentGroup.forEach(function(student) {
+		data.forEach(function(tadata) {
+
+			if(tadata["id"] == originalStudentData[student]["id"]) {
+				tadata["values"].forEach(function(d,i) {
+					result[i]["hours"] = result[i]["hours"] + (d["hours"]/studentGroup.length);
+					result[i]["min"] = Math.min(result[i]["min"],d["hours"]);
+					result[i]["max"] = Math.max(result[i]["max"],d["hours"]);
+				})
+			}
+		})
+	})
+	return result;
+}
+
+function getLineData(data,students,dataSecondary) { 	
 
 	x.domain(d3.extent(data, function(d) {return d.date; }));
 	y.domain([0,110])
 	z.domain(students.map(function(c,i) {return c.id; }));
 
+	circles = []
+
 	students.forEach(function(studentID,i) {
 		studentID["values"].forEach(function(entry,i1) {
-			circles.push([studentID["id"],x(entry["date"]),y(entry["scores"]),dataSecondary[i]["values"][i1]["hours"]])
+			circles.push([studentID["id"],x(entry["date"]),y(entry["scores"]),dataSecondary[i]["values"][i1]["hours"],dataSecondary[i]["values"][i1]["min"],dataSecondary[i]["values"][i1]["max"]])
 		})
 	})
 
@@ -1113,67 +1262,6 @@ function getLineData(data,students,dataSecondary) {
 		.attr("fill", "#000")
 		.text("Scores");
 
-	// var officeHourDots = g.selectAll(".officeHourDots")
-	// .data(circles)
-	// .enter().append("g")
-	// .attr("class", "officeHourDots");
-
-	// officeHourDots.append("circle")
-	// .attr("class", "officecircles")
-	// .attr("cx", function(d) { return d[1]; })
-	// .attr("cy", function(d) { return d[2]; })
-	// .attr("r", function(d) { return d[3]*2; })
-	// .style("fill",  function(d) {return z(d[0]); })
-
-	/*var pillars = g.selectAll(".pillars")
-		.data(dateList)
-		.enter()
-
-	pillars.append("rect")
-		.attr("class", "pillars")
-		.attr("x", function(d,i) {
-			var temp = parseTime(d);
-			return x(temp)
-		})
-		.attr("y","10")
-		.attr("width", 1)
-		.attr("height", height);
-
-	var text = g.selectAll(".pillar-text")
-		.data(dateList)
-		.enter()
-	
-	text.append("text")
-			.attr("class", "pillar-text")
-			.attr("x", "10px")
-			.attr("y","10px")
-			.text(function(d) { return calendarData[d]["description"]; })
-			.attr("transform", function(d,i) {
-				return "translate("+x(parseTime(d))+") rotate(45 10 0)";
-			})
-			.attr("text-anchor","end")
-			.attr("font-size","10px")
-
-	pillars.exit().remove()
-	text.exit().remove()*/
-
-
-
-	// g.append("g")
-	//   .data(dateList)
-	//   .attr("class", "axis axis--y")
-	//   .enter()
-	//   .append("rect")
-	//   .attr("x", function(d,i) {
-	//     var temp = parseTime(d);
-	//     console.log(temp+"->"+x(temp));
-	//     return x(temp)
-	//   })
-	//   .attr("y","10")
-	//   .attr("width", 10)
-	//   .attr("height", 300);
-
-
 	tooltip = d3.select("body")
 	.append("div")
 	.style("position", "absolute")
@@ -1185,23 +1273,11 @@ function getLineData(data,students,dataSecondary) {
 		.enter().append("g")
 		.attr("class", "studentData");
 
-	// studentData.append("path")
-	//   .attr("class", "line")
-	//   .attr("d", function(d) { return line(d.values); })
-	//   .style("stroke", function(d,i) {
-	//     var x = getRGBIndex(i)
-	//     var r = Math.floor((x/Object.keys(labels).length*123)%255);
-	//     var g = Math.floor((x/Object.keys(labels).length*345)%255);
-	//     var b = Math.floor((x/Object.keys(labels).length*567)%255);
-	//   })
-	//   .style("stroke-width", "2px")
-	//   .on("mouseover", mouseOverFunction)
-	//   .on("mouseout", mouseOutFunction)
-	//   .on("mousemove", mouseMoveFunction)
-
+	d3.select("viz-body").selectAll(".line").remove()
+	
 	studentData.append("path")
 		.attr("class", "line")
-		.attr("d", function(d) { return line(d.values); })
+		.attr("d", function(d) {return studentline(d.values) })
 		.style("stroke", function(d) {return z(d.id); })
 		.style("stroke-width", "2px")
 		.on("mouseover", mouseOverFunction)
@@ -1209,15 +1285,7 @@ function getLineData(data,students,dataSecondary) {
 		.on("mousemove", mouseMoveFunction)
 		.on("click", selectLine)
 
-	// studentData.append("path")
-	// 	.attr("class", "line")
-	// 	.attr("d", function(d) { return line(d.values); })
-	// 	.style("stroke", function(d,i) {var x = getRGBIndex(i);return z(x); })
-	// 	.style("stroke-width", "2px")
-	// 	.on("mouseover", mouseOverFunction)
-	// 	.on("mouseout", mouseOutFunction)
-	// 	.on("mousemove", mouseMoveFunction)
-	// 	.on("click", selectLine)
+	studentData.exit().remove();		
 
 	studentData.append("text")
 		.attr("class","cluster-text-name")
@@ -1230,10 +1298,130 @@ function getLineData(data,students,dataSecondary) {
 
 }
 
-function getDots(data,dataSecondary) {
+function filterAttendingStudents() {
+	mainFunction(2)
+}
 
-	
-	
+function filterMissingStudents() {
+	mainFunction(3)
+}
 
+
+
+function hierarch(students, distance, clusterSize) {
+	console.log("----------hierarch----------")
+
+	var dmin = []
+	var n = students.length
+	var d = []
+	for(var i=0;i<n;i++) {
+		d[i] = {}
+		d[i]["labels"] = [i]
+		d[i]["values"] = []
+		for(var j=0;j<n;j++) {
+			if(i==j) {
+				d[i]["values"][j] = Infinity
+			} else {
+				d[i]["values"][j] = distance(students[i]["values"],students[j]["values"])
+			}
+		}	
+	}
+
+	// var m = []
+	// m[0] = {}
+	// m[1] = {}
+	// m[2] = {}
+	// m[3] = {}
+	// m[4] = {}
+	// m[5] = {}
+
+	// m[0]["labels"] = [0]
+	// m[0]["values"] = [Infinity,662,877,255,412,996]
+
+	// m[1]["labels"] = [1]
+	// m[1]["values"] = [662,Infinity,295,468,268,400]
+
+	// m[2]["labels"] = [2]
+	// m[2]["values"] = [877,295,Infinity,754,564,138]
+
+	// m[3]["labels"] = [3]
+	// m[3]["values"] = [255,468,754,Infinity,219,869]
+
+	// m[4]["labels"] = [4]
+	// m[4]["values"] = [412,268,564,219,Infinity,669]
+
+	// m[5]["labels"] = [5]
+	// m[5]["values"] = [996,400,138,869,669,Infinity]
+
+
+	return handleDistanceMatrix(d,clusterSize)
+}
+
+function handleDistanceMatrix(matrix, clusterSize) {
+
+	var Osize = matrix.length
+	for(var hx = Osize-1; hx >= clusterSize ; hx--) {
+		var size = matrix.length
+		var min = Infinity
+		var minLabel1 = null
+		var minLabel2 = null
+
+
+		// To find the closest clusters
+		// by finding the least value in the matrix
+		for(var i=0;i<size;i++) {
+			for(var j=0;j<=i;j++) {
+				if(matrix[i]["values"][j] < min) {
+					min = matrix[i]["values"][j]
+					minLabel1 = i
+					minLabel2 = j
+				}
+			}
+		}
+
+		// Saving the index of the closest clusters
+		var min = minLabel1 < minLabel2 ? minLabel1 : minLabel2
+		var max = minLabel1 < minLabel2 ? minLabel2 : minLabel1
+
+
+		// Moving all the labels from the max index to the min index
+		matrix[max]["labels"].forEach(function(d,i) {
+			matrix[min]["labels"].push(d)	
+		})
+		
+		// Replacing all the values in the min index
+		// with the minimum values of both the rows
+		for(var i=0;i<size;i++) {
+			matrix[min]["values"][i] = Math.min(matrix[min]["values"][i],matrix[max]["values"][i])
+		}
+
+		// Replacing all the entries for the rows to make the same change
+		for(var i=0;i<size;i++) {
+			matrix[i]["values"][min] = matrix[min]["values"][i]
+		}
+
+		// Remove the row for the max index
+		_.remove(matrix, function(n,i) {
+			return i == max;
+		});
+
+		// Remove the columns for the max index
+		for(var i=0;i<size-1;i++) {
+			_.remove(matrix[i]["values"], function(n,i2) {
+				return i2 == max;
+			});
+		}
+
+
+		matrix[min]["values"][min] = Infinity
+
+			  
+		// console.log("-----------------------------------")
+	}
+	var result = {}
+		matrix.forEach(function(d,i) {
+			result[i] = d["labels"]
+		})
+	return result
 
 }

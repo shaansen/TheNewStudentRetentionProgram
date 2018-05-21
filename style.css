@@ -1,6 +1,6 @@
 button {
   width: 140px;
-  margin: 10px 10px 10px 10px;
+  margin: 2px 10px 2px 10px;
 }
 
 .main-header {
@@ -33,7 +33,7 @@ button {
 
 body {
     font-family: 'Abel','Roboto Condensed';
-    font-size: 14px;
+    font-size: 13px;
     /*font-weight: bold;*/
 }
 
@@ -156,6 +156,6 @@ body {
   font-size: 10px;
 }
 
-h4 {
-  margin: 10px 10px 10px 10px;
+h4, h5, .radio-distance {
+  margin: 2px 10px 2px 10px;
 }
