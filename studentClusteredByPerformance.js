@@ -93,7 +93,7 @@ var date_i_list = [20170201,20170202,20170203,20170204,20170205,20170206,2017020
 20170508,20170509,20170510,20170511,20170512,20170513,20170514,20170515]
 
 
-mainFunction(3)
+mainFunction(1)
 
 function mainFunction(studentFilter) {
 	// Below code parses the calendar csv to mark events on the basis of the date
@@ -196,14 +196,18 @@ function mainFunction(studentFilter) {
 			};
 		});
 
-		clusters = 8
+		clusters = 10
 		maxiterations = 100
 		numFeatures = students[0]["values"].map(function(d) {
 			return d.date;
 		})
-		// studentClusters = kmeans(students,clusters,maxiterations)
-		labelsOnBasisOfPerformance = hierarch(students,DTWDistance, clusters)
-		studentClusters = getCentroids(students, labelsOnBasisOfPerformance, clusters)
+		// K-MEANS CLUSTERING
+		studentClusters = kmeans(students,clusters,maxiterations)
+		
+		// HIERARCHICAL CLUSTERING
+		// labelsOnBasisOfPerformance = hierarch(students,EuclideanDistance, clusters)
+		// studentClusters = getCentroids(students, labelsOnBasisOfPerformance, clusters)
+
 		// findOptimalClusterUsingElbow(students, maxiterations)
 		// findOptimalClusterUsingSil(students, maxiterations)
 		// calculateSumSquareDistance(studentClusters,students)
@@ -233,9 +237,12 @@ function initializePanel() {
 
 	d3.selectAll(".corr")
 	.text("Correlation ON")
+	enableCorrelation()
 
 	d3.selectAll(".dist")
 	.text("Distribution ON")
+
+	enableNavFilters()
 }
 
 function toggleTick() {
@@ -305,6 +312,41 @@ function toggleCorr() {
 		.text("Correlation OFF")
 		disableCorrelation()
 	}
+}
+
+function enableNavFilters() {
+
+	var data = Object.keys(labelsOnBasisOfPerformance)
+	
+	var navbarElements = d3.select(".navfilter-body").select("svg").selectAll(".navbarElements")
+	.data(data)
+	.enter().append("g")
+	.attr("class", "navbarElements")
+	
+
+	navbarElements.append("rect")
+	.attr("class", "navbarRects")
+	.attr("width","11px")
+	.attr("height","11px")
+	.style("fill",function(d,i) {
+		return z(i);
+	})
+	.attr("x","20px")
+	.attr("y",function(d,i) {
+		return (i*20);
+	})
+	
+	navbarElements.append("text")
+	.attr("class","navbarTexts")
+	.text(function(d,i) {
+		return "Cluster-"+i+" #"+labelsOnBasisOfPerformance[d].length
+	})
+	.attr("x","40px")
+	.attr("y",function(d,i) {
+		return (i*20)+10;
+	})
+	
+	
 }
 
 function enableCorrelation() {
@@ -389,22 +431,28 @@ function mouseOutFunction() {
 
 	d3.select(".filter-body").selectAll(".officeHourline")
 	 .style("stroke-width",function(d1,i1) {
-			 return "2px"
+			 return "1.5px"
 	 }) 
+	 .style("stroke-opacity","1") 
 	 // .style("stroke", "black")
 
 	d3.select(this)
-		.style("stroke-width","2px")   
+		.style("stroke-width","1.5px")   
 	// tooltip.style("visibility", "hidden") 
+
+	d3.selectAll(".navbarRects")
+	 .attr("width","10px") 
+
+	d3.selectAll(".navbarTexts")
+	 .attr("font-weight","normal") 
 }
 
 function mouseOverFunction(d,i) {
 
 	d3.select(".viz-body").selectAll(".line")
 	 .style("stroke-opacity",function(d1,i1) {
-
 		 if(d.id != d1.id) {
-			 return "0.60";
+			 return "0.30";
 		 }
 	 }) 
 
@@ -416,6 +464,31 @@ function mouseOverFunction(d,i) {
 			 return "8px"
 		 }
 	 }) 
+	 .style("stroke-opacity",function(d1,i1) {
+		 if(d.id != d1.id) {
+			 return "0.30";
+		 }
+	 }) 
+
+
+	 d3.selectAll(".navbarRects")
+	 .attr("width",function(d1,i1) {
+	 	if(d1 != i) {
+			 return "10px"
+		 } else {
+			 return "20px"
+		 }
+	 })
+
+	 d3.selectAll(".navbarTexts")
+	 .attr("font-weight",function(d1,i1) {
+	 	if(d1 != i) {
+			 return "normal"
+		 } else {
+			 return "bold"
+		 }
+	 }) 
+
 	 // .style("stroke", "black")
 
 	d3.select(this)
@@ -647,7 +720,6 @@ function getLabels(dataset, centroids) {
 		}		
 	}
 
-	console.log(labelSet)
 	return labelSet
 }
 
@@ -1066,8 +1138,8 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 
 	x.domain(d3.extent(data, function(d) { return d.date; }));
 	y.domain([
-		d3.min(officeHourData, function(c) { return d3.min(c.values, function(d) { return d.hours; }); }),
-		d3.max(officeHourData, function(c) { return d3.max(c.values, function(d) { return d.hours; }); })
+		d3.min(officeHourData, function(c) { return d3.min(c.values, function(d) { return d.max; }); }),
+		d3.max(officeHourData, function(c) { return d3.max(c.values, function(d) { return d.max; }); })
 	]);
 	z.domain(officeHourData.map(function(c,i) {return c.id; }));
 
@@ -1096,6 +1168,7 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 	.attr("class", "officeHourline")
 	.attr("d", function(d) { return line1(d.values); })
 	.style("stroke", function(d) { return z(d.id); })
+	.style("stroke-width", "1.5px")
 	.on("mouseover", mouseOverFunction)
 	.on("mouseout", mouseOutFunction)
 	.on("mousemove", mouseMoveFunction)
@@ -1103,23 +1176,25 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 
 	officeHourDatum.exit().remove()
 
-	// officeHourDatum.append("path")
-	// .attr("class", "officeHourline")
-	// .attr("d", function(d) { return line2(d.values); })
-	// .style("stroke", function(d) { return z(d.id); })
-	// .on("mouseover", mouseOverFunction)
-	// .on("mouseout", mouseOutFunction)
-	// .on("mousemove", mouseMoveFunction)
-	// .on("click", selectLine)
+	officeHourDatum.append("path")
+	.attr("class", "officeHourline")
+	.attr("d", function(d) { return line2(d.values); })
+	.style("stroke", function(d) { return z(d.id); })
+	.style("stroke-width", "4px")
+	.on("mouseover", mouseOverFunction)
+	.on("mouseout", mouseOutFunction)
+	.on("mousemove", mouseMoveFunction)
+	.on("click", selectLine)
 
-	// officeHourDatum.append("path")
-	// .attr("class", "officeHourline")
-	// .attr("d", function(d) { return line3(d.values); })
-	// .style("stroke", function(d) { return z(d.id); })
-	// .on("mouseover", mouseOverFunction)
-	// .on("mouseout", mouseOutFunction)
-	// .on("mousemove", mouseMoveFunction)
-	// .on("click", selectLine)
+	officeHourDatum.append("path")
+	.attr("class", "officeHourline")
+	.attr("d", function(d) { return line3(d.values); })
+	.style("stroke", function(d) { return z(d.id); })
+	.style("stroke-width", "0.5px")
+	.on("mouseover", mouseOverFunction)
+	.on("mouseout", mouseOutFunction)
+	.on("mousemove", mouseMoveFunction)
+	.on("click", selectLine)
 
 	officeHourDatum.append("text")
 	.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
@@ -1279,7 +1354,7 @@ function getLineData(data,students,dataSecondary) {
 		.attr("class", "line")
 		.attr("d", function(d) {return studentline(d.values) })
 		.style("stroke", function(d) {return z(d.id); })
-		.style("stroke-width", "2px")
+		.style("stroke-width", "1.5px")
 		.on("mouseover", mouseOverFunction)
 		.on("mouseout", mouseOutFunction)
 		.on("mousemove", mouseMoveFunction)
@@ -1298,18 +1373,17 @@ function getLineData(data,students,dataSecondary) {
 
 }
 
-function filterAttendingStudents() {
-	mainFunction(2)
-}
+// function filterAttendingStudents() {
+// 	mainFunction(2)
+// }
 
-function filterMissingStudents() {
-	mainFunction(3)
-}
+// function filterMissingStudents() {
+// 	mainFunction(3)
+// }
 
 
 
 function hierarch(students, distance, clusterSize) {
-	console.log("----------hierarch----------")
 
 	var dmin = []
 	var n = students.length
@@ -1416,7 +1490,6 @@ function handleDistanceMatrix(matrix, clusterSize) {
 		matrix[min]["values"][min] = Infinity
 
 			  
-		// console.log("-----------------------------------")
 	}
 	var result = {}
 		matrix.forEach(function(d,i) {
