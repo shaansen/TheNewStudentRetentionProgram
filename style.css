@@ -45,7 +45,17 @@ body {
 
 .officeHourline {
   fill: none;
-  stroke-width: 1.5px;
+  /*stroke-width: 1.5px;*/
+}
+
+.officeHourlineMin {
+  fill: none;
+  /*stroke-width: 1.5px;*/
+}
+
+.officeHourlineMax {
+  fill: none;
+  /*stroke-width: 1.5px;*/
 }
 
 .axis path,

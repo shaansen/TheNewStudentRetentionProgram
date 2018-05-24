@@ -196,17 +196,17 @@ function mainFunction(studentFilter) {
 			};
 		});
 
-		clusters = 10
+		clusters = 8
 		maxiterations = 100
 		numFeatures = students[0]["values"].map(function(d) {
 			return d.date;
 		})
 		// K-MEANS CLUSTERING
-		studentClusters = kmeans(students,clusters,maxiterations)
+		// studentClusters = kmeans(students,clusters,maxiterations)
 		
 		// HIERARCHICAL CLUSTERING
-		// labelsOnBasisOfPerformance = hierarch(students,EuclideanDistance, clusters)
-		// studentClusters = getCentroids(students, labelsOnBasisOfPerformance, clusters)
+		labelsOnBasisOfPerformance = hierarch(students,DTWDistance, clusters)
+		studentClusters = getCentroids(students, labelsOnBasisOfPerformance, clusters)
 
 		// findOptimalClusterUsingElbow(students, maxiterations)
 		// findOptimalClusterUsingSil(students, maxiterations)
@@ -322,13 +322,14 @@ function enableNavFilters() {
 	.data(data)
 	.enter().append("g")
 	.attr("class", "navbarElements")
-	
+
 
 	navbarElements.append("rect")
 	.attr("class", "navbarRects")
 	.attr("width","11px")
 	.attr("height","11px")
 	.style("fill",function(d,i) {
+		console.log("Nav",d,i)
 		return z(i);
 	})
 	.attr("x","20px")
@@ -434,6 +435,18 @@ function mouseOutFunction() {
 			 return "1.5px"
 	 }) 
 	 .style("stroke-opacity","1") 
+
+	 d3.select(".filter-body").selectAll(".officeHourlineMin")
+	 .style("stroke-width",function(d1,i1) {
+			 return "4px"
+	 }) 
+	 .style("stroke-opacity","1") 
+
+	 d3.select(".filter-body").selectAll(".officeHourlineMax")
+	 .style("stroke-width",function(d1,i1) {
+			 return "0.5px"
+	 }) 
+	 .style("stroke-opacity","1") 
 	 // .style("stroke", "black")
 
 	d3.select(this)
@@ -461,7 +474,36 @@ function mouseOverFunction(d,i) {
 		 if(d.id != d1.id) {
 			 return "1.5px"
 		 } else {
-			 return "8px"
+			 return "6px"
+		 }
+	 }) 
+	 .style("stroke-opacity",function(d1,i1) {
+		 if(d.id != d1.id) {
+			 return "0.30";
+		 }
+	 }) 
+
+
+	 d3.select(".filter-body").selectAll(".officeHourlineMin")
+	 .style("stroke-width",function(d1,i1) {
+		 if(d.id != d1.id) {
+			 return "4px"
+		 } else {
+			 return "6px"
+		 }
+	 }) 
+	 .style("stroke-opacity",function(d1,i1) {
+		 if(d.id != d1.id) {
+			 return "0.30";
+		 }
+	 }) 
+
+	 d3.select(".filter-body").selectAll(".officeHourlineMax")
+	 .style("stroke-width",function(d1,i1) {
+		 if(d.id != d1.id) {
+			 return "0.5px"
+		 } else {
+			 return "4px"
 		 }
 	 }) 
 	 .style("stroke-opacity",function(d1,i1) {
@@ -492,7 +534,7 @@ function mouseOverFunction(d,i) {
 	 // .style("stroke", "black")
 
 	d3.select(this)
-		.style("stroke-width","8px") 
+		.style("stroke-width","6px") 
 	currentLabel = labelsOnBasisOfPerformance[i]
 }
 
@@ -511,36 +553,49 @@ function mouseMoveFunction() {
 	.style("font-size","11px")
 }
 
-function selectLine(d,i) {
+function clickOnLineToSeeSubLines(d,i) {
 
-	// d3.select(".viz-body").selectAll(".line")
-	// 	.style("stroke-opacity",function(d1,i1) {
+  // d3.select(".viz-body").selectAll(".line")
+  //  .style("stroke-opacity",function(d1,i1) {
 
-	// 		if(d.id != d1.id) {
-	// 			return "0.60";
-	// 		}
-	// 	}) 
+  //    if(d.id != d1.id) {
+  //      return "0.60";
+  //    }
+  //  }) 
 
-	// d3.select(".filter-body").selectAll(".officeHourline")
-	// 	.style("stroke-width",function(d1,i1) {
-	// 		if(d.id != d1.id) {
-	// 			return "1.5px"
-	// 		} else {
-	// 			return "10px"
-	// 		}
-	// 	}) 
-	// 	// .style("stroke", "black")
-	
-	currentLabel = labelsOnBasisOfPerformance[i]
-	getTextValues(currentLabel)
-	getStackedBarData(currentLabel,filterCriteria)
+  // d3.select(".filter-body").selectAll(".officeHourline")
+  //  .style("stroke-width",function(d1,i1) {
+  //    if(d.id != d1.id) {
+  //      return "1.5px"
+  //    } else {
+  //      return "10px"
+  //    }
+  //  }) 
+  //  // .style("stroke", "black")
+  
+  currentLabel = labelsOnBasisOfPerformance[i]
+  getTextValues(currentLabel,i)
+  getStackedBarData(currentLabel,filterCriteria)
 
 }
 
-function getTextValues(label) {
+function clickOnLineToSeeDistribution(d,i) {
+
+  currentLabel = labelsOnBasisOfPerformance[i]
+  getTextValues(currentLabel,i)
+  getStackedBarData(currentLabel,filterCriteria)
+
+}
+
+function getTextValues(label,index) {
+
+	console.log(label,index,z(index))
+	d3.select(".text-body")
+	.style("border","1px solid black")
 
 
 	var text = d3.select(".text-body-cluster-description")
+
 	text.text("Cluster Size : "+label.length);
 
 	var text = d3.select(".text-body-cluster-content").selectAll("text")
@@ -1141,7 +1196,7 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 		d3.min(officeHourData, function(c) { return d3.min(c.values, function(d) { return d.max; }); }),
 		d3.max(officeHourData, function(c) { return d3.max(c.values, function(d) { return d.max; }); })
 	]);
-	z.domain(officeHourData.map(function(c,i) {return c.id; }));
+	// z.domain(officeHourData.map(function(c,i) {return c.id; }));
 
 	g.append("g")
 		.attr("class", "axis axis--x")
@@ -1172,29 +1227,29 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 	.on("mouseover", mouseOverFunction)
 	.on("mouseout", mouseOutFunction)
 	.on("mousemove", mouseMoveFunction)
-	.on("click", selectLine)
+	.on("click", clickOnLineToSeeDistribution)
 
 	officeHourDatum.exit().remove()
 
 	officeHourDatum.append("path")
-	.attr("class", "officeHourline")
+	.attr("class", "officeHourlineMin")
 	.attr("d", function(d) { return line2(d.values); })
 	.style("stroke", function(d) { return z(d.id); })
 	.style("stroke-width", "4px")
 	.on("mouseover", mouseOverFunction)
 	.on("mouseout", mouseOutFunction)
 	.on("mousemove", mouseMoveFunction)
-	.on("click", selectLine)
+	.on("click", clickOnLineToSeeDistribution)
 
 	officeHourDatum.append("path")
-	.attr("class", "officeHourline")
+	.attr("class", "officeHourlineMax")
 	.attr("d", function(d) { return line3(d.values); })
 	.style("stroke", function(d) { return z(d.id); })
 	.style("stroke-width", "0.5px")
 	.on("mouseover", mouseOverFunction)
 	.on("mouseout", mouseOutFunction)
 	.on("mousemove", mouseMoveFunction)
-	.on("click", selectLine)
+	.on("click", clickOnLineToSeeDistribution)
 
 	officeHourDatum.append("text")
 	.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
@@ -1310,7 +1365,7 @@ function getLineData(data,students,dataSecondary) {
 
 	x.domain(d3.extent(data, function(d) {return d.date; }));
 	y.domain([0,110])
-	z.domain(students.map(function(c,i) {return c.id; }));
+	z.domain(students.map(function(c,i) {console.log("Line",c,i);return c.id; }));
 
 	circles = []
 
@@ -1358,7 +1413,7 @@ function getLineData(data,students,dataSecondary) {
 		.on("mouseover", mouseOverFunction)
 		.on("mouseout", mouseOutFunction)
 		.on("mousemove", mouseMoveFunction)
-		.on("click", selectLine)
+		.on("click", clickOnLineToSeeDistribution)
 
 	studentData.exit().remove();		
 
@@ -1466,7 +1521,7 @@ function handleDistanceMatrix(matrix, clusterSize) {
 		// Replacing all the values in the min index
 		// with the minimum values of both the rows
 		for(var i=0;i<size;i++) {
-			matrix[min]["values"][i] = Math.min(matrix[min]["values"][i],matrix[max]["values"][i])
+			matrix[min]["values"][i] = linkageCriteriaAverage(matrix[min]["values"][i],matrix[max]["values"][i])
 		}
 
 		// Replacing all the entries for the rows to make the same change
@@ -1485,11 +1540,7 @@ function handleDistanceMatrix(matrix, clusterSize) {
 				return i2 == max;
 			});
 		}
-
-
 		matrix[min]["values"][min] = Infinity
-
-			  
 	}
 	var result = {}
 		matrix.forEach(function(d,i) {
@@ -1497,4 +1548,16 @@ function handleDistanceMatrix(matrix, clusterSize) {
 		})
 	return result
 
+}
+
+function linkageCriteriaSingle(a, b) {
+  return Math.min(a,b)
+}
+
+function linkageCriteriaComplete(a, b) {
+  return Math.max(a,b)
+}
+
+function linkageCriteriaAverage(a, b) {
+  return (a+b)/2
 }
