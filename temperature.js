@@ -1,4 +1,6 @@
 	var choices = new Set()
+	var labelsOnBasisOfPerformance
+	var numFeatures
 
 	var svg = d3.select(".viz-body").select("svg"),
 			margin = {top: 20, right: 80, bottom: 30, left: 50},
@@ -33,7 +35,7 @@
 
 	function getLineData() {
 
-		d3.csv("data/temperature5.csv", type, function(error, data) {
+		d3.csv("data/temperature7.csv", type, function(error, data) {
 		if (error) throw error;
 
 		var dataToRepresent = data.columns.slice(1).map(function(id) {
@@ -45,8 +47,11 @@
 			};
 		});
 
-		clusters = 3
-		maxiterations = 30
+		clusters = 8
+		maxiterations = 1000
+		numFeatures = dataToRepresent[0]["values"].map(function(d) {
+			return d.date;
+		})
 
 		dataClusters = kmeans(dataToRepresent,clusters,maxiterations)
 		// findOptimalCluster(dataToRepresent, maxiterations)
@@ -62,7 +67,6 @@
 		originalData = dataToRepresent
 		dataToRepresent = clusteredData
 	 	
-	 	console.log(dataToRepresent)
 		x.domain(d3.extent(data, function(d) { return d.date; }));
 
 		// y.domain([
@@ -70,9 +74,9 @@
 		// 	d3.max(dataToRepresent, function(c) { return d3.max(c.values, function(d) { return d.temperature; }); })
 		// ]);
 
-		y.domain([10,65]);
+		y.domain([0,100]);
 
-		z.domain(dataToRepresent.map(function(c) { return c.id; }));
+		z.domain(dataToRepresent.map(function(c,i) { return i; }));
 
 		g.append("g")
 				.attr("class", "axis axis--x")
@@ -87,7 +91,7 @@
 				.attr("y", 6)
 				.attr("dy", "0.71em")
 				.attr("fill", "#000")
-				.text("Temperature, ºF");
+				.text("Value");
 
 		var city = g.selectAll(".city")
 			.data(dataToRepresent)
@@ -95,14 +99,29 @@
 			.attr("class", "city");
 
 		city.append("path")
-				.attr("class", "line")
-				.attr("d", function(d) { return line(d.values); })
-				.style("stroke", function(d,i) {var x = 2.5*getRGBIndex(i);return z(x); })
-				.style("stroke-width","2px") 
-				.on("mouseover", mouseOverFunction)
-				.on("mouseout", mouseOutFunction)
-				.on("mousemove", mouseMoveFunction)
-				.on("click", selectLine)
+			.attr("class", "line")
+			.attr("d", function(d) { return line(d.values); })
+			.style("stroke", function(d,i) {return z(i); })
+			.style("stroke-width","5px") 
+			.on("mouseover", mouseOverFunction)
+			.on("mouseout", mouseOutFunction)
+			.on("mousemove", mouseMoveFunction)
+			.on("click", selectLine)
+
+
+		// city.append("path")
+		// 	.attr("class", "line")
+		// 	.attr("d", function(d) {return line(d.values) })
+		// 	.style("stroke", function(d,i) {
+		// 		var x = getLabelNumber(labelsOnBasisOfPerformance,i)
+		// 		console.log(i,x)
+		// 		return z(x)
+		// 	})
+		// 	.style("stroke-width","5px") 
+		// 	.on("mouseover", mouseOverFunction)
+		// 	.on("mouseout", mouseOutFunction)
+		// 	.on("mousemove", mouseMoveFunction)
+		// 	.on("click", selectLine)
 				// .style("stroke", "black")
 
 		// city.append("path")
@@ -131,17 +150,150 @@
 		});
 	}
 
-	function mouseOutFunction() {
-		d3.select(this)
-			.style("stroke-width","2px") 
-			.style("stroke", "black")
-				
-	}
+function getLabelNumber(labelsOnBasisOfPerformance,id) {
+	var result;
+	Object.keys(labelsOnBasisOfPerformance).forEach(function(d1,i1) {
+		if(labelsOnBasisOfPerformance[d1].includes(id)) {
+			// console.log(id,labelsOnBasisOfPerformance[d1],"->",i1)
+			result =  i1;
+		}
+	})
+	return result;
+}
 
-	function mouseOverFunction(d,i) {
-		d3.select(this)
-			.style("stroke-width","5px")
-	}
+	
+function mouseOutFunction() {
+	d3.select(".viz-body").selectAll(".line")
+	 .style("stroke-opacity",function(d1,i1) {
+			 return "1";
+	 }) 
+
+	d3.select(".filter-body").selectAll(".officeHourline")
+	 .style("stroke-width",function(d1,i1) {
+			 return "1.5px"
+	 }) 
+	 .style("stroke-opacity","1") 
+
+	 d3.select(".filter-body").selectAll(".officeHourlineMin")
+	 .style("stroke-width",function(d1,i1) {
+			 return "4px"
+	 }) 
+	 .style("stroke-opacity","1") 
+
+	 d3.select(".filter-body").selectAll(".officeHourlineMax")
+	 .style("stroke-width",function(d1,i1) {
+			 return "0.5px"
+	 }) 
+	 .style("stroke-opacity","1") 
+	 // .style("stroke", "black")
+
+	d3.select(this)
+		.style("stroke-width","5px")   
+	// tooltip.style("visibility", "hidden") 
+
+	d3.selectAll(".navbarRects")
+	 .attr("width","10px") 
+
+	d3.selectAll(".navbarTexts")
+	 .attr("font-weight","normal") 
+}
+
+function compareCentroidsTo(centroids, oldCentroids) {
+	return _.isEqual(centroids,oldCentroids);
+}
+
+function mouseOverFunction(d,i) {
+
+	d3.select(".viz-body").selectAll(".line")
+	 .style("stroke-opacity",function(d1,i1) {
+		 if(d.id != d1.id) {
+			 return "0.30";
+		 }
+	 }) 
+
+	d3.select(".filter-body").selectAll(".officeHourline")
+	 .style("stroke-width",function(d1,i1) {
+		 if(d.id != d1.id) {
+			 return "1.5px"
+		 } else {
+			 return "6px"
+		 }
+	 }) 
+	 .style("stroke-opacity",function(d1,i1) {
+		 if(d.id != d1.id) {
+			 return "0.30";
+		 }
+	 }) 
+
+
+	 d3.select(".filter-body").selectAll(".officeHourlineMin")
+	 .style("stroke-width",function(d1,i1) {
+		 if(d.id != d1.id) {
+			 return "4px"
+		 } else {
+			 return "6px"
+		 }
+	 }) 
+	 .style("stroke-opacity",function(d1,i1) {
+		 if(d.id != d1.id) {
+			 return "0.30";
+		 }
+	 }) 
+
+	 d3.select(".filter-body").selectAll(".officeHourlineMax")
+	 .style("stroke-width",function(d1,i1) {
+		 if(d.id != d1.id) {
+			 return "0.5px"
+		 } else {
+			 return "4px"
+		 }
+	 }) 
+	 .style("stroke-opacity",function(d1,i1) {
+		 if(d.id != d1.id) {
+			 return "0.30";
+		 }
+	 }) 
+
+
+	 d3.selectAll(".navbarRects")
+	 .attr("width",function(d1,i1) {
+	 	if(d1 != i) {
+			 return "10px"
+		 } else {
+			 return "20px"
+		 }
+	 })
+
+	 d3.selectAll(".navbarTexts")
+	 .attr("font-weight",function(d1,i1) {
+	 	if(d1 != i) {
+			 return "normal"
+		 } else {
+			 return "bold"
+		 }
+	 }) 
+
+	 // .style("stroke", "black")
+
+	d3.select(this)
+		.style("stroke-width","6px") 
+	currentLabel = labelsOnBasisOfPerformance[i]
+}
+
+function mouseMoveFunction() {
+	var year = x.invert(d3.mouse(this)[0])
+	var y = getEventName(year)
+
+	tooltip.style("top", (event.pageY-30)+"px")
+	.style("visibility", "visible") 
+	.style("left",(event.pageX - 50)+"px")
+	.text(y)
+	.style("background-color","grey")
+	.style("padding","5px 5px 5px 5px")
+	.style("color","white")
+	.style("font-family","Cabin")
+	.style("font-size","11px")
+}
 
 	function selectLine(d,i) {
 		d3.select(".viz-body").selectAll(".line")
@@ -150,14 +302,7 @@
 					return "0.10";
 				}
 			}) 
-			.style("stroke", "black")
-			// .style("stroke-width",function(d1,i1) {
-			// 	if(i == i1) {
-			// 		return "5px";
-			// 	} else {
-			// 		return "2px"
-			// 	}
-			// }) 
+			
 				
 		currentLabel = labels[i]
 		// boxplotdata = getBoxPlotData()
@@ -165,10 +310,10 @@
 
 	}
 
-	function mouseMoveFunction(d,i) {
-		d3.select(this)
-			.style("stroke-width","5px") 
-	}
+	// function mouseMoveFunction(d,i) {
+	// 	d3.select(this)
+	// 		.style("stroke-width","5px") 
+	// }
 
 	function type(d, _, columns) {
 		d.date = parseTime(d.date);
@@ -176,30 +321,33 @@
 		return d;
 	}
 
-	function kmeans(dataset,clusters,maxIterations) {
+function kmeans(dataset,clusters,maxIterations) {
 
-		numFeatures = dataset[0]["values"].map(function(d) {
-			return d.date;
-		})
-		var centroids = getRandomCentroids(numFeatures, clusters)
+	
+	var centroids = getRandomCentroids(numFeatures, clusters)
+	
+	// Initialize book keeping vars.
+	iterations = 0
+	oldCentroids = null
+
+	while(iterations <= maxIterations && !compareCentroidsTo(centroids,oldCentroids)) {
 		
-		// Initialize book keeping vars.
-		iterations = 0
-		oldCentroids = null
+		// Save old centroids for convergence test. Book keeping.
+		oldCentroids = centroids
+		iterations = iterations + 1
+		// Assign labels to each datapoint based on centroids
 
-		while(iterations <= maxIterations) {
-				// Save old centroids for convergence test. Book keeping.
-				oldCentroids = centroids
-				iterations = iterations + 1
-				// Assign labels to each datapoint based on centroids
-				labels = getLabels(dataset, centroids)
-				// Assign centroids based on datapoint labels
-				centroids = getCentroids(dataset, labels, clusters)
-				
+		labels = getLabels(dataset, centroids)
+		// Assign centroids based on datapoint labels
+		centroids = getCentroids(dataset, labels, clusters)
 		// We can get the labels too by calling getLabels(dataset, centroids)
-		}
-		return centroids
+
 	}
+	
+	labelsOnBasisOfPerformance = labels
+	
+	return centroids
+}
 
 	function getRandomCentroids(numFeatures, k) {
 		var result = []
@@ -216,103 +364,142 @@
 		return result;
 	}
 
-	function getLabels(dataset, centroids) {
-		var result = []
-		var labelSet = {}
-		for (var id = 0; id < dataset.length; id++) {
-			var min = 1000
+function getLabels(dataset, centroids) {
+	var result = []
+	var labelSet = {}
+	for (var id = 0; id < dataset.length; id++) {
+		var min = Infinity
+		for (var j = 0; j < centroids.length; j++) {
+			// var dist = EuclideanDistance(dataset[id]["values"],centroids[j])
+			var dist = DTWDistance(dataset[id]["values"],centroids[j])
+			// var dist = ManhattanDistance(dataset[id]["values"],centroids[j])
+			// var dist = MinkowskiDistance(dataset[id]["values"],centroids[j],10)
+			// var dist = ChebyshevDistance(dataset[id]["values"],centroids[j])
 
-			for (var j = 0; j < centroids.length; j++) {
-				var dist = DTWDistance(dataset[id]["values"],centroids[j])
-				// var dist = EuclideanDistance(dataset[id]["values"],centroids[j])
-				if(dist < min) {
-					min = dist;
-					result[id] = j;
-				}
+			
+			if(dist < min) {
+				min = dist;
+				result[id] = j;
 			}
-			if(labelSet[result[id]] == undefined) {
-				labelSet[result[id]] = []
-			}
-			labelSet[result[id]].push(id)
-		}   
-		return labelSet
+		}
+		if(labelSet[result[id]] == undefined) {
+			labelSet[result[id]] = []
+		}
+		labelSet[result[id]].push(id)
+	}   
+	
+	for (var j = 0; j < centroids.length; j++) {
+		if(labelSet[j] == undefined) {
+			labelSet[j] = []
+		}		
 	}
+
+	console.log(labelSet)
+	return labelSet
+}
 
 	function DTWDistance(s1, s2) {
-		var DTW = []
-		for (var i = 0; i < s1.length; i++) {
-			DTW[i] = {}
-			for (var j = 0; j < s2.length; j++) {
-				DTW[i][j] = 0;
-			}
+	var DTW = []
+	for (var i = 0; i < s1.length; i++) {
+		DTW[i] = {}
+		for (var j = 0; j < s2.length; j++) {
+			DTW[i][j] = 0;
 		}
-		for(var i=1;i<s1.length;i++) {
-		 DTW[i][0] = Infinity
+	}
+	for(var i=1;i<s1.length;i++) {
+	 DTW[i][0] = Infinity
+	}
+	for(var i=1;i<s2.length;i++) {
+	 DTW[0][i] = Infinity
+	}
+	
+	for (var i = 1; i < s1.length; i++) {
+		for (var j = 1; j < s2.length; j++) {
+			var dist = (s1[i].temperature - s2[j].temperature)*(s1[i].temperature - s2[j].temperature)
+			DTW[i][j] = dist + Math.sqrt(Math.min(DTW[i-1][j],DTW[i][j-1],DTW[i-1][j-1]));
 		}
-		for(var i=1;i<s2.length;i++) {
-		 DTW[0][i] = Infinity
-		}
+	}
+
+	var result = Math.sqrt(DTW[s1.length-1][s2.length-1])
+	return result
+}
+
+function EuclideanDistance(s1, s2) {
+	var result = 0;
+
+	for (var i = 0; i < s1.length; i++) {
+		var x = (s1[i].temperature - s2[i].temperature)
+		result +=  x*x; 
+	}
+	return Math.sqrt(result)
+}
+
+function ManhattanDistance(s1, s2) {
+	var result = 0;
+
+	for (var i = 0; i < s1.length; i++) {
+		var x = (s1[i].temperature - s2[i].temperature) >= 0 ? (s1[i].temperature - s2[i].temperature) : - (s1[i].temperature - s2[i].temperature)
+		result +=  x; 
+	}
+	return result
+}
+
+function MinkowskiDistance(s1, s2,p ) {
+	var result = 0;
+
+	for (var i = 0; i < s1.length; i++) {
+		var x = (s1[i].temperature - s2[i].temperature) >= 0 ? (s1[i].temperature - s2[i].temperature) : - (s1[i].temperature - s2[i].temperature)
+		x = Math.log(x)/p
+		x = Math.exp(x)
+		result +=  x; 
+	}
+	return Math.exp(result,p)
+}
+
+function ChebyshevDistance(s1, s2) {
+	var result = 0;
+
+	for (var i = 0; i < s1.length; i++) {
+		var x = (s1[i].temperature - s2[i].temperature) >= 0 ? (s1[i].temperature - s2[i].temperature) : - (s1[i].temperature - s2[i].temperature)
 		
-		for (var i = 1; i < s1.length; i++) {
-			for (var j = 1; j < s2.length; j++) {
-				var dist = (s1[i].temperature - s2[j].temperature)*(s1[i].temperature - s2[j].temperature)
-				DTW[i][j] = dist + Math.sqrt(Math.min(DTW[i-1][j],DTW[i][j-1],DTW[i-1][j-1]));
-			}
-		}
-
-		var result = Math.sqrt(DTW[s1.length-1][s2.length-1])
-		return result
+		result =  Math.max(x,result); 
 	}
-
-	function EuclideanDistance(s1, s2) {
-		var result = 0;
-		for (var i = 0; i < s1.length; i++) {
-			var x = (s1[i].temperature - s2[i].temperature)
-			result +=  x*x; 
-		}
-		return Math.sqrt(result/s1.length)
-	}
+	return result
+}
 
 	function getCentroids(dataset, labels, k) {
 
-		var keys = Object.keys(labels)
-		var result = []
-		for (var i = 0; i < k; i++) {
-			if(labels[i] == undefined) {
-				result[i] = []
-				numFeatures.map(function(d) {
-					var x = {}
-					x["date"] = d;
-					x["temperature"] = Math.random()*100;
-					result[i].push(x)
-				})
+	var keys = Object.keys(labels)
+	var result = []
+	
+	for (var i = 0; i < k; i++) {
+		if(labels[i].length == 0) {
+			result[i] = []
+			numFeatures.map(function(d) {
+				var x = {}
+				x["date"] = d;
+				x["temperature"] = Math.random()*100;
+				result[i].push(x)
+			})
 
-			} else {
-				result[i] = []
-
-				numFeatures.map(function(d,i1) {
-					var x = {}
-					x["date"] = d;
-					// var y = 1
-					// labels[i].forEach(function(d1) {
-					//   y = y * dataset[d1]["values"][i1]["temperature"]
-					// });
-					// x["temperature"] = Math.pow(y,1/labels[i].length)
-					// result[i].push(x)
-
-					var y = 0
-					labels[i].forEach(function(d1) {
-						y = y + dataset[d1]["values"][i1]["temperature"]
-					});
-					x["temperature"] = y/labels[i].length
-					result[i].push(x)
-				})
-			}
-
+		} else {
+			result[i] = []
+			numFeatures.forEach(function(d,i1) {
+				var x = {}
+				x["date"] = d;
+				// var y = 1 // Using Multiplication
+				var  y = 0; // Using log in place of multiplication
+				labels[i].forEach(function(d1) {
+					y = y + Math.log(dataset[d1]["values"][i1]["temperature"])
+					
+				});
+				x["temperature"] = Math.exp(y/labels[i].length)
+				result[i].push(x)
+			})
 		}
-
-		return result
 	}
+	return result
+}
 
 	function findOptimalCluster(students, iterations) {
 			// For Clusters ranging from 1 - 20, find the sum of square differences and store in a map
@@ -373,8 +560,12 @@
 			}
 		})
 
+		// console.log("Index",indexes)
+		// console.log("Inter",inter)
+
 		numFeatures.forEach(function(d,i) {
-			inter[d].sort()
+			inter[d].sort(function(a, b){return a - b});
+			// console.log(d,inter[d])
 			var resultElement = {}
 			resultElement["date"] = d
 			resultElement["min"] = inter[d][0]
@@ -384,6 +575,8 @@
 			resultElement["max"] = inter[d][indexes.length-1] - inter[d][Math.floor(indexes.length*0.75)]
 			result.push(resultElement)
 		})
+
+		// console.log("result",result)
 
 		return result
 
@@ -484,7 +677,7 @@
 			.attr("text-anchor", "middle")  
 			.style("font-size", "18px")
 			.style("font-family", "Cabin") 
-			.text("Distribution of Scores within Cluster")
+			.text("Distribution of temperature within Cluster")
 
 		box_svg.append("g")
 			.attr("class", "y axis")
@@ -495,7 +688,7 @@
 			.attr("dy", ".71em")
 			.style("text-anchor", "end")
 			.style("font-size", "16px") 
-			.text("Scores");    
+			.text("temperature");    
 		
 		box_svg.append("g")
 			.attr("class", "x axis")
@@ -553,6 +746,7 @@
 
 function getStackedBarData(currentLabel,filterCriteria) {
 	var result = getQuartileData(currentLabel,filterCriteria)
+
 	d3.selectAll(".serie").remove()
 	d3.select(".stream-body").append("svg")
 	// var svgStacked = d3.select(".stream-body").select("svg").attr("id","stacked"),
@@ -564,18 +758,18 @@ function getStackedBarData(currentLabel,filterCriteria) {
 	// d3.select(".serie").moveToBack();
 	// d3.selectAll(".line").moveToFront();
 
-	var x = d3.scaleTime().range([0, width])
+	// var x = d3.scaleTime().range([0, width])
 
-	var y = d3.scaleLinear()
-			.rangeRound([height, 0]);
+	// var y = d3.scaleLinear()
+	// 		.rangeRound([height, 0]);
 
 	var z = d3.interpolateRdYlBu();
 	var stack = d3.stack();
 	data = result
 	var columns = Object.keys(result[0])
 	
-	x.domain(d3.extent(data, function(d) { return d.date; }));
-	y.domain([0,75]);
+	// x.domain(d3.extent(data, function(d) { return d.date; }));
+	// y.domain([0,75]);
 	g.selectAll(".serie")
 		.data(stack.keys(columns.slice(1))(data))
 		.enter().append("g")
@@ -695,7 +889,7 @@ function getFilterData() {
 		z.domain(dataToRepresent.map(function(c,i) { return c.id; }));
 		var line = d3.line()
 			.curve(d3.curveBasis)
-			.x(function(d,i) { var temp = new Date(d.date); console.log(i+"-"+(temp instanceof Date)); return x(temp); })
+			.x(function(d,i) { var temp = new Date(d.date); return x(temp); })
 			.y(function(d,i) { return y(d.humidity); });
 
 		g.append("g")
@@ -721,8 +915,10 @@ function getFilterData() {
 		city.append("path")
 				.attr("class", "line")
 				.attr("d", function(d) { return line(d.values); })
-				.style("stroke", function(d,i) {return z(d.id)})
+				.style("stroke", function(d,i) {return z(i)})
 				.style("stroke-width","1px") 
+
+
 
 		city.append("text")
 				.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })

@@ -196,17 +196,19 @@ function mainFunction(studentFilter) {
 			};
 		});
 
+		console.log(students)
+
 		clusters = 8
 		maxiterations = 100
 		numFeatures = students[0]["values"].map(function(d) {
 			return d.date;
 		})
 		// K-MEANS CLUSTERING
-		// studentClusters = kmeans(students,clusters,maxiterations)
+		studentClusters = kmeans(students,clusters,maxiterations)
 		
 		// HIERARCHICAL CLUSTERING
-		labelsOnBasisOfPerformance = hierarch(students,DTWDistance, clusters)
-		studentClusters = getCentroids(students, labelsOnBasisOfPerformance, clusters)
+		// labelsOnBasisOfPerformance = hierarch(students,DTWDistance, clusters)
+		// studentClusters = getCentroids(students, labelsOnBasisOfPerformance, clusters)
 
 		// findOptimalClusterUsingElbow(students, maxiterations)
 		// findOptimalClusterUsingSil(students, maxiterations)
@@ -220,7 +222,7 @@ function mainFunction(studentFilter) {
 		})
 
 		originalStudentData = students
-		students = clusteredData
+		// students = clusteredData
 
 		if (getFilterData && typeof (getFilterData) == "function" && initializePanel && typeof (initializePanel) == "function") { 
 			getFilterData(labelsOnBasisOfPerformance,data,students,getLineData)
@@ -311,7 +313,7 @@ function toggleCorr() {
 		d3.selectAll(".corrText")
 		.text("Correlation OFF")
 		disableCorrelation()
-	}
+	}getFilterData
 }
 
 function enableNavFilters() {
@@ -329,7 +331,6 @@ function enableNavFilters() {
 	.attr("width","11px")
 	.attr("height","11px")
 	.style("fill",function(d,i) {
-		console.log("Nav",d,i)
 		return z(i);
 	})
 	.attr("x","20px")
@@ -589,7 +590,6 @@ function clickOnLineToSeeDistribution(d,i) {
 
 function getTextValues(label,index) {
 
-	console.log(label,index,z(index))
 	d3.select(".text-body")
 	.style("border","1px solid black")
 
@@ -1365,17 +1365,17 @@ function getLineData(data,students,dataSecondary) {
 
 	x.domain(d3.extent(data, function(d) {return d.date; }));
 	y.domain([0,110])
-	z.domain(students.map(function(c,i) {console.log("Line",c,i);return c.id; }));
+	z.domain(students.map(function(c,i) {return c.id; }));
 
 	circles = []
 
-	students.forEach(function(studentID,i) {
-		studentID["values"].forEach(function(entry,i1) {
-			circles.push([studentID["id"],x(entry["date"]),y(entry["scores"]),dataSecondary[i]["values"][i1]["hours"],dataSecondary[i]["values"][i1]["min"],dataSecondary[i]["values"][i1]["max"]])
-		})
-	})
+	// students.forEach(function(studentID,i) {
+	// 	studentID["values"].forEach(function(entry,i1) {
+	// 		circles.push([studentID["id"],x(entry["date"]),y(entry["scores"]),dataSecondary[i]["values"][i1]["hours"],dataSecondary[i]["values"][i1]["min"],dataSecondary[i]["values"][i1]["max"]])
+	// 	})
+	// })
 
-	maxRadius = d3.max(circles, function(c) {return c[3] })
+	// maxRadius = d3.max(circles, function(c) {return c[3] })
 	
 	g.append("g")
 		.attr("class", "axis axis--x")
@@ -1405,11 +1405,26 @@ function getLineData(data,students,dataSecondary) {
 
 	d3.select("viz-body").selectAll(".line").remove()
 	
+	// studentData.append("path")
+	// 	.attr("class", "line")
+	// 	.attr("d", function(d) {return studentline(d.values) })
+	// 	.style("stroke", function(d) {return z(d.id); })
+	// 	.style("stroke-width", "1.5px")
+	// 	.on("mouseover", mouseOverFunction)
+	// 	.on("mouseout", mouseOutFunction)
+	// 	.on("mousemove", mouseMoveFunction)
+	// 	.on("click", clickOnLineToSeeDistribution)
+
+
 	studentData.append("path")
 		.attr("class", "line")
 		.attr("d", function(d) {return studentline(d.values) })
-		.style("stroke", function(d) {return z(d.id); })
-		.style("stroke-width", "1.5px")
+		.style("stroke", function(d,i) {
+			var x = getLabelNumber(labelsOnBasisOfPerformance,i)
+			console.log(i,x)
+			return z(x)
+		})
+		.style("stroke-width", "2.5px")
 		.on("mouseover", mouseOverFunction)
 		.on("mouseout", mouseOutFunction)
 		.on("mousemove", mouseMoveFunction)
@@ -1436,6 +1451,16 @@ function getLineData(data,students,dataSecondary) {
 // 	mainFunction(3)
 // }
 
+function getLabelNumber(labelsOnBasisOfPerformance,id) {
+	var result;
+	Object.keys(labelsOnBasisOfPerformance).forEach(function(d1,i1) {
+		if(labelsOnBasisOfPerformance[d1].includes(id)) {
+			// console.log(id,labelsOnBasisOfPerformance[d1],"->",i1)
+			result =  i1;
+		}
+	})
+	return result;
+}
 
 
 function hierarch(students, distance, clusterSize) {
