@@ -196,7 +196,6 @@ function mainFunction(studentFilter) {
 			};
 		});
 
-		console.log(students)
 
 		clusters = 8
 		maxiterations = 100
@@ -223,6 +222,7 @@ function mainFunction(studentFilter) {
 
 		originalStudentData = students
 		// students = clusteredData
+		console.log(originalStudentData)
 
 		if (getFilterData && typeof (getFilterData) == "function" && initializePanel && typeof (initializePanel) == "function") { 
 			getFilterData(labelsOnBasisOfPerformance,data,students,getLineData)
@@ -1421,7 +1421,6 @@ function getLineData(data,students,dataSecondary) {
 		.attr("d", function(d) {return studentline(d.values) })
 		.style("stroke", function(d,i) {
 			var x = getLabelNumber(labelsOnBasisOfPerformance,i)
-			console.log(i,x)
 			return z(x)
 		})
 		.style("stroke-width", "2.5px")

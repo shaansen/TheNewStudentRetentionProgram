@@ -35,7 +35,7 @@
 
 	function getLineData() {
 
-		d3.csv("data/temperature7.csv", type, function(error, data) {
+		d3.csv("data/temperature8.csv", type, function(error, data) {
 		if (error) throw error;
 
 		var dataToRepresent = data.columns.slice(1).map(function(id) {
@@ -47,7 +47,7 @@
 			};
 		});
 
-		clusters = 8
+		clusters = 5
 		maxiterations = 1000
 		numFeatures = dataToRepresent[0]["values"].map(function(d) {
 			return d.date;
@@ -74,7 +74,7 @@
 		// 	d3.max(dataToRepresent, function(c) { return d3.max(c.values, function(d) { return d.temperature; }); })
 		// ]);
 
-		y.domain([0,100]);
+		y.domain([0,80]);
 
 		z.domain(dataToRepresent.map(function(c,i) { return i; }));
 
@@ -394,7 +394,6 @@ function getLabels(dataset, centroids) {
 		}		
 	}
 
-	console.log(labelSet)
 	return labelSet
 }
 
@@ -782,7 +781,7 @@ function getStackedBarData(currentLabel,filterCriteria) {
 		.attr("x", function(d) { return x(d.data.date); })
 		.attr("y", function(d) { return y(d[1]); })
 		.attr("height", function(d) { return y(d[0]) - y(d[1]); })
-		.attr("width", 3)
+		.attr("width", 25)
 		
 
 		// g.append("g")
