@@ -99,7 +99,7 @@ function mainFunction(studentFilter) {
 	// Below code parses the calendar csv to mark events on the basis of the date
 	// and give descriptions of the events that have occured
 	// with the cummulative total score till that event
-	d3.csv('data/calendar.csv')
+	d3.csv('data/spring2017/calendar.csv')
 		.row(function(d) {
 			return {
 				date: parseInt(d["Date"]),
@@ -129,7 +129,7 @@ function mainFunction(studentFilter) {
 
 
 	// Below code basically parses the studentGrade data to create normalized scores of the students till that date
-	d3.csv("data/grades2.csv", type, function(error, studentGradeData) {
+	d3.csv("data/spring2017/grades.csv", type, function(error, studentGradeData) {
 		if (error) throw error;
 		
 		 if(studentFilter == 1) {
@@ -197,7 +197,7 @@ function mainFunction(studentFilter) {
 		});
 
 
-		clusters = 8
+		clusters = 10
 		maxiterations = 100
 		numFeatures = students[0]["values"].map(function(d) {
 			return d.date;
@@ -221,8 +221,7 @@ function mainFunction(studentFilter) {
 		})
 
 		originalStudentData = students
-		// students = clusteredData
-		console.log(originalStudentData)
+		students = clusteredData
 
 		if (getFilterData && typeof (getFilterData) == "function" && initializePanel && typeof (initializePanel) == "function") { 
 			getFilterData(labelsOnBasisOfPerformance,data,students,getLineData)
@@ -319,12 +318,12 @@ function toggleCorr() {
 function enableNavFilters() {
 
 	var data = Object.keys(labelsOnBasisOfPerformance)
-	
-	var navbarElements = d3.select(".navfilter-body").select("svg").selectAll(".navbarElements")
+/*	d3.select(".navfilter-body").select(".navfilter-body-svg").selectAll(".navbarElements").remove();
+
+	var navbarElements = d3.select(".navfilter-body").select(".navfilter-body-svg").selectAll(".navbarElements")
 	.data(data)
 	.enter().append("g")
 	.attr("class", "navbarElements")
-
 
 	navbarElements.append("rect")
 	.attr("class", "navbarRects")
@@ -348,12 +347,50 @@ function enableNavFilters() {
 		return (i*20)+10;
 	})
 	
+	navbarElements.exit().remove();*/
+var svg = d3.select(".navfilter-body").append("svg")
+    .attr("width", "160px")
+    .attr("height", "400px")
+    .append("g")
+    .attr("transform", "translate(" + 10 + "," + 10 + ")");
+
+
+var width = 10
+
+
+var legend = svg.selectAll(".navbarElements")
+    .data(data)
+    .enter().append("g")
+    .attr("class", "navbarElements")
+    .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+legend.append("rect")
+	.attr("class", "navbarRects")
+    .attr("x", width - 10)
+    .attr("width", 18)
+    .attr("height", 18)
+    .style("fill", function(d,i) {
+    	return z(i);
+    });
+
+legend.append("text")
+	.attr("class", "navbarTexts")
+    .attr("x", width + 20)
+    .attr("y", 9)
+    .attr("dy", ".35em")
+    .style("text-anchor", "start")
+    .text(function(d,i) {
+		return "Cluster-"+i+" #"+labelsOnBasisOfPerformance[d].length
+	})
+
+legend.exit().remove();  
 	
 }
 
 function enableCorrelation() {
+
 	var svg = d3.select(".viz-body").select("svg"),
-			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
 	d3.selectAll(".officeHourDots").remove()
@@ -455,10 +492,13 @@ function mouseOutFunction() {
 	// tooltip.style("visibility", "hidden") 
 
 	d3.selectAll(".navbarRects")
-	 .attr("width","10px") 
+	 .attr("width","18px") 
 
 	d3.selectAll(".navbarTexts")
 	 .attr("font-weight","normal") 
+
+	d3.selectAll(".navbarTexts")
+	 .attr("fill","black") 
 }
 
 function mouseOverFunction(d,i) {
@@ -517,9 +557,9 @@ function mouseOverFunction(d,i) {
 	 d3.selectAll(".navbarRects")
 	 .attr("width",function(d1,i1) {
 	 	if(d1 != i) {
-			 return "10px"
+			 return "18px"
 		 } else {
-			 return "20px"
+			 return "140px"
 		 }
 	 })
 
@@ -529,6 +569,13 @@ function mouseOverFunction(d,i) {
 			 return "normal"
 		 } else {
 			 return "bold"
+		 }
+	 }) 
+	 .attr("fill",function(d1,i1) {
+	 	if(d1 != i) {
+			 return "black"
+		 } else {
+			 return "white"
 		 }
 	 }) 
 
@@ -1144,7 +1191,7 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 	.x(function(d,i) {return x(d.date); })
 	.y(function(d,i) {return y(d.max); });
 
-	d3.csv("data/tahours4.csv", type, function(error, TAdata) {
+	d3.csv("data/spring2017/oh.csv", type, function(error, TAdata) {
 		if (error) throw error;
 
 		var data = []
@@ -1171,8 +1218,7 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 			data.push(object);
 		})
 
-		var svg = d3.select(".filter-body").select("svg").attr("width","1400px")
-    	.attr("height","300px"),
+		var svg = d3.select(".filter-body").select("svg"),
 			margin = {top: 30, right: 80, bottom: 30, left: 50},
 			width = svg.attr("width") - margin.left - margin.right,
 			height = svg.attr("height") - margin.top - margin.bottom,
@@ -1222,7 +1268,7 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 	officeHourDatum.append("path")
 	.attr("class", "officeHourline")
 	.attr("d", function(d) { return line1(d.values); })
-	.style("stroke", function(d) { return z(d.id); })
+	.style("stroke", function(d,i) { return z(i); })
 	.style("stroke-width", "1.5px")
 	.on("mouseover", mouseOverFunction)
 	.on("mouseout", mouseOutFunction)
@@ -1234,7 +1280,7 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 	officeHourDatum.append("path")
 	.attr("class", "officeHourlineMin")
 	.attr("d", function(d) { return line2(d.values); })
-	.style("stroke", function(d) { return z(d.id); })
+	.style("stroke", function(d,i) { return z(i); })
 	.style("stroke-width", "4px")
 	.on("mouseover", mouseOverFunction)
 	.on("mouseout", mouseOutFunction)
@@ -1244,7 +1290,7 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 	officeHourDatum.append("path")
 	.attr("class", "officeHourlineMax")
 	.attr("d", function(d) { return line3(d.values); })
-	.style("stroke", function(d) { return z(d.id); })
+	.style("stroke", function(d,i) { return z(i); })
 	.style("stroke-width", "0.5px")
 	.on("mouseover", mouseOverFunction)
 	.on("mouseout", mouseOutFunction)
@@ -1365,17 +1411,17 @@ function getLineData(data,students,dataSecondary) {
 
 	x.domain(d3.extent(data, function(d) {return d.date; }));
 	y.domain([0,110])
-	z.domain(students.map(function(c,i) {return c.id; }));
+	z.domain(students.map(function(c,i) {return i; }));
 
 	circles = []
 
-	// students.forEach(function(studentID,i) {
-	// 	studentID["values"].forEach(function(entry,i1) {
-	// 		circles.push([studentID["id"],x(entry["date"]),y(entry["scores"]),dataSecondary[i]["values"][i1]["hours"],dataSecondary[i]["values"][i1]["min"],dataSecondary[i]["values"][i1]["max"]])
-	// 	})
-	// })
+	students.forEach(function(studentID,i) {
+		studentID["values"].forEach(function(entry,i1) {
+			circles.push([studentID["id"],x(entry["date"]),y(entry["scores"]),dataSecondary[i]["values"][i1]["hours"],dataSecondary[i]["values"][i1]["min"],dataSecondary[i]["values"][i1]["max"]])
+		})
+	})
 
-	// maxRadius = d3.max(circles, function(c) {return c[3] })
+	maxRadius = d3.max(circles, function(c) {return c[3] })
 	
 	g.append("g")
 		.attr("class", "axis axis--x")
@@ -1420,8 +1466,7 @@ function getLineData(data,students,dataSecondary) {
 		.attr("class", "line")
 		.attr("d", function(d) {return studentline(d.values) })
 		.style("stroke", function(d,i) {
-			var x = getLabelNumber(labelsOnBasisOfPerformance,i)
-			return z(x)
+			return z(i)
 		})
 		.style("stroke-width", "2.5px")
 		.on("mouseover", mouseOverFunction)
@@ -1454,7 +1499,6 @@ function getLabelNumber(labelsOnBasisOfPerformance,id) {
 	var result;
 	Object.keys(labelsOnBasisOfPerformance).forEach(function(d1,i1) {
 		if(labelsOnBasisOfPerformance[d1].includes(id)) {
-			// console.log(id,labelsOnBasisOfPerformance[d1],"->",i1)
 			result =  i1;
 		}
 	})

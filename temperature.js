@@ -35,7 +35,7 @@
 
 	function getLineData() {
 
-		d3.csv("data/temperature8.csv", type, function(error, data) {
+		d3.csv("data/temperature/temperature8.csv", type, function(error, data) {
 		if (error) throw error;
 
 		var dataToRepresent = data.columns.slice(1).map(function(id) {
@@ -551,20 +551,17 @@ function ChebyshevDistance(s1, s2) {
 		var y0 = filterLimits["y0"]
 		var y1 = filterLimits["y1"]
 
-		originalData.forEach(function(d,i) {
+
+		originalStudentData.forEach(function(d,i) {
 			if(filterCriteria!=undefined && indexes.includes(i) && (filterCriteria.length == 0 || filterCriteria.includes(i))) {
 				d.values.forEach(function(d1,i1) {
-					inter[d1.date].push(d1.temperature)	
+					inter[d1.date].push(d1.scores) 
 				})
 			}
 		})
 
-		// console.log("Index",indexes)
-		// console.log("Inter",inter)
-
 		numFeatures.forEach(function(d,i) {
 			inter[d].sort(function(a, b){return a - b});
-			// console.log(d,inter[d])
 			var resultElement = {}
 			resultElement["date"] = d
 			resultElement["min"] = inter[d][0]
@@ -574,8 +571,6 @@ function ChebyshevDistance(s1, s2) {
 			resultElement["max"] = inter[d][indexes.length-1] - inter[d][Math.floor(indexes.length*0.75)]
 			result.push(resultElement)
 		})
-
-		// console.log("result",result)
 
 		return result
 
@@ -857,7 +852,7 @@ function getFilterData() {
 			.x(function(d) { var temp = new Date(d.date); return x(temp); })
 			.y(function(d) { return y(d.temperature); });
 
-	d3.csv("data/humidity.csv", type, function(error, data) {
+	d3.csv("data/temperature/humidity.csv", type, function(error, data) {
 		if (error) throw error;
 
 		var svg = d3.select(".filter-body").select("svg"),
