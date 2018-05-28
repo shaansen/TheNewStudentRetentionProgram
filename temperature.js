@@ -1,167 +1,379 @@
-	var choices = new Set()
-	var labelsOnBasisOfPerformance
-	var numFeatures
+var lineWidthOriginal = "1.5px";
+var lineWidthOnHover = "6px";
 
-	var svg = d3.select(".viz-body").select("svg"),
-			margin = {top: 20, right: 80, bottom: 30, left: 50},
+var choices = new Set()
+
+var svg = d3.select(".viz-body").select("svg"),
+			margin = {top: 30, right: 80, bottom: 30, left: 50},
 			width = svg.attr("width") - margin.left - margin.right,
 			height = svg.attr("height") - margin.top - margin.bottom,
 			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	var parseTime = d3.timeParse("%Y%m%d%H%M");
+var parseTime = d3.timeParse("%Y%m%d%H%M");
 
-	var x = d3.scaleTime().range([0, width]),
-			y = d3.scaleLinear().range([height, 0]),
-			z = d3.scaleOrdinal(d3.schemeCategory10);
+var x = d3.scaleTime().range([0, width]),
+		y = d3.scaleLinear().range([height, 0]),
+		z = d3.scaleOrdinal(d3.schemeCategory10);
 
-	var line = d3.line()
-			.curve(d3.curveBasis)
-			.x(function(d) { var temp = new Date(d.date); return x(temp); })
-			.y(function(d) { return y(d.temperature); });
+var yellow = d3.interpolateYlGn(), // "rgb(255, 255, 229)"
+		yellowGreen = d3.interpolateYlGn(0.5), // "rgb(120, 197, 120)"
+		green = d3.interpolateYlGn(1); // "rgb(0, 69, 41)"
 
-	var filterLimits = {
-		"x0" : new Date('December 17, 1995 03:24:00'),
-		"x1" : new Date('December 17, 2995 03:24:00'),
-		"y0" : 0,
-		"y1" : 300
-	}
+var cityline = d3.line()
+		.x(function(d) {return x(d.date); })
+		.y(function(d) {return y(d.temperature); });
+		// .curve(d3.curveBasis)
 
-	var filterCriteria = []
-	var currentLabel
-	var dataSecondary
+var filterLimits = {
+	"x0" : new Date('December 17, 1995 03:24:00'),
+	"x1" : new Date('December 17, 2995 03:24:00'),
+	"y0" : 0,
+	"y1" : 300
+}
 
-	getFilterData()
-	getLineData()	
+var circles = []
+var maxRadius
+var tipBox
+var tooltip
+var completeDateList
+var dateSet
+var date_list
+var labelsOnBasisOfPerformance
+var tickOn = false
+var corrOn = false
+var distOn = false
+// -----------------------------------------------------------------------------------------
+//
+// Code to read Calendar and Map dates to events
+//
+// -----------------------------------------------------------------------------------------
 
-	function getLineData() {
+// Calendar data contains the values of all the 
+// dates mapped to their events and the aggregate total score of the events till then
+var calendarData = {}
 
-		d3.csv("data/temperature/temperature8.csv", type, function(error, data) {
+// dateList contains the sequence of dates of events in an array
+var dateList = []
+var longDateToShortDate = {}
+
+// cTotal contains the accumulative total for all the events that have occured till that date
+var cTotal = 0
+
+// this is the list of columns that need to be displayed in the visualization
+var columns = ["date"]
+var irregDatesToRegDates = []
+var quartilePreData
+var quartilePostData
+var numFeatures
+var boxplotdata
+var originalcityData
+var helpSeekingCSVdata = []
+var catWisecityData = []
+var cityWiseTAdata = []
+var choices = new Set()
+var filterCriteria = []
+var currentLabel
+var listOfEvents = ["HW1","LAB2","OTHERS","HW2","HW3","LAB3","LAB4","HW4","LAB5","PROJ1","LAB6","LAB7",
+										"Midterm","HW5","LAB8","PROJ2","LAB9","HW6","LAB10","PROJ3","LAB13"]
+var hourSpent = {
+	1: "< 5 minutes",
+	2: "6 - 15 minutes",
+	3: "16 - 30 minutes",
+	4: "31 - 60 minutes",
+	5: "> 60 minutes",
+	6: "Not Attended",
+}
+
+var filteredSet = []
+
+mainFunction()
+
+function mainFunction() {
+	// Below code basically parses the cityGrade data to create normalized temperature of the cities till that date
+	d3.csv("data/temperature/temperature5.csv", type, function(error, cityGradeData) {
 		if (error) throw error;
-
-		var dataToRepresent = data.columns.slice(1).map(function(id) {
+		
+		data = cityGradeData;
+		date_list = data.map(function(d,i) {
+			return d.date;
+		})
+		
+		cities = cityGradeData.columns.slice(1).map(function(id) {
 			return {
 				id: id,
 				values: data.map(function(d) {
-					return {date: new Date(d.date), temperature: d[id]};
+					return {date: d.date, temperature: d[id]};
 				})
 			};
 		});
 
+
 		clusters = 5
-		maxiterations = 1000
-		numFeatures = dataToRepresent[0]["values"].map(function(d) {
+		maxiterations = 5
+		numFeatures = cities[0]["values"].map(function(d) {
 			return d.date;
 		})
 
-		dataClusters = kmeans(dataToRepresent,clusters,maxiterations)
-		// findOptimalCluster(dataToRepresent, maxiterations)
-		// calculateSumSquareDistance(dataClusters,dataToRepresent)
+		// K-MEANS CLUSTERING
+		cityClusters = kmeans(cities,clusters,maxiterations)
+		
+		// HIERARCHICAL CLUSTERING
+		// labelsOnBasisOfPerformance = hierarch(cities,DTWDistance, clusters)
+		// cityClusters = getCentroids(cities, labelsOnBasisOfPerformance, clusters)
 
-		var clusteredData = dataClusters.map(function(d,i) {
+		// findOptimalClusterUsingElbow(cities, maxiterations)
+		// findOptimalClusterUsingSil(cities, maxiterations)
+		// calculateSumSquareDistance(cityClusters,cities)
+
+		var clusteredData = cityClusters.map(function(d,i) {
 			return {
 				id: "C"+i,
 				values: d
 			};
 		})
 
-		originalData = dataToRepresent
-		dataToRepresent = clusteredData
-	 	
-		x.domain(d3.extent(data, function(d) { return d.date; }));
+		originalcityData = cities
+		cities = clusteredData
 
-		// y.domain([
-		// 	d3.min(dataToRepresent, function(c) { return d3.min(c.values, function(d) { return d.temperature; }); }),
-		// 	d3.max(dataToRepresent, function(c) { return d3.max(c.values, function(d) { return d.temperature; }); })
-		// ]);
-
-		y.domain([0,80]);
-
-		z.domain(dataToRepresent.map(function(c,i) { return i; }));
-
-		g.append("g")
-				.attr("class", "axis axis--x")
-				.attr("transform", "translate(0," + height + ")")
-				.call(d3.axisBottom(x));
-
-		g.append("g")
-				.attr("class", "axis axis--y")
-				.call(d3.axisLeft(y))
-				.append("text")
-				.attr("transform", "rotate(-90)")
-				.attr("y", 6)
-				.attr("dy", "0.71em")
-				.attr("fill", "#000")
-				.text("Value");
-
-		var city = g.selectAll(".city")
-			.data(dataToRepresent)
-			.enter().append("g")
-			.attr("class", "city");
-
-		city.append("path")
-			.attr("class", "line")
-			.attr("d", function(d) { return line(d.values); })
-			.style("stroke", function(d,i) {return z(i); })
-			.style("stroke-width","5px") 
-			.on("mouseover", mouseOverFunction)
-			.on("mouseout", mouseOutFunction)
-			.on("mousemove", mouseMoveFunction)
-			.on("click", selectLine)
-
-
-		// city.append("path")
-		// 	.attr("class", "line")
-		// 	.attr("d", function(d) {return line(d.values) })
-		// 	.style("stroke", function(d,i) {
-		// 		var x = getLabelNumber(labelsOnBasisOfPerformance,i)
-		// 		console.log(i,x)
-		// 		return z(x)
-		// 	})
-		// 	.style("stroke-width","5px") 
-		// 	.on("mouseover", mouseOverFunction)
-		// 	.on("mouseout", mouseOutFunction)
-		// 	.on("mousemove", mouseMoveFunction)
-		// 	.on("click", selectLine)
-				// .style("stroke", "black")
-
-		// city.append("path")
-		//   .attr("class", "line")
-		//   .attr("d", function(d) { return line(d.values); })
-		//   .style("stroke", function(d,i) {
-		//     var x = getRGBIndex(i)
-		//     var r = Math.floor((x/Object.keys(labels).length*123)%255);
-		//     var g = Math.floor((x/Object.keys(labels).length*345)%255);
-		//     var b = Math.floor((x/Object.keys(labels).length*567)%255);
-		//     return "rgb("+r+","+g+","+b+")"
-		//   })
-		//   .style("stroke-width", "2px")
-		//   .on("mouseover", mouseOverFunction)
-		//   .on("mouseout", mouseOutFunction)
-		//   .on("mousemove", mouseMoveFunction)
-
-		city.append("text")
-				.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-				.attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
-				.attr("x", 3)
-				.attr("dy", "0.35em")
-				.style("font", "10px sans-serif")
-				.text(function(d) { return d.id; });
-
-		});
-	}
-
-function getLabelNumber(labelsOnBasisOfPerformance,id) {
-	var result;
-	Object.keys(labelsOnBasisOfPerformance).forEach(function(d1,i1) {
-		if(labelsOnBasisOfPerformance[d1].includes(id)) {
-			// console.log(id,labelsOnBasisOfPerformance[d1],"->",i1)
-			result =  i1;
+		if (getFilterData && typeof (getFilterData) == "function" && initializePanel && typeof (initializePanel) == "function") { 
+			getFilterData(labelsOnBasisOfPerformance,data,cities,getLineData)
+			initializePanel()
 		}
 	})
-	return result;
 }
 
+
+function initializePanel() {
+	d3.selectAll(".tick")
+	.text("Ticks ON")
+	// enableTicks()
+
+	d3.selectAll(".corr")
+	.text("Correlation ON")
+	enableCorrelation()
+
+	d3.selectAll(".dist")
+	.text("Distribution ON")
+
+	// enableNavFilters()
+}
+
+function toggleTick() {
+	tickOn = !tickOn
+	if(!tickOn) {
+		d3.selectAll(".tickText")
+		.text("Ticks ON")
+		enableTicks()
+	} else {
+		d3.selectAll(".tickText")
+		.text("Ticks OFF")
+		disableTicks()
+	}
+}
+
+function disableTicks() {
+	d3.selectAll(".pillars").remove()
+	d3.selectAll(".pillar-text").remove()
+}
+
+function enableTicks() {
+	var svg = d3.select(".viz-body").select("svg"),
+			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	var pillars = g.selectAll(".pillars")
+		.data(dateList)
+		.enter()
+
+	pillars.append("rect")
+		.attr("class", "pillars")
+		.attr("x", function(d,i) {
+			var temp = parseTime(d);
+			return x(temp)
+		})
+		.attr("y","10")
+		.attr("width", 1)
+		.attr("height", height);
+
+	var text = g.selectAll(".pillar-text")
+		.data(dateList)
+		.enter()
 	
+	text.append("text")
+			.attr("class", "pillar-text")
+			.attr("x", "10px")
+			.attr("y","10px")
+			.text(function(d) { return calendarData[d]["description"]; })
+			.attr("transform", function(d,i) {
+				return "translate("+x(parseTime(d))+") rotate(45 10 0)";
+			})
+			.attr("text-anchor","end")
+			.attr("font-size","10px")
+
+	pillars.exit().remove()
+	text.exit().remove()
+
+}
+
+function toggleCorr() {
+	corrOn = !corrOn
+	if(!corrOn) {
+		d3.selectAll(".corrText")
+		.text("Correlation ON")
+		enableCorrelation()
+	} else {
+		d3.selectAll(".corrText")
+		.text("Correlation OFF")
+		disableCorrelation()
+	}getFilterData
+}
+
+function enableNavFilters() {
+
+	var data = Object.keys(labelsOnBasisOfPerformance)
+/*	d3.select(".navfilter-body").select(".navfilter-body-svg").selectAll(".navbarElements").remove();
+
+	var navbarElements = d3.select(".navfilter-body").select(".navfilter-body-svg").selectAll(".navbarElements")
+	.data(data)
+	.enter().append("g")
+	.attr("class", "navbarElements")
+
+	navbarElements.append("rect")
+	.attr("class", "navbarRects")
+	.attr("width","11px")
+	.attr("height","11px")
+	.style("fill",function(d,i) {
+		return z(i);
+	})
+	.attr("x","20px")
+	.attr("y",function(d,i) {
+		return (i*20);
+	})
+	
+	navbarElements.append("text")
+	.attr("class","navbarTexts")
+	.text(function(d,i) {
+		return "Cluster-"+i+" #"+labelsOnBasisOfPerformance[d].length
+	})
+	.attr("x","40px")
+	.attr("y",function(d,i) {
+		return (i*20)+10;
+	})
+	
+	navbarElements.exit().remove();*/
+var svg = d3.select(".navfilter-body").append("svg")
+	.attr("width", "160px")
+	.attr("height", "400px")
+	.append("g")
+	.attr("transform", "translate(" + 10 + "," + 10 + ")");
+
+
+var width = 10
+
+
+var legend = svg.selectAll(".navbarElements")
+	.data(data)
+	.enter().append("g")
+	.attr("class", "navbarElements")
+	.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+legend.append("rect")
+	.attr("class", "navbarRects")
+	.attr("x", width - 10)
+	.attr("width", 18)
+	.attr("height", 18)
+	.style("fill", function(d,i) {
+		return z(i);
+	});
+
+legend.append("text")
+	.attr("class", "navbarTexts")
+	.attr("x", width + 20)
+	.attr("y", 9)
+	.attr("dy", ".35em")
+	.style("text-anchor", "start")
+	.text(function(d,i) {
+		return "Cluster-"+i+" #"+labelsOnBasisOfPerformance[d].length
+	})
+
+legend.exit().remove();  
+	
+}
+
+function enableCorrelation() {
+
+	var svg = d3.select(".viz-body").select("svg"),
+		g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+	d3.selectAll(".officeHourDots").remove()
+	d3.selectAll(".officecircles").remove()
+
+	var officeHourDots = g.selectAll(".officeHourDots")
+	.data(circles)
+	.enter().append("g")
+	.attr("class", "officeHourDots");
+
+	// officeHourDots.append("circle")
+	// .attr("class", "officecircles")
+	// .attr("cx", function(d) { return d[1]; })
+	// .attr("cy", function(d) { return d[2]; })
+	// .attr("r", function(d) { return d[5]/7; })
+	// .style("fill",  function(d) {return z(d[0]); })
+	// .style("fill-opacity", "0.75")
+
+
+	officeHourDots.append("circle").transition()
+	.attr("class", "officecircles")
+	.attr("cx", function(d) { return d[1]; })
+	.attr("cy", function(d) { return d[2]; })
+	.attr("r", function(d) { return 15*d[3]/maxRadius; })
+	.style("fill",  function(d) {return z(d[0]); })
+	.style("fill-opacity", "0.85")
+
+	officeHourDots.exit().remove()
+
+
+
+	// officeHourDots.append("circle")
+	// .attr("class", "officecircles")
+	// .attr("cx", function(d) { return d[1]; })
+	// .attr("cy", function(d) { return d[2]; })
+	// .attr("r", function(d) { return d[4]/7; })
+	// .style("fill",  function(d) {return z(d[0]); })
+	// .style("fill-opacity", "1")
+
+	// officeHourDots.append("circle")
+	// .attr("class", "officecircles")
+	// .attr("cx", function(d) { return d[1]; })
+	// .attr("cy", function(d) { return d[2]; })
+	// .attr("r", function(d) { return 15*d[3]/maxRadius; })
+	// .style("fill",  function(d) {return z(d[0]); })
+
+	// officeHourDots.append("circle")
+	// .attr("class", "officecircles")
+	// .attr("cx", function(d) { return d[1]; })
+	// .attr("cy", function(d) { return d[2]; })
+	// .attr("r", function(d) { return 15*d[3]/maxRadius; })
+	// .style("fill",  function(d) {return z(d[0]); })
+
+}
+
+function disableCorrelation() {
+	d3.selectAll(".officeHourDots").remove()
+	d3.selectAll(".officecircles").remove()
+}
+	
+function toggleDist() {
+	distOn = !distOn
+	if(!distOn) {
+		d3.selectAll(".distText")
+		.text("Distribution ON")
+	} else {
+		d3.selectAll(".distText")
+		.text("Distribution OFF")
+	}
+}
+
 function mouseOutFunction() {
 	d3.select(".viz-body").selectAll(".line")
 	 .style("stroke-opacity",function(d1,i1) {
@@ -170,7 +382,7 @@ function mouseOutFunction() {
 
 	d3.select(".filter-body").selectAll(".officeHourline")
 	 .style("stroke-width",function(d1,i1) {
-			 return "1.5px"
+			 return lineWidthOriginal;
 	 }) 
 	 .style("stroke-opacity","1") 
 
@@ -188,18 +400,17 @@ function mouseOutFunction() {
 	 // .style("stroke", "black")
 
 	d3.select(this)
-		.style("stroke-width","5px")   
+		.style("stroke-width",lineWidthOriginal)   
 	// tooltip.style("visibility", "hidden") 
 
 	d3.selectAll(".navbarRects")
-	 .attr("width","10px") 
+	 .attr("width","18px") 
 
 	d3.selectAll(".navbarTexts")
 	 .attr("font-weight","normal") 
-}
 
-function compareCentroidsTo(centroids, oldCentroids) {
-	return _.isEqual(centroids,oldCentroids);
+	d3.selectAll(".navbarTexts")
+	 .attr("fill","black") 
 }
 
 function mouseOverFunction(d,i) {
@@ -214,9 +425,9 @@ function mouseOverFunction(d,i) {
 	d3.select(".filter-body").selectAll(".officeHourline")
 	 .style("stroke-width",function(d1,i1) {
 		 if(d.id != d1.id) {
-			 return "1.5px"
+			 return lineWidthOriginal;
 		 } else {
-			 return "6px"
+			 return lineWidthOnHover;
 		 }
 	 }) 
 	 .style("stroke-opacity",function(d1,i1) {
@@ -232,7 +443,7 @@ function mouseOverFunction(d,i) {
 			 return "4px"
 		 } else {
 			 return "6px"
-		 }
+		 }mouseOver
 	 }) 
 	 .style("stroke-opacity",function(d1,i1) {
 		 if(d.id != d1.id) {
@@ -255,34 +466,41 @@ function mouseOverFunction(d,i) {
 	 }) 
 
 
-	 d3.selectAll(".navbarRects")
+	 d3.selectAll(".navbarRects").transition()
 	 .attr("width",function(d1,i1) {
-	 	if(d1 != i) {
-			 return "10px"
+		if(d1 != i) {
+			 return "18px"
 		 } else {
-			 return "20px"
+			 return "140px"
 		 }
 	 })
 
-	 d3.selectAll(".navbarTexts")
+	 d3.selectAll(".navbarTexts").transition()
 	 .attr("font-weight",function(d1,i1) {
-	 	if(d1 != i) {
+		if(d1 != i) {
 			 return "normal"
 		 } else {
 			 return "bold"
+		 }
+	 }) 
+	 .attr("fill",function(d1,i1) {
+		if(d1 != i) {
+			 return "black"
+		 } else {
+			 return "white"
 		 }
 	 }) 
 
 	 // .style("stroke", "black")
 
 	d3.select(this)
-		.style("stroke-width","6px") 
+		.style("stroke-width", lineWidthOnHover) 
 	currentLabel = labelsOnBasisOfPerformance[i]
 }
 
 function mouseMoveFunction() {
 	var year = x.invert(d3.mouse(this)[0])
-	var y = getEventName(year)
+	// var y = getEventName(year)
 
 	tooltip.style("top", (event.pageY-30)+"px")
 	.style("visibility", "visible") 
@@ -295,35 +513,124 @@ function mouseMoveFunction() {
 	.style("font-size","11px")
 }
 
-	function selectLine(d,i) {
-		d3.select(".viz-body").selectAll(".line")
-			.style("stroke-opacity",function(d1,i1) {
-				if(i != i1) {
-					return "0.10";
-				}
-			}) 
+function clickOnLineToSeeSubLines(d,i) {
+
+  // d3.select(".viz-body").selectAll(".line")
+  //  .style("stroke-opacity",function(d1,i1) {
+
+  //    if(d.id != d1.id) {
+  //      return "0.60";
+  //    }
+  //  }) 
+
+  // d3.select(".filter-body").selectAll(".officeHourline")
+  //  .style("stroke-width",function(d1,i1) {
+  //    if(d.id != d1.id) {
+  //      return "1.5px"
+  //    } else {
+  //      return "10px"
+  //    }
+  //  }) 
+  //  // .style("stroke", "black")
+  
+  currentLabel = labelsOnBasisOfPerformance[i]
+  getTextValues(currentLabel,i)
+  getStackedBarData(currentLabel,filterCriteria)
+
+}
+
+function clickOnLineToSeeDistribution(d,i) {
+
+  currentLabel = labelsOnBasisOfPerformance[i]
+  getTextValues(currentLabel,i)
+  getStackedBarData(currentLabel,filterCriteria)
+
+}
+
+function getTextValues(label,index) {
+
+	d3.select(".text-body")
+	.style("border","1px solid black")
+
+
+	var text = d3.select(".text-body-cluster-description")
+
+	text.text("Cluster Size : "+label.length);
+
+	var text = d3.select(".text-body-cluster-content").selectAll("text")
+		.data(label);
+
+
+	text.attr("class", "update");
+	text.text("User IDs within this cluster : ")
+			.merge(text)
+	text.enter().append("text")
+			.attr("class", "enter")
+			.attr("x", function(d, i) { return i * 32; })
+			.attr("dy", ".35em")
+			.merge(text)
+			.text(function(d) { return originalcityData[d]["id"]+", "; });
+	text.exit().remove();
+}
+
+function getSimpleDate(d) {
+	var mm = d.getMonth() + 1; // getMonth() is zero-based
+	var dd = d.getDate();
+	return [d.getFullYear(),
+					(mm>9 ? '' : '0') + mm,
+					(dd>9 ? '' : '0') + dd
+				 ].join('');
+};
+
+function getEventName(year) {
+	var y = new Date(year)
+	y.setHours( 0,0,0,0 )
+	var event = " - "+(y.getMonth()+1)+"/"+y.getDay()+"/"+y.getFullYear();
+	return calendarData[getSimpleDate(irregDatesToRegDates[y])]["description"] + event;
+}
+
+function type(d, _, columns) {
+	d.date = parseTime(d.date);
+	for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
+	return d;
+}
+
+	// ----------------------------------------------------------------------------------------------
+	// Reads in all the Events at the Irregular Dates and converts them to Regular Spaced Dates
+	// The purpose of this conversion is to use it for DTW Clustering
+function convertIrregToReg(completeDateList,cityGradeData,calendarData) {
+
+	var dataForVisualization = []
+	var date_j = 0;
+	completeDateList.forEach(function(date_i,i) {
+			var element = {}
+			irregDatesToRegDates[date_i] = parseTime(dateList[date_j])
+			element["date"] = date_i
+			if(date_i >= parseTime(dateList[date_j+1]-1)) {
+				date_j = date_j + 1;
+			}
 			
-				
-		currentLabel = labels[i]
-		// boxplotdata = getBoxPlotData()
-		getStackedBarData(currentLabel,filterCriteria)
+			if(dateList[date_j] !== undefined) {
+				var x = calendarData[dateList[date_j]].description
+				for (var i = 0; i < cityGradeData.length; i++) {
+					var username = cityGradeData[i]["Username"] 
+					if(filteredSet.length===0 || filteredSet.includes(parseInt(username))) {
+						element[username] = cityGradeData[i][x]
+					}
+				}
 
-	}
+				dataForVisualization.push(element)  
+			}
+	})
+	return dataForVisualization
+}
 
-	// function mouseMoveFunction(d,i) {
-	// 	d3.select(this)
-	// 		.style("stroke-width","5px") 
-	// }
-
-	function type(d, _, columns) {
-		d.date = parseTime(d.date);
-		for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
-		return d;
-	}
-
+// ----------------------------------------------------------------------------------------------
+// 
+//   
+// ----------------------------------------------------------------------------------------------
 function kmeans(dataset,clusters,maxIterations) {
 
-	
 	var centroids = getRandomCentroids(numFeatures, clusters)
 	
 	// Initialize book keeping vars.
@@ -348,21 +655,25 @@ function kmeans(dataset,clusters,maxIterations) {
 	
 	return centroids
 }
+	
+function getRandomCentroids(numFeatures, k) {
+	var result = []
+	for (var i = 0; i < k; i++) {
+		result[i] = []
+		numFeatures.map(function(d) {
+			var x = {}
 
-	function getRandomCentroids(numFeatures, k) {
-		var result = []
-		for (var i = 0; i < k; i++) {
-			result[i] = []
-			numFeatures.map(function(d) {
-				var x = {}
-
-				x["date"] = d;
-				x["temperature"] = (Math.random()*75);
-				result[i].push(x)
-			})
-		}
-		return result;
+			x["date"] = d;
+			x["temperature"] = Math.random()*100;
+			result[i].push(x)
+		})
 	}
+	return result;
+}
+
+function compareCentroidsTo(centroids, oldCentroids) {
+	return _.isEqual(centroids,oldCentroids);
+}
 
 function getLabels(dataset, centroids) {
 	var result = []
@@ -397,7 +708,8 @@ function getLabels(dataset, centroids) {
 	return labelSet
 }
 
-	function DTWDistance(s1, s2) {
+function DTWDistance(s1, s2) {
+
 	var DTW = []
 	for (var i = 0; i < s1.length; i++) {
 		DTW[i] = {}
@@ -466,7 +778,7 @@ function ChebyshevDistance(s1, s2) {
 	return result
 }
 
-	function getCentroids(dataset, labels, k) {
+function getCentroids(dataset, labels, k) {
 
 	var keys = Object.keys(labels)
 	var result = []
@@ -500,46 +812,140 @@ function ChebyshevDistance(s1, s2) {
 	return result
 }
 
-	function findOptimalCluster(students, iterations) {
-			// For Clusters ranging from 1 - 20, find the sum of square differences and store in a map
-			var elbowMap = {}
-			for (var i = 1; i <= 10; i++) {
-				var clusters = kmeans(students,i,iterations)
-				elbowMap[i] = calculateSumSquareDistance(clusters, students)
-			}
-			console.log(elbowMap)
+function processQuartileData(quartile) {
+	quartilePostData = []
+	quartile.map(function(q) {
+		numFeatures.map(function(date) {
+			quartilePostData[date] = {}
+			q[date].sort(function compareNumbers(a, b) {
+				return a - b;
+			})
+			quartilePostData[date]["MAX"] = q[date][q[date].length-1]
+			quartilePostData[date]["MIN"] = q[date][0]
+			quartilePostData[date]["Median"] = q[date][Math.floor(q[date].length*0.5)-1]
+			quartilePostData[date]["LQuartile"] = q[date][Math.floor(q[date].length*0.25)-1]
+			quartilePostData[date]["HQuartile"] = q[date][Math.floor(q[date].length*0.75)-1]
+			
+
+		})
+	})
+}
+
+function getRGBIndex(d) {
+	for (var i = 0; i < Object.keys(labels).length; i++) {
+		if(labels[Object.keys(labels)[i]].includes(d)) {
+			return i
 		}
+	}
+}
 
+function findOptimalClusterUsingElbow(cities, iterations) {
+	var elbowMap = {}
+	for (var i = 1; i <= 15; i++) {
+		var clusters = kmeans(cities,i,iterations)
+		elbowMap[i] = calculateSumSquareDistance(clusters, cities)
+	}
+}
 
-		function calculateSumSquareDistance(clusters, studentData) {
-			var label_iterator = Object.keys(labels)
+function findOptimalClusterUsingSil(cities, iterations) {
+	var silMap = {}
+	for (var i = 1; i <= 10; i++) {
+		var clusters = kmeans(cities,i,iterations)
+		silMap[i] = calculateSilhouette(clusters, cities, labelsOnBasisOfPerformance)
+
+	}
+}
+
+function calculateSilhouette(clusters, cities, labels) {
+	var result = 0
+	var plot = []
+	Object.keys(labels).forEach(function(d,i) {
+		var a = calculateSilhouetteForOneClusterA(clusters, cities, labels[d])
+		var b = calculateSilhouetteForOneClusterB(clusters, cities, labels, d)
+		var s = a.map(function(d,i) {
+			if(d < b[i]) {
+				return (1-(d/b[i]))
+			} else if(d > b[i]) {
+				return ((b[i]/d)-1)
+			} else {
+				return 0;
+			}
+		})
+		plot[i] = _.sum(s)/s.length
+		result = result + plot[i]
+	})
+
+	return (result/Object.keys(labels).length)
+}
+
+function calculateSilhouetteForOneClusterA(clusters, cities, label) {
+	var a = []
+	label.forEach(function(d1,i1) {
+		a[i1] = 0
+		label.forEach(function(d2,i2) {
+			if(i1!=i2) {
+				a[i1] = a[i1] + getScoreDifferenceForSilhouette(cities[d1]["values"],cities[d2]["values"])/label.length
+			}
+		})	
+	})
+	return a;
+}
+
+function calculateSilhouetteForOneClusterB(clusters, cities, labels, key) {
+	var a = []
+	labels[key].forEach(function(d1,i1) {
+		a[i1] = Infinity
+		Object.keys(labels).forEach(function(d2,i2) {
 			var x = 0
-			label_iterator.forEach(function(d,i1) {
-				labels[d].forEach(function(e,i2) {
-					x = x + getSquareDifference(d,e,studentData[e]["values"],clusters[i1])
-				})
-			})
-			return x
-		}
-
-		function getSquareDifference(i1, i2, arr1, arr2) {
-
-			var result = 0
-			arr1.forEach(function(d,i) {
-				result = result + (arr1[i].temperature - arr2[i].temperature)*(arr1[i].temperature - arr2[i].temperature)
-			})
-			return Math.sqrt(result)
-		}
-
-		function getRGBIndex(d) {
-			for (var i = 0; i < Object.keys(labels).length; i++) {
-				if(labels[Object.keys(labels)[i]].includes(d)) {
-					return i
+			if(d2!=key) {
+				var label = labels[d2]
+				label.forEach(function(d3,i3) {
+						x = x + getScoreDifferenceForSilhouette(cities[d1]["values"],cities[d3]["values"])/label.length
+				})	
+				if(a[i1] > x) {
+					
+					a[i1] = x
 				}
-			}
-		}
+			} 
+		})	
+	})
+	
 
-	function getQuartileData(indexes,filterCriteria) {
+
+	return a;
+}
+
+function getScoreDifferenceForSilhouette(score1, score2) {
+	var difference = 0
+	score1.forEach(function(d,i) {
+		var stuffToAdd = score1[i]["temperature"]-score2[i]["temperature"]
+		stuffToAdd = stuffToAdd >= 0 ? stuffToAdd : -stuffToAdd;
+		difference = difference + stuffToAdd
+	})
+	return difference
+}
+
+function calculateSumSquareDistance(clusters, cityData) {
+	var label_iterator = Object.keys(labels)
+	var x = 0
+	label_iterator.forEach(function(d,i1) {
+		labels[d].forEach(function(e,i2) {
+			x = x + getSquareDifference(d,e,cityData[e]["values"],clusters[i1])
+		})
+	})
+	return x
+}
+
+
+function getSquareDifference(i1, i2, arr1, arr2) {
+	var result = 0
+	arr1.forEach(function(d,i) {
+		result = result + Math.sqrt(Math.abs(arr1[i].temperature - arr2[i].temperature))
+	})
+	return result
+}
+
+function getQuartileData(indexes,filterCriteria) {
 		result = []
 		var inter = {}
 		numFeatures.forEach(function(d,i) {
@@ -552,10 +958,10 @@ function ChebyshevDistance(s1, s2) {
 		var y1 = filterLimits["y1"]
 
 
-		originalStudentData.forEach(function(d,i) {
+		originalcityData.forEach(function(d,i) {
 			if(filterCriteria!=undefined && indexes.includes(i) && (filterCriteria.length == 0 || filterCriteria.includes(i))) {
 				d.values.forEach(function(d1,i1) {
-					inter[d1.date].push(d1.scores) 
+					inter[d1.date].push(d1.temperature) 
 				})
 			}
 		})
@@ -576,194 +982,31 @@ function ChebyshevDistance(s1, s2) {
 
 	}
 
-
-	/*function getBoxPlotData() {
-
-		arr = getFilteredUsers(currentLabel,choices)
-	
-		var t = d3.transition()
-				.duration(750);
-
-		var result = arr.map(function(d) {
-			var x = {}
-			originalData[d]["values"].forEach(function(e) {
-					x[e.date]= e.temperature
-			})
-			return x
-		})
-
-		d3.selectAll(".box").remove()
-
-		var box_labels = true
-		var box_margin = {top: 10, right: 50, bottom: 20, left: 50}
-		var box_width = 1500 - box_margin.left - box_margin.right
-		var box_height = 250 - box_margin.top - box_margin.bottom
-		var box_min = Infinity
-		var box_max = -Infinity
-		var box_data = [];
-
-		numFeatures.map(function(d,i) {
-			box_data[i] = []
-		})
-
-		numFeatures.map(function(d,i) {
-			box_data[i][0] = d
-			box_data[i][1] = []
-		})
-			
-		result.forEach(function(x) {
-
-		var box_v = []
-
-		numFeatures.map(function(d,i) {
-			box_v[i] = x[d]
-		})
-
-		box_v.sort()
-		
-		var rowbox_max = box_v[box_v.length-1]
-		var rowbox_min = box_v[0]
-
-
-		box_v.forEach(function(d,i) {
-			box_data[i][1].push(d);
-		})
-
-		 // add more rows if your csv file has more columns
-		 
-		if (rowbox_max > box_max) box_max = rowbox_max;
-		if (rowbox_min < box_min) box_min = rowbox_min; 
-		});
-			
-		var box_chart = d3.box()
-			.whiskers(iqr(1.5))
-			.height(box_height) 
-			.domain([box_min, box_max])
-			.showLabels(box_labels);
-
-		var box_svg = d3.select(".viz-body").append("svg")
-			.attr("width", box_width + box_margin.left + box_margin.right)
-			.attr("height", box_height + box_margin.top + box_margin.bottom)
-			.attr("class", "box")    
-			.append("g")
-			.attr("transform", "translate(" + box_margin.left + "," + box_margin.top + ")");
-
-		box_x = d3.scaleTime().range([0, box_width])
-		box_x.domain(d3.extent(box_data, function(d) {return d[0]; }));
-
-		var box_xAxis = d3.axisBottom(box_x)
-
-		var box_y = d3.scaleLinear()
-			.domain([box_min, box_max])
-			.range([box_height + box_margin.top, 0 + box_margin.top]);
-		
-		var box_yAxis = d3.axisLeft(box_y)
-
-		box_svg.selectAll(".box")    
-			.data(box_data)
-			.enter().append("g")
-			.attr("transform", function(d) { return "translate(" +  box_x(d[0])  + "," + box_margin.top + ")"; } )
-			.call(box_chart.width(5));
-	 
-		box_svg.append("text")
-			.attr("x", (box_width / 2))             
-			.attr("y", 0 + (box_margin.top / 2))
-			.attr("text-anchor", "middle")  
-			.style("font-size", "18px")
-			.style("font-family", "Cabin") 
-			.text("Distribution of temperature within Cluster")
-
-		box_svg.append("g")
-			.attr("class", "y axis")
-			.call(box_yAxis)
-			.append("text") // and text1
-			.attr("transform", "rotate(+90)")
-			.attr("y", 6)
-			.attr("dy", ".71em")
-			.style("text-anchor", "end")
-			.style("font-size", "16px") 
-			.text("temperature");    
-		
-		box_svg.append("g")
-			.attr("class", "x axis")
-			.attr("transform", "translate(0," + (box_height  + box_margin.top + 10) + ")")
-			.call(box_xAxis)
-			.append("text")             // text label for the x axis
-			.attr("x", (box_width / 2) )
-			.attr("y",  10 )
-			.attr("dy", ".71em")
-			.style("text-anchor", "middle")
-			.style("font-size", "16px") 
-			.text("Quarter"); 
-
-		function iqr(k) {
-			return function(d, i) {
-			var q1 = d.quartiles[0],
-				q3 = d.quartiles[2],
-				iqr = (q3 - q1) * k,
-				i = -1,
-				j = d.length;
-			while (d[++i] < q1 - iqr);
-			while (d[--j] > q3 + iqr);
-			return [i, j];
-			};
-		}
-
-		function getFilteredUsers(currentLabel,choices) {
-			// Returm Array of Indices
-			if(choices.size == 0) {
-				return currentLabel
-			} else {
-				var results = new Set()
-				choices.forEach(function(d,i) {
-					catWiseStudentData[d].forEach(function(d1,i1) {
-					var index = getStudentIndex(d1,currentLabel)
-					if(index != -1) {
-						results.add(index)
-					}
-					})
-				})
-				let array = Array.from(results);
-				return array
-			}
-		}
-
-		function getStudentIndex(student,currentLabel) {
-			for (var i = 0; i < originalData.length; i++) {
-				if(originalData[i]["id"] == student && currentLabel.includes(i)) {
-					return i
-				}
-			}
-			return -1
-		}
-	}*/
-
 function getStackedBarData(currentLabel,filterCriteria) {
 	var result = getQuartileData(currentLabel,filterCriteria)
-
 	d3.selectAll(".serie").remove()
 	d3.select(".stream-body").append("svg")
 	// var svgStacked = d3.select(".stream-body").select("svg").attr("id","stacked"),
-	// 	margin = {top: 20, right: 80, bottom: 30, left: 50},
-	// 	width = +svg.attr("width") - margin.left - margin.right,
-	// 	height = +svg.attr("height") - margin.top - margin.bottom,
+	//  margin = {top: 20, right: 80, bottom: 30, left: 50},
+	//  width = +svg.attr("width") - margin.left - margin.right,
+	//  height = +svg.attr("height") - margin.top - margin.bottom,
 	
 	g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	// d3.select(".serie").moveToBack();
 	// d3.selectAll(".line").moveToFront();
 
-	// var x = d3.scaleTime().range([0, width])
+	var x = d3.scaleTime().range([0, width])
 
-	// var y = d3.scaleLinear()
-	// 		.rangeRound([height, 0]);
+	var y = d3.scaleLinear()
+			.rangeRound([height, 0]);
 
 	var z = d3.interpolateRdYlBu();
 	var stack = d3.stack();
 	data = result
 	var columns = Object.keys(result[0])
 	
-	// x.domain(d3.extent(data, function(d) { return d.date; }));
-	// y.domain([0,75]);
+	x.domain(d3.extent(data, function(d) { return d.date; }));
+	y.domain([0,100]);
 	g.selectAll(".serie")
 		.data(stack.keys(columns.slice(1))(data))
 		.enter().append("g")
@@ -776,44 +1019,7 @@ function getStackedBarData(currentLabel,filterCriteria) {
 		.attr("x", function(d) { return x(d.data.date); })
 		.attr("y", function(d) { return y(d[1]); })
 		.attr("height", function(d) { return y(d[0]) - y(d[1]); })
-		.attr("width", 25)
-		
-
-		// g.append("g")
-		// 	.attr("class", "axis axis--x")
-		// 	.attr("transform", "translate(0," + height + ")")
-		// 	.call(d3.axisBottom(x));
-
-		// g.append("g")
-		// 	.attr("class", "axis axis--y")
-		// 	.call(d3.axisLeft(y).ticks(10, "s"))
-		// 	.append("text")
-		// 	.attr("x", 2)
-		// 	.attr("y", y(y.ticks(10).pop()))
-		// 	.attr("dy", "0.35em")
-		// 	.attr("text-anchor", "start")
-		// 	.attr("fill", "#000")
-		// 	.text("Temperature");
-
-	// var legend = g.selectAll(".legend")
-	// 	.data(columns.slice(1).reverse())
-	// 	.enter().append("g")
-	// 	.attr("class", "legend")
-	// 	.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; })
-	// 	.style("font", "10px sans-serif");
-
-	// legend.append("rect")
-	// 	.attr("x", width + 18)
-	// 	.attr("width", 18)
-	// 	.attr("height", 18)
-	// 	.attr("fill", z);
-
-	// legend.append("text")
-	// 	.attr("x", width + 44)
-	// 	.attr("y", 9)
-	// 	.attr("dy", ".35em")
-	// 	.attr("text-anchor", "start")
-	// 	.text(function(d) { return d; });
+		.attr("width", 10)
 
 	function type(d, i, columns) {
 		for (i = 1, t = 0; i < columns.length; ++i) t += d[columns[i]] = +d[columns[i]];
@@ -841,145 +1047,461 @@ function getRectangleColors(i) {
 	}
 }
 
-function getFilterData() {
+function getDateIndex(completeDateList, date) {
+	completeDateList.forEach(function(d,i) {
+		if(x.getTime() == y.getTime()) {
+			return i;
+		}
+	})
+	return -1;
+}
+
+function getFilterData(labelsOnBasisOfPerformance,originalData,cities,getLineData) {
 
 	var x = d3.scaleTime().range([0, width]),
-			y = d3.scaleLinear().range([height, 0]),
-			z = d3.scaleOrdinal(d3.schemeCategory20);
+		y = d3.scaleLinear().range([height, 0]),
+		z = d3.scaleOrdinal(d3.schemeCategory10);
 
-	var line = d3.line()
-			.curve(d3.curveBasis)
-			.x(function(d) { var temp = new Date(d.date); return x(temp); })
-			.y(function(d) { return y(d.temperature); });
+	var line1 = d3.line()
+	.x(function(d,i) {return x(d.date); })
+	.y(function(d,i) {return y(d.hours); });
 
-	d3.csv("data/temperature/humidity.csv", type, function(error, data) {
+	var line2 = d3.line()
+	.x(function(d,i) {return x(d.date); })
+	.y(function(d,i) {return y(d.min); });
+
+	var line3 = d3.line()
+	.x(function(d,i) {return x(d.date); })
+	.y(function(d,i) {return y(d.max); });
+
+	d3.csv("data/temperature/humidity.csv", type, function(error, TAdata) {
 		if (error) throw error;
 
+		var data = []
+		var columns = TAdata.columns.splice(1);
+
+		columns.forEach(function(cityName,cityIndex) {
+			var object = {
+				"id": cityName,
+				"values": []
+			}
+			TAdata.forEach(function(d,i) {
+				object["values"].push({
+					"date": d.date,
+					"hours": d[cityName]
+				});
+			})	
+			data.push(object);
+		})
+
 		var svg = d3.select(".filter-body").select("svg"),
-			margin = {top: 20, right: 80, bottom: 30, left: 50},
+			margin = {top: 30, right: 80, bottom: 30, left: 50},
 			width = svg.attr("width") - margin.left - margin.right,
 			height = svg.attr("height") - margin.top - margin.bottom,
 			g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+		// var brush = d3.brush().on("end", brushended).extent([[0, 0], [width, height]]),
+		// 	idleTimeout,
+		// 	idleDelay = 10000;
+		
+		data = clusterSimilarPerformingcities(data, labelsOnBasisOfPerformance)
+		var officeHourData = data
+		var dataSecondary = data
 
-		var brush = d3.brush().on("end", brushended).extent([[0, 0], [width, height]]),
-	    idleTimeout,
-	    idleDelay = 10000;
+	var data = [
+		{date: new Date(date_list[0]), value: 93.24},
+		{date: new Date(date_list[date_list.length-1]), value: 95.35}
+	];
 
-		var dataToRepresent = data.columns.slice(1).map(function(id) {
-			return {
- 				values: data.map(function(d) {
-					return {date: new Date(d.date), humidity: d[id]};
-				})
-			};
-		});
+	x.domain(d3.extent(data, function(d) { return d.date; }));
+	y.domain([
+		d3.min(officeHourData, function(c) { return d3.min(c.values, function(d) { return d.max; }); }),
+		d3.max(officeHourData, function(c) { return d3.max(c.values, function(d) { return d.max; }); })
+	]);
+	// z.domain(officeHourData.map(function(c,i) {return c.id; }));
 
-		dataSecondary = dataToRepresent
+	g.append("g")
+		.attr("class", "axis axis--x")
+		.attr("transform", "translate(0," + height + ")")
+		.call(d3.axisBottom(x));
 
-		x.range([0, width]),
-		y.range([height, 0]),
-		x.domain(d3.extent(data, function(d) { return d.date; }));
-		y.domain([0,100]);
-		z.domain(dataToRepresent.map(function(c,i) { return c.id; }));
-		var line = d3.line()
-			.curve(d3.curveBasis)
-			.x(function(d,i) { var temp = new Date(d.date); return x(temp); })
-			.y(function(d,i) { return y(d.humidity); });
+	g.append("g")
+		.attr("class", "axis axis--y")
+		.call(d3.axisLeft(y))
+		.append("text")
+		.attr("transform", "rotate(-90)")
+		.attr("y", 6)
+		.attr("dy", "0.71em")
+		.attr("fill", "#000")
+		.text("minutes");
 
-		g.append("g")
-				.attr("class", "axis axis--x")
-				.attr("transform", "translate(0," + height + ")")
-				.call(d3.axisBottom(x));
+	var officeHourDatum = g.selectAll(".officeHourDatum")
+	.data(officeHourData)
+	.enter().append("g")
+	.attr("class", "officeHourDatum");
 
-		g.append("g")
-				.attr("class", "axis axis--y")
-				.call(d3.axisLeft(y))
-				.append("text")
-				.attr("transform", "rotate(-90)")
-				.attr("y", 6)
-				.attr("dy", "0.71em")
-				.attr("fill", "#000")
-				.text("Humidity");
+	d3.selectAll(".officeHourline").remove()
+	officeHourDatum.append("path")
+	.attr("class", "officeHourline")
+	.attr("d", function(d) { return line1(d.values); })
+	.style("stroke", function(d,i) { return z(i); })
+	.style("stroke-width", "1.5px")
+	.on("mouseover", mouseOverFunction)
+	.on("mouseout", mouseOutFunction)
+	.on("mousemove", mouseMoveFunction)
+	.on("click", clickOnLineToSeeDistribution)
 
-		var city = g.selectAll(".filter-city")
-			.data(dataToRepresent)
-			.enter().append("g")
-			.attr("class", "filter-city");
+	officeHourDatum.exit().remove()
 
-		city.append("path")
-				.attr("class", "line")
-				.attr("d", function(d) { return line(d.values); })
-				.style("stroke", function(d,i) {return z(i)})
-				.style("stroke-width","1px") 
+/*	officeHourDatum.append("path")
+	.attr("class", "officeHourlineMin")
+	.attr("d", function(d) { return line2(d.values); })
+	.style("stroke", function(d,i) { return z(i); })
+	.style("stroke-width", "4px")
+	.on("mouseover", mouseOverFunction)
+	.on("mouseout", mouseOutFunction)
+	.on("mousemove", mouseMoveFunction)
+	.on("click", clickOnLineToSeeDistribution)
 
+	officeHourDatum.append("path")
+	.attr("class", "officeHourlineMax")
+	.attr("d", function(d) { return line3(d.values); })
+	.style("stroke", function(d,i) { return z(i); })
+	.style("stroke-width", "0.5px")
+	.on("mouseover", mouseOverFunction)
+	.on("mouseout", mouseOutFunction)
+	.on("mousemove", mouseMoveFunction)
+	.on("click", clickOnLineToSeeDistribution)*/
 
+	officeHourDatum.append("text")
+	.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+	.attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.hours) + ")"; })
+	.attr("x", 3)
+	.attr("dy", "0.35em")
+	.style("font", "10px sans-serif")
+	.text(function(d) { return d.id; });
 
-		city.append("text")
-				.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-				.attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.humidity) + ")"; })
-				.attr("x", 3)
-				.attr("dy", "0.35em")
-				.style("font", "10px sans-serif")
-				.text(function(d) { return d.id; });
-
-		svg.append("g")
-    .attr("class", "brush")
-    .call(brush)
-
-		function brushended() {
-			var s = d3.event.selection;
-		  if (!s) {
-		    if (!idleTimeout) return idleTimeout = setTimeout(idled, idleDelay);
-		    // x.domain(x0);
-		    // y.domain(y0);
-		  } else {
-		  	var x0 = x.invert(s[0][0])
-		  	var x1 = x.invert(s[1][0])
-		  	x0.setHours(x0.getHours() - 12);
-		  	x1.setHours(x1.getHours() - 12);
-		  	var y0 = y.invert(s[0][1])+7
-		  	var y1 = y.invert(s[1][1])+7
-		  	var filterLimits = {
-		  		"x0" : x0,
-		  		"y0" : y0,
-		  		"x1" : x1,
-		  		"y1" : y1,
-		  	}
-		  }
-		  update(filterLimits);
-		}
-
-		function idled() {
-		  idleTimeout = null;
-		}
-
-		function update(filterLimits) {
-			filterCriteria = getFilteredLabels(dataSecondary, filterLimits)
-			getStackedBarData(currentLabel, filterCriteria)
-		}
-
-		function getFilteredLabels(data, filters) {
-
-			var x0 = filters["x0"]
-			var x1 = filters["x1"]
-			var y0 = filters["y0"]
-			var y1 = filters["y1"]
-
-			var set = new Set()
-
-			data.forEach(function(d,i) {
-				d.values.forEach(function(d1,i1) {
-					if(d1.date > x0 && d1.date < x1 && d1.humidity < y0 && d1.humidity > y1) {
-						set.add(i)
-					}
-				})
-			})
-
-			var result = Array.from(set);
-			return result
-		}
+		if ( getLineData && typeof ( getLineData ) == "function" ) { 
+			getLineData(originalData,cities,dataSecondary); 
+		} 
 
 	});
+	
 
 
+}
+
+function brushended() {
+	var s = d3.event.selection;
+	if (!s) {
+		if (!idleTimeout) return idleTimeout = setTimeout(idled, idleDelay);
+		// x.domain(x0);
+		// y.domain(y0);
+	} else {
+		var x0 = x.invert(s[0][0])
+		var x1 = x.invert(s[1][0])
+		x0.setHours(x0.getHours() - 12);
+		x1.setHours(x1.getHours() - 12);
+		var y0 = y.invert(s[0][1])+7
+		var y1 = y.invert(s[1][1])+7
+		var filterLimits = {
+			"x0" : x0,
+			"y0" : y0,
+			"x1" : x1,
+			"y1" : y1,
+		}
+	}
+	update(filterLimits);
+}
+
+function idled() {
+	idleTimeout = null;
+}
+
+function update(filterLimits) {
+	filterCriteria = getFilteredLabels(dataSecondary, filterLimits)
+	getStackedBarData(currentLabel, filterCriteria)
+}
+
+function getFilteredLabels(data, filters) {
+
+	var x0 = filters["x0"]
+	var x1 = filters["x1"]
+	var y0 = filters["y0"]
+	var y1 = filters["y1"]
+
+	var set = new Set()
+	data.forEach(function(d,i) {
+		d.values.forEach(function(d1,i1) {
+			if(d1.date > x0 && d1.date < x1 && d1.hours < y0 && d1.hours > y1) {
+				set.add(i)
+			}
+		})
+	})
+
+	var result = Array.from(set);
+	return result
+}
+
+function clusterSimilarPerformingcities(data, labelsOnBasisOfPerformance) {
+	var clusteredData = []
+	var keys = Object.keys(labelsOnBasisOfPerformance)
+	var result = []
+	keys.map(function(labelIndex,i) {
+		var object = {};
+		var cityGroup = labelsOnBasisOfPerformance[labelIndex]
+		var clusteredOfficeHourData = clusterOfficeHourData(cityGroup,data)
+		object["id"] = "C"+i
+		object["values"] = clusteredOfficeHourData
+		result.push(object)
+	})
+	return result;
+}
+
+function clusterOfficeHourData(cityGroup, data) {
+	result = data[0]["values"].map(function(d,i) {
+		return {
+			"date" : d["date"],
+			"hours" : 0,
+			"min" : 0,
+			"max" : 0
+		}
+	})
+
+	cityGroup.forEach(function(city) {
+		data.forEach(function(tadata) {
+
+			if(tadata["id"] == originalcityData[city]["id"]) {
+				tadata["values"].forEach(function(d,i) {
+					result[i]["hours"] = result[i]["hours"] + (d["hours"]/cityGroup.length);
+					result[i]["min"] = Math.min(result[i]["min"],d["hours"]);
+					result[i]["max"] = Math.max(result[i]["max"],d["hours"]);
+				})
+			}
+		})
+	})
+	return result;
+}
+
+function getLineData(data,cities,dataSecondary) { 	
+
+	x.domain(d3.extent(data, function(d) {return d.date; }));
+	y.domain([10,70])
+	z.domain(cities.map(function(c,i) {return i; }));
+
+	circles = []
+
+	cities.forEach(function(cityID,i) {
+		cityID["values"].forEach(function(entry,i1) {
+			circles.push([cityID["id"],x(entry["date"]),y(entry["temperature"]),dataSecondary[i]["values"][i1]["hours"],dataSecondary[i]["values"][i1]["min"],dataSecondary[i]["values"][i1]["max"]])
+		})
+	})
+
+	maxRadius = d3.max(circles, function(c) {return c[3] })
+	
+	g.append("g")
+		.attr("class", "axis axis--x")
+		.attr("transform", "translate(0," + height + ")")
+		.call(d3.axisBottom(x));
+
+	g.append("g")
+		.attr("class", "axis axis--y")
+		.call(d3.axisLeft(y))
+		.append("text")
+		.attr("transform", "rotate(-90)")
+		.attr("y", 6)
+		.attr("dy", "0.71em")
+		.attr("fill", "#000")
+		.text("temperature");
+
+	tooltip = d3.select("body")
+	.append("div")
+	.style("position", "absolute")
+	.style("z-index", "10")
+	.style("visibility", "hidden")
+
+	var cityData = g.selectAll(".cityData")
+		.data(cities)
+		.enter().append("g")
+		.attr("class", "cityData");
+
+	d3.select("viz-body").selectAll(".line").remove()
+	
+	// cityData.append("path")
+	// 	.attr("class", "line")
+	// 	.attr("d", function(d) {return cityline(d.values) })
+	// 	.style("stroke", function(d) {return z(d.id); })
+	// 	.style("stroke-width", "1.5px")
+	// 	.on("mouseover", mouseOverFunction)
+	// 	.on("mouseout", mouseOutFunction)
+	// 	.on("mousemove", mouseMoveFunction)
+	// 	.on("click", clickOnLineToSeeDistribution)
+
+
+	cityData.append("path")
+		.attr("class", "line")
+		.attr("d", function(d) {return cityline(d.values) })
+		.style("stroke", function(d,i) {
+			return z(i)
+		})
+		.style("stroke-width", lineWidthOriginal)
+		.on("mouseover", mouseOverFunction)
+		.on("mouseout", mouseOutFunction)
+		.on("mousemove", mouseMoveFunction)
+		.on("click", clickOnLineToSeeDistribution)
+
+	cityData.exit().remove();		
+
+	cityData.append("text")
+		.attr("class","cluster-text-name")
+		.datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+		.attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+		.attr("x", 3)
+		.attr("dy", "0.35em")
+		.style("font", "10px")
+		.text(function(d) { return d.id; })
+
+}
+
+// function filterAttendingcities() {
+// 	mainFunction(2)
+// }
+
+// function filterMissingcities() {
+// 	mainFunction(3)
+// }
+
+function getLabelNumber(labelsOnBasisOfPerformance,id) {
+	var result;
+	Object.keys(labelsOnBasisOfPerformance).forEach(function(d1,i1) {
+		if(labelsOnBasisOfPerformance[d1].includes(id)) {
+			result =  i1;
+		}
+	})
+	return result;
+}
+
+
+function hierarch(cities, distance, clusterSize) {
+
+	var dmin = []
+	var n = cities.length
+	var d = []
+	for(var i=0;i<n;i++) {
+		d[i] = {}
+		d[i]["labels"] = [i]
+		d[i]["values"] = []
+		for(var j=0;j<n;j++) {
+			if(i==j) {
+				d[i]["values"][j] = Infinity
+			} else {
+				d[i]["values"][j] = distance(cities[i]["values"],cities[j]["values"])
+			}
+		}	
+	}
+
+	// var m = []
+	// m[0] = {}
+	// m[1] = {}
+	// m[2] = {}
+	// m[3] = {}
+	// m[4] = {}
+	// m[5] = {}
+
+	// m[0]["labels"] = [0]
+	// m[0]["values"] = [Infinity,662,877,255,412,996]
+
+	// m[1]["labels"] = [1]
+	// m[1]["values"] = [662,Infinity,295,468,268,400]
+
+	// m[2]["labels"] = [2]
+	// m[2]["values"] = [877,295,Infinity,754,564,138]
+
+	// m[3]["labels"] = [3]
+	// m[3]["values"] = [255,468,754,Infinity,219,869]
+
+	// m[4]["labels"] = [4]
+	// m[4]["values"] = [412,268,564,219,Infinity,669]
+
+	// m[5]["labels"] = [5]
+	// m[5]["values"] = [996,400,138,869,669,Infinity]
+
+
+	return handleDistanceMatrix(d,clusterSize)
+}
+
+function handleDistanceMatrix(matrix, clusterSize) {
+
+	var Osize = matrix.length
+	for(var hx = Osize-1; hx >= clusterSize ; hx--) {
+		var size = matrix.length
+		var min = Infinity
+		var minLabel1 = null
+		var minLabel2 = null
+
+
+		// To find the closest clusters
+		// by finding the least value in the matrix
+		for(var i=0;i<size;i++) {
+			for(var j=0;j<=i;j++) {
+				if(matrix[i]["values"][j] < min) {
+					min = matrix[i]["values"][j]
+					minLabel1 = i
+					minLabel2 = j
+				}
+			}
+		}
+
+		// Saving the index of the closest clusters
+		var min = minLabel1 < minLabel2 ? minLabel1 : minLabel2
+		var max = minLabel1 < minLabel2 ? minLabel2 : minLabel1
+
+
+		// Moving all the labels from the max index to the min index
+		matrix[max]["labels"].forEach(function(d,i) {
+			matrix[min]["labels"].push(d)	
+		})
+		
+		// Replacing all the values in the min index
+		// with the minimum values of both the rows
+		for(var i=0;i<size;i++) {
+			matrix[min]["values"][i] = linkageCriteriaAverage(matrix[min]["values"][i],matrix[max]["values"][i])
+		}
+
+		// Replacing all the entries for the rows to make the same change
+		for(var i=0;i<size;i++) {
+			matrix[i]["values"][min] = matrix[min]["values"][i]
+		}
+
+		// Remove the row for the max index
+		_.remove(matrix, function(n,i) {
+			return i == max;
+		});
+
+		// Remove the columns for the max index
+		for(var i=0;i<size-1;i++) {
+			_.remove(matrix[i]["values"], function(n,i2) {
+				return i2 == max;
+			});
+		}
+		matrix[min]["values"][min] = Infinity
+	}
+	var result = {}
+		matrix.forEach(function(d,i) {
+			result[i] = d["labels"]
+		})
+	return result
+
+}
+
+function linkageCriteriaSingle(a, b) {
+  return Math.min(a,b)
+}
+
+function linkageCriteriaComplete(a, b) {
+  return Math.max(a,b)
+}
+
+function linkageCriteriaAverage(a, b) {
+  return (a+b)/2
 }

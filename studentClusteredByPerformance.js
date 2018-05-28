@@ -37,7 +37,7 @@ var tipBox
 var tooltip
 var completeDateList
 var dateSet
-var fall_date_list
+var spring_date_list
 var labelsOnBasisOfPerformance
 var tickOn = false
 var corrOn = false
@@ -114,7 +114,7 @@ var fall_date_list = [20170831,20170901,20170902,20170903,20170904,20170905,2017
 20171205,20171206,20171207,20171208,20171209,20171210,20171211,20171212,
 20171213,20171214,20171215]
 
-var studentsWithAssistance_Fall = ["316","227","184","334","337","137","151","215","111",
+var studentsWithAssistance_spring = ["316","227","184","334","337","137","151","215","111",
 			"320","160","130","253","158","171","116","183","313","369","310","335","173","155",
 			"169","174","297","120","257","302","138","274","121","305","358","278","102","118",
 			"124","217","162","112","364","292","179","356","190","306","101","285","110","268",
@@ -131,7 +131,7 @@ function mainFunction(studentFilter) {
 	// Below code parses the calendar csv to mark events on the basis of the date
 	// and give descriptions of the events that have occured
 	// with the cummulative total score till that event
-	d3.csv('data/fall2017/calendar.csv')
+	d3.csv('data/spring2017/calendar.csv')
 		.row(function(d) {
 			return {
 				date: parseInt(d["Date"]),
@@ -161,7 +161,7 @@ function mainFunction(studentFilter) {
 
 
 	// Below code basically parses the studentGrade data to create normalized scores of the students till that date
-	d3.csv("data/fall2017/grades.csv", type, function(error, studentGradeData) {
+	d3.csv("data/spring2017/grades.csv", type, function(error, studentGradeData) {
 		if (error) throw error;
 		
 		if(studentFilter == 1) {
@@ -177,7 +177,7 @@ function mainFunction(studentFilter) {
 			})
 		} else if(studentFilter == 2) {
 			studentGradeData.forEach(function(d,i) {
-			  if(studentsWithAssistance_Fall.includes(d.Username)) {
+			  if(studentsWithAssistance_spring.includes(d.Username)) {
 				var total = 0
 				for (var i = 0; i < dateList.length; i++) {
 				  var x = (calendarData[dateList[i]].description)
@@ -191,7 +191,7 @@ function mainFunction(studentFilter) {
 		} else if(studentFilter == 3) {
 	
 			studentGradeData.forEach(function(d,i) {
-			  if(!studentsWithAssistance_Fall.includes(d.Username)) {
+			  if(!studentsWithAssistance_spring.includes(d.Username)) {
 				var total = 0
 				for (var i = 0; i < dateList.length; i++) {
 				  var x = (calendarData[dateList[i]].description)
@@ -241,7 +241,6 @@ function mainFunction(studentFilter) {
 			};
 		})
 
-		console.log(clusteredData);
 		originalStudentData = students
 		students = clusteredData
 
@@ -744,7 +743,7 @@ function getCompleteDateList(dateList) {
 	dateSet = new Set()
 	var completeDateList = []
 
-	fall_date_list.map(function(date_i,i) {
+	spring_date_list.map(function(date_i,i) {
 		if(parseTime(date_i) <= parseTime(dateList[dateList.length-1])) {
 			if(!dateSet.has(parseTime(date_i).toString())) {
 				dateSet.add(parseTime(date_i).toString())
@@ -1207,15 +1206,14 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 	.x(function(d,i) {return x(d.date); })
 	.y(function(d,i) {return y(d.max); });
 
-	d3.csv("data/fall2017/oh.csv", type, function(error, TAdata) {
+	d3.csv("data/spring2017/oh.csv", type, function(error, TAdata) {
 		if (error) throw error;
-
 		var data = []
 		columns.splice(1).forEach(function(studentID,id) {
 			var object = {};
 			object["id"] = studentID;
 			object["values"] = [];
-			object["values"] = fall_date_list.map(function(date,i) {
+			object["values"] = spring_date_list.map(function(date,i) {
 				var x = date%100;
 				var y = ((date%10000-x)/100)-1
 				var z = 2017
@@ -1227,12 +1225,15 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 
 			TAdata.map(function(d,i) {
 				if(d["Username"]==object["id"]) {
-					var index = (fall_date_list.indexOf(d["Timestamp"]))
+					var index = (spring_date_list.indexOf(d["Timestamp"]))
 					object["values"][index]["hours"] = d["Time Spent"]
 				}
 			})
 			data.push(object);
 		})
+
+		console.log("Data")
+		console.log(data)
 
 		var svg = d3.select(".filter-body").select("svg"),
 			margin = {top: 30, right: 80, bottom: 30, left: 50},
@@ -1424,15 +1425,6 @@ function clusterOfficeHourData(studentGroup, data) {
 }
 
 function getLineData(data,students,dataSecondary) { 	
-
-	console.log("data");
-	console.log(data);
-
-	console.log("students")
-	console.log(students)
-
-	console.log("dataSecondary")
-	console.log(dataSecondary)
 
 	x.domain(d3.extent(data, function(d) {return d.date; }));
 	y.domain([0,100])
