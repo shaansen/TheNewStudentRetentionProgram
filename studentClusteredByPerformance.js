@@ -1,3 +1,6 @@
+var lineWidthOriginal = "1.5px";
+var lineWidthOnHover = "6px";
+
 var choices = new Set()
 
 var svg = d3.select(".viz-body").select("svg"),
@@ -29,9 +32,7 @@ var filterLimits = {
 }
 
 var circles = []
-
 var maxRadius
-		
 var tipBox
 var tooltip
 var completeDateList
@@ -470,7 +471,7 @@ function mouseOutFunction() {
 
 	d3.select(".filter-body").selectAll(".officeHourline")
 	 .style("stroke-width",function(d1,i1) {
-			 return "1.5px"
+			 return lineWidthOriginal;
 	 }) 
 	 .style("stroke-opacity","1") 
 
@@ -488,7 +489,7 @@ function mouseOutFunction() {
 	 // .style("stroke", "black")
 
 	d3.select(this)
-		.style("stroke-width","1.5px")   
+		.style("stroke-width",lineWidthOriginal)   
 	// tooltip.style("visibility", "hidden") 
 
 	d3.selectAll(".navbarRects")
@@ -513,9 +514,9 @@ function mouseOverFunction(d,i) {
 	d3.select(".filter-body").selectAll(".officeHourline")
 	 .style("stroke-width",function(d1,i1) {
 		 if(d.id != d1.id) {
-			 return "1.5px"
+			 return lineWidthOriginal;
 		 } else {
-			 return "6px"
+			 return lineWidthOnHover;
 		 }
 	 }) 
 	 .style("stroke-opacity",function(d1,i1) {
@@ -531,7 +532,7 @@ function mouseOverFunction(d,i) {
 			 return "4px"
 		 } else {
 			 return "6px"
-		 }
+		 }mouseOver
 	 }) 
 	 .style("stroke-opacity",function(d1,i1) {
 		 if(d.id != d1.id) {
@@ -582,7 +583,7 @@ function mouseOverFunction(d,i) {
 	 // .style("stroke", "black")
 
 	d3.select(this)
-		.style("stroke-width","6px") 
+		.style("stroke-width", lineWidthOnHover) 
 	currentLabel = labelsOnBasisOfPerformance[i]
 }
 
@@ -1468,7 +1469,7 @@ function getLineData(data,students,dataSecondary) {
 		.style("stroke", function(d,i) {
 			return z(i)
 		})
-		.style("stroke-width", "2.5px")
+		.style("stroke-width", lineWidthOriginal)
 		.on("mouseover", mouseOverFunction)
 		.on("mouseout", mouseOutFunction)
 		.on("mousemove", mouseMoveFunction)
