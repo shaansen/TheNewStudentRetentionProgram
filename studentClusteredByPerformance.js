@@ -37,7 +37,7 @@ var tipBox
 var tooltip
 var completeDateList
 var dateSet
-var date_i_list
+var fall_date_list
 var labelsOnBasisOfPerformance
 var tickOn = false
 var corrOn = false
@@ -85,14 +85,45 @@ var hourSpent = {
 }
 
 var filteredSet = []
-var date_i_list = [20170201,20170202,20170203,20170204,20170205,20170206,20170207,20170208,20170209,20170210,20170211,20170212,20170213,20170214,20170215,20170216,
-20170217,20170218,20170219,20170220,20170221,20170222,20170223,20170224,20170225,20170226,20170227,20170228,20170301,20170302,20170303,20170304,
-20170305,20170306,20170307,20170308,20170309,20170310,20170311,20170312,20170313,20170314,20170315,20170316,20170317,20170318,20170319,20170320,
-20170321,20170322,20170323,20170324,20170325,20170326,20170327,20170328,20170329,20170330,20170331,20170401,20170402,20170403,20170404,20170405,
-20170406,20170407,20170408,20170409,20170410,20170411,20170412,20170413,20170414,20170415,20170416,20170417,20170418,20170419,20170420,20170421,
-20170422,20170423,20170424,20170425,20170426,20170427,20170428,20170429,20170430,20170501,20170502,20170503,20170504,20170505,20170506,20170507,
+var spring_date_list = [20170201,20170202,20170203,20170204,20170205,20170206,20170207,20170208,
+20170209,20170210,20170211,20170212,20170213,20170214,20170215,20170216,
+20170217,20170218,20170219,20170220,20170221,20170222,20170223,20170224,
+20170225,20170226,20170227,20170228,20170301,20170302,20170303,20170304,
+20170305,20170306,20170307,20170308,20170309,20170310,20170311,20170312,
+20170313,20170314,20170315,20170316,20170317,20170318,20170319,20170320,
+20170321,20170322,20170323,20170324,20170325,20170326,20170327,20170328,
+20170329,20170330,20170331,20170401,20170402,20170403,20170404,20170405,
+20170406,20170407,20170408,20170409,20170410,20170411,20170412,20170413,
+20170414,20170415,20170416,20170417,20170418,20170419,20170420,20170421,
+20170422,20170423,20170424,20170425,20170426,20170427,20170428,20170429,
+20170430,20170501,20170502,20170503,20170504,20170505,20170506,20170507,
 20170508,20170509,20170510,20170511,20170512,20170513,20170514,20170515]
 
+var fall_date_list = [20170831,20170901,20170902,20170903,20170904,20170905,20170906,20170907,
+20170908,20170909,20170910,20170911,20170912,20170913,20170914,20170915,
+20170916,20170917,20170918,20170919,20170920,20170921,20170922,20170923,
+20170924,20170925,20170926,20170927,20170928,20170929,20170930,20171001,
+20171002,20171003,20171004,20171005,20171006,20171007,20171008,20171009,
+20171010,20171011,20171012,20171013,20171014,20171015,20171016,20171017,
+20171018,20171019,20171020,20171021,20171022,20171023,20171024,20171025,
+20171026,20171027,20171028,20171029,20171030,20171031,20171101,20171102,
+20171103,20171104,20171105,20171106,20171107,20171108,20171109,20171110,
+20171111,20171112,20171113,20171114,20171115,20171116,20171117,20171118,
+20171119,20171120,20171121,20171122,20171123,20171124,20171125,20171126,
+20171127,20171128,20171129,20171130,20171201,20171202,20171203,20171204,
+20171205,20171206,20171207,20171208,20171209,20171210,20171211,20171212,
+20171213,20171214,20171215]
+
+var studentsWithAssistance_Fall = ["316","227","184","334","337","137","151","215","111",
+			"320","160","130","253","158","171","116","183","313","369","310","335","173","155",
+			"169","174","297","120","257","302","138","274","121","305","358","278","102","118",
+			"124","217","162","112","364","292","179","356","190","306","101","285","110","268",
+			"331","269","108","135","258","232","262","329","296","346","167","237","143","242",
+			"139","154","105","122","243","350","157","176","244","189","187","149","136","128",
+			"245","250","359","264","261","276","152","354","133","107","221","142","357","340",
+			"106","332","339","131","208","260","280","226","170","266","303","228","304","233",
+			"159","150","251","229","211","100","220","199","180","255","299","145","165","291",
+			"322","344","254","338","283","362","284","252","279","219"]
 
 mainFunction(1)
 
@@ -100,7 +131,7 @@ function mainFunction(studentFilter) {
 	// Below code parses the calendar csv to mark events on the basis of the date
 	// and give descriptions of the events that have occured
 	// with the cummulative total score till that event
-	d3.csv('data/spring2017/calendar.csv')
+	d3.csv('data/fall2017/calendar.csv')
 		.row(function(d) {
 			return {
 				date: parseInt(d["Date"]),
@@ -130,58 +161,47 @@ function mainFunction(studentFilter) {
 
 
 	// Below code basically parses the studentGrade data to create normalized scores of the students till that date
-	d3.csv("data/spring2017/grades.csv", type, function(error, studentGradeData) {
+	d3.csv("data/fall2017/grades.csv", type, function(error, studentGradeData) {
 		if (error) throw error;
 		
-		 if(studentFilter == 1) {
+		if(studentFilter == 1) {
 			studentGradeData.forEach(function(d,i) {
-        var total = 0
-        for (var i = 0; i < dateList.length; i++) {
-          var x = (calendarData[dateList[i]].description)
-          var y = (calendarData[dateList[i]].total)
-          total = total + d[x]
-          d[x] = total/y*100
-        }
-      	columns.push(d.Username)
-	    })
+			var total = 0
+			for (var i = 0; i < dateList.length; i++) {
+			  var x = (calendarData[dateList[i]].description)
+			  var y = (calendarData[dateList[i]].total)
+			  total = total + d[x]
+			  d[x] = total/y*100
+			}
+			columns.push(d.Username)
+			})
 		} else if(studentFilter == 2) {
-			var studentsWithAssistance = ["316","227","184","334","337","137","151","215","111","320","160","130","253","158","171","116","183","313","369","310","335","173","155","169","174","297","120","257","302","138","274","121","305",
-      "358","278","102","118","124","217","162","112","364","292","179","356","190","306","101","285","110","268","331","269","108","135","258","232","262","329","296","346","167","237","143","242",
-      "139","154","105","122","243","350","157","176","244","189","187","149","136","128","245","250","359","264","261","276","152","354","133","107","221","142","357","340","106","332","339","131",
-      "208","260","280","226","170","266","303","228","304","233","159","150","251","229","211","100","220","199","180","255","299","145","165","291","322","344","254","338","283","362","284","252",
-      "279","219"]
-    
-	    studentGradeData.forEach(function(d,i) {
-	      if(studentsWithAssistance.includes(d.Username)) {
-	        var total = 0
-	        for (var i = 0; i < dateList.length; i++) {
-	          var x = (calendarData[dateList[i]].description)
-	          var y = (calendarData[dateList[i]].total)
-	          total = total + d[x]
-	          d[x] = total/y*100
-	        }
-	      	columns.push(d.Username)
-	      }
-	    })
+			studentGradeData.forEach(function(d,i) {
+			  if(studentsWithAssistance_Fall.includes(d.Username)) {
+				var total = 0
+				for (var i = 0; i < dateList.length; i++) {
+				  var x = (calendarData[dateList[i]].description)
+				  var y = (calendarData[dateList[i]].total)
+				  total = total + d[x]
+				  d[x] = total/y*100
+				}
+				columns.push(d.Username)
+			  }
+			})
 		} else if(studentFilter == 3) {
-			var studentsWithAssistance = ["316","227","184","334","337","137","151","215","111","320","160","130","253","158","171","116","183","313","369","310","335","173","155","169","174","297","120","257","302","138","274","121","305",
-      "358","278","102","118","124","217","162","112","364","292","179","356","190","306","101","285","110","268","331","269","108","135","258","232","262","329","296","346","167","237","143","242",
-      "139","154","105","122","243","350","157","176","244","189","187","149","136","128","245","250","359","264","261","276","152","354","133","107","221","142","357","340","106","332","339","131",
-      "208","260","280","226","170","266","303","228","304","233","159","150","251","229","211","100","220","199","180","255","299","145","165","291","322","344","254","338","283","362","284","252",
-      "279","219"]
-    
-	    studentGradeData.forEach(function(d,i) {
-	      if(!studentsWithAssistance.includes(d.Username)) {
-	        var total = 0
-	        for (var i = 0; i < dateList.length; i++) {
-	          var x = (calendarData[dateList[i]].description)
-	          var y = (calendarData[dateList[i]].total)
-	          total = total + d[x]
-	          d[x] = total/y*100
-	        }
-	      	columns.push(d.Username)
-	      }
-	    })
+	
+			studentGradeData.forEach(function(d,i) {
+			  if(!studentsWithAssistance_Fall.includes(d.Username)) {
+				var total = 0
+				for (var i = 0; i < dateList.length; i++) {
+				  var x = (calendarData[dateList[i]].description)
+				  var y = (calendarData[dateList[i]].total)
+				  total = total + d[x]
+				  d[x] = total/y*100
+				}
+				columns.push(d.Username)
+			  }
+			})
 		}
 
 		completeDateList = getCompleteDateList(dateList)
@@ -221,6 +241,7 @@ function mainFunction(studentFilter) {
 			};
 		})
 
+		console.log(clusteredData);
 		originalStudentData = students
 		students = clusteredData
 
@@ -350,37 +371,37 @@ function enableNavFilters() {
 	
 	navbarElements.exit().remove();*/
 var svg = d3.select(".navfilter-body").append("svg")
-    .attr("width", "160px")
-    .attr("height", "400px")
-    .append("g")
-    .attr("transform", "translate(" + 10 + "," + 10 + ")");
+	.attr("width", "160px")
+	.attr("height", "400px")
+	.append("g")
+	.attr("transform", "translate(" + 10 + "," + 10 + ")");
 
 
 var width = 10
 
 
 var legend = svg.selectAll(".navbarElements")
-    .data(data)
-    .enter().append("g")
-    .attr("class", "navbarElements")
-    .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+	.data(data)
+	.enter().append("g")
+	.attr("class", "navbarElements")
+	.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
 legend.append("rect")
 	.attr("class", "navbarRects")
-    .attr("x", width - 10)
-    .attr("width", 18)
-    .attr("height", 18)
-    .style("fill", function(d,i) {
-    	return z(i);
-    });
+	.attr("x", width - 10)
+	.attr("width", 18)
+	.attr("height", 18)
+	.style("fill", function(d,i) {
+		return z(i);
+	});
 
 legend.append("text")
 	.attr("class", "navbarTexts")
-    .attr("x", width + 20)
-    .attr("y", 9)
-    .attr("dy", ".35em")
-    .style("text-anchor", "start")
-    .text(function(d,i) {
+	.attr("x", width + 20)
+	.attr("y", 9)
+	.attr("dy", ".35em")
+	.style("text-anchor", "start")
+	.text(function(d,i) {
 		return "Cluster-"+i+" #"+labelsOnBasisOfPerformance[d].length
 	})
 
@@ -411,7 +432,7 @@ function enableCorrelation() {
 	// .style("fill-opacity", "0.75")
 
 
-	officeHourDots.append("circle")
+	officeHourDots.append("circle").transition()
 	.attr("class", "officecircles")
 	.attr("cx", function(d) { return d[1]; })
 	.attr("cy", function(d) { return d[2]; })
@@ -555,25 +576,25 @@ function mouseOverFunction(d,i) {
 	 }) 
 
 
-	 d3.selectAll(".navbarRects")
+	 d3.selectAll(".navbarRects").transition()
 	 .attr("width",function(d1,i1) {
-	 	if(d1 != i) {
+		if(d1 != i) {
 			 return "18px"
 		 } else {
 			 return "140px"
 		 }
 	 })
 
-	 d3.selectAll(".navbarTexts")
+	 d3.selectAll(".navbarTexts").transition()
 	 .attr("font-weight",function(d1,i1) {
-	 	if(d1 != i) {
+		if(d1 != i) {
 			 return "normal"
 		 } else {
 			 return "bold"
 		 }
 	 }) 
 	 .attr("fill",function(d1,i1) {
-	 	if(d1 != i) {
+		if(d1 != i) {
 			 return "black"
 		 } else {
 			 return "white"
@@ -674,7 +695,8 @@ function getSimpleDate(d) {
 function getEventName(year) {
 	var y = new Date(year)
 	y.setHours( 0,0,0,0 )
-	return calendarData[getSimpleDate(irregDatesToRegDates[y])]["description"] + " - "+(y.getMonth()+1)+"/"+y.getDay()+"/"+y.getFullYear()
+	var event = " - "+(y.getMonth()+1)+"/"+y.getDay()+"/"+y.getFullYear();
+	return calendarData[getSimpleDate(irregDatesToRegDates[y])]["description"] + event;
 }
 
 function type(d, _, columns) {
@@ -721,15 +743,8 @@ function getCompleteDateList(dateList) {
 	var date_i = dateList[0]
 	dateSet = new Set()
 	var completeDateList = []
-	date_i_list = [20170201,20170202,20170203,20170204,20170205,20170206,20170207,20170208,20170209,20170210,20170211,20170212,20170213,20170214,20170215,20170216,
-20170217,20170218,20170219,20170220,20170221,20170222,20170223,20170224,20170225,20170226,20170227,20170228,20170301,20170302,20170303,20170304,
-20170305,20170306,20170307,20170308,20170309,20170310,20170311,20170312,20170313,20170314,20170315,20170316,20170317,20170318,20170319,20170320,
-20170321,20170322,20170323,20170324,20170325,20170326,20170327,20170328,20170329,20170330,20170331,20170401,20170402,20170403,20170404,20170405,
-20170406,20170407,20170408,20170409,20170410,20170411,20170412,20170413,20170414,20170415,20170416,20170417,20170418,20170419,20170420,20170421,
-20170422,20170423,20170424,20170425,20170426,20170427,20170428,20170429,20170430,20170501,20170502,20170503,20170504,20170505,20170506,20170507,
-20170508,20170509,20170510,20170511,20170512,20170513,20170514,20170515]
 
-	date_i_list.map(function(date_i,i) {
+	fall_date_list.map(function(date_i,i) {
 		if(parseTime(date_i) <= parseTime(dateList[dateList.length-1])) {
 			if(!dateSet.has(parseTime(date_i).toString())) {
 				dateSet.add(parseTime(date_i).toString())
@@ -1123,7 +1138,7 @@ function getStackedBarData(currentLabel,filterCriteria) {
 	var columns = Object.keys(result[0])
 	
 	x.domain(d3.extent(data, function(d) { return d.date; }));
-	y.domain([0,110]);
+	y.domain([0,100]);
 	g.selectAll(".serie")
 		.data(stack.keys(columns.slice(1))(data))
 		.enter().append("g")
@@ -1192,7 +1207,7 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 	.x(function(d,i) {return x(d.date); })
 	.y(function(d,i) {return y(d.max); });
 
-	d3.csv("data/spring2017/oh.csv", type, function(error, TAdata) {
+	d3.csv("data/fall2017/oh.csv", type, function(error, TAdata) {
 		if (error) throw error;
 
 		var data = []
@@ -1200,7 +1215,7 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 			var object = {};
 			object["id"] = studentID;
 			object["values"] = [];
-			object["values"] = date_i_list.map(function(date,i) {
+			object["values"] = fall_date_list.map(function(date,i) {
 				var x = date%100;
 				var y = ((date%10000-x)/100)-1
 				var z = 2017
@@ -1212,7 +1227,7 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 
 			TAdata.map(function(d,i) {
 				if(d["Username"]==object["id"]) {
-					var index = (date_i_list.indexOf(d["Timestamp"]))
+					var index = (fall_date_list.indexOf(d["Timestamp"]))
 					object["values"][index]["hours"] = d["Time Spent"]
 				}
 			})
@@ -1234,9 +1249,9 @@ function getFilterData(labelsOnBasisOfPerformance,originalData,students,getLineD
 		dataSecondary = data
 
 	var data = [
-	{date: new Date(2017, 1, 1), value: 93.24},
-	{date: new Date(2017, 4, 15), value: 95.35}
-];
+		{date: new Date(2017, 8, 31), value: 93.24},
+		{date: new Date(2017, 12, 15), value: 95.35}
+	];
 
 	x.domain(d3.extent(data, function(d) { return d.date; }));
 	y.domain([
@@ -1410,8 +1425,17 @@ function clusterOfficeHourData(studentGroup, data) {
 
 function getLineData(data,students,dataSecondary) { 	
 
+	console.log("data");
+	console.log(data);
+
+	console.log("students")
+	console.log(students)
+
+	console.log("dataSecondary")
+	console.log(dataSecondary)
+
 	x.domain(d3.extent(data, function(d) {return d.date; }));
-	y.domain([0,110])
+	y.domain([0,100])
 	z.domain(students.map(function(c,i) {return i; }));
 
 	circles = []
