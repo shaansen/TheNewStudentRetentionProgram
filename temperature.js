@@ -1,3 +1,5 @@
+console.log("Shantanu Sengupta")
+
 var lineWidthOriginal = "1.5px";
 var lineWidthOnHover = "6px";
 
@@ -108,8 +110,8 @@ function mainFunction() {
 		});
 
 
-		clusters = 5
-		maxiterations = 5
+		clusters = 10
+		maxiterations = 1000
 		numFeatures = cities[0]["values"].map(function(d) {
 			return d.date;
 		})
@@ -155,7 +157,7 @@ function initializePanel() {
 	d3.selectAll(".dist")
 	.text("Distribution ON")
 
-	// enableNavFilters()
+	enableNavFilters()
 }
 
 function toggleTick() {
