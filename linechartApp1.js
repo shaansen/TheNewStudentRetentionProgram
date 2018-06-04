@@ -131,8 +131,8 @@ d3.csv('data/tahours3.csv', function(error, tadata) {
       };
     });
 
-    clusters = 10
-    maxiterations = 25
+    clusters = 1
+    maxiterations = 100
 
     studentClusters = kmeans(students,clusters,maxiterations)
     // findOptimalCluster(students, maxiterations)
