@@ -574,7 +574,7 @@ function mainFunction(studentFilter) {
 		// studentClusters = getCentroids(students, labelsOnBasisOfPerformance, clusters)
 
 		// findOptimalClusterUsingElbow(students, maxiterations)
-		// findOptimalClusterUsingSil(students, maxiterations)
+		findOptimalClusterUsingSil(students, maxiterations)
 		// calculateSumSquareDistance(studentClusters,students)
 
 		var clusteredData = studentClusters.map(function(d, i) {
@@ -1370,7 +1370,7 @@ function findOptimalClusterUsingElbow(students, iterations) {
 
 function findOptimalClusterUsingSil(students, iterations) {
 	var silMap = {};
-	for (var i = 10; i <= 10; i++) {
+	for (var i = ; i <= 3; i++) {
 		var clusters = kmeans(students, i, iterations);
 		silMap[i] = calculateSilhouette(
 			clusters,

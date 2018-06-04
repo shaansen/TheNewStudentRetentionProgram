@@ -498,10 +498,7 @@ function mainFunction(studentFilter) {
   });
 
   // Below code basically parses the studentGrade data to create normalized scores of the students till that date
-  d3.csv("data/spring2017/grades.csv", type, function(
-    error,
-    studentGradeData
-  ) {
+  d3.csv("data/spring2017/grades.csv", type, function(error, studentGradeData) {
     if (error) throw error;
 
     if (studentFilter == 1) {
@@ -560,7 +557,7 @@ function mainFunction(studentFilter) {
       };
     });
 
-    clusters = 8;
+    clusters = 10;
     maxiterations = 100;
     numFeatures = students[0]["values"].map(function(d) {
       return d.date;
@@ -593,12 +590,7 @@ function mainFunction(studentFilter) {
       initializePanel &&
       typeof initializePanel == "function"
     ) {
-      getFilterData(
-        labelsOnBasisOfPerformance,
-        data,
-        students,
-        getLineData
-      );
+      getFilterData(labelsOnBasisOfPerformance, data, students, getLineData);
       initializePanel();
     }
   });
@@ -606,18 +598,11 @@ function mainFunction(studentFilter) {
 
 function initializePanel() {
   d3.selectAll(".tick").text("Ticks ON");
-  enableTicks();
-
   d3.selectAll(".corr").text("Correlation ON");
-  enableCorrelation();
-
   d3.selectAll(".dist").text("Distribution ON");
-
-  enableNavFilters();
 }
 
 function toggleTick() {
-  tickOn = !tickOn;
   if (!tickOn) {
     d3.selectAll(".tickText").text("Ticks ON");
     enableTicks();
@@ -625,6 +610,7 @@ function toggleTick() {
     d3.selectAll(".tickText").text("Ticks OFF");
     disableTicks();
   }
+  tickOn = !tickOn;
 }
 
 function disableTicks() {
@@ -636,10 +622,7 @@ function enableTicks() {
   var svg = d3.select(".viz-body").select("svg"),
     g = svg
       .append("g")
-      .attr(
-        "transform",
-        "translate(" + margin.left + "," + margin.top + ")"
-      );
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   var pillars = g
     .selectAll(".pillars")
@@ -662,7 +645,8 @@ function enableTicks() {
     .data(dateList)
     .enter();
 
-  text.append("text")
+  text
+    .append("text")
     .attr("class", "pillar-text")
     .attr("x", "10px")
     .attr("y", "10px")
@@ -680,9 +664,7 @@ function enableTicks() {
 }
 
 function toggleCorr() {
-
-  console.log("Correlation is ",corrOn)
-  if (corrOn) {
+  if (!corrOn) {
     d3.selectAll(".corrText").text("Correlation ON");
     enableCorrelation();
   } else {
@@ -773,10 +755,7 @@ function enableCorrelation() {
   var svg = d3.select(".viz-body").select("svg"),
     g = svg
       .append("g")
-      .attr(
-        "transform",
-        "translate(" + margin.left + "," + margin.top + ")"
-      );
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   d3.selectAll(".officeHourDots").remove();
   d3.selectAll(".officecircles").remove();
@@ -806,12 +785,12 @@ function enableCorrelation() {
       return d[2];
     })
     .attr("r", function(d) {
-      return (15 * d[3]) / maxRadius;
+      return (20 * d[3]) / maxRadius;
     })
     .style("fill", function(d, i) {
       return z(d[0]);
     })
-    .style("fill-opacity", "0.85");
+    .style("fill-opacity", "0.50");
 
   officeHourDots.exit().remove();
 
@@ -889,9 +868,40 @@ function mouseOutFunction() {
   d3.selectAll(".navbarTexts").attr("font-weight", "normal");
 
   d3.selectAll(".navbarTexts").attr("fill", "black");
+
+  d3.selectAll(".officecircles")
+    .style("fill-opacity", "0.50")
+    .style("stroke", null);
 }
 
+// https://github.com/wbkd/d3-extended
+d3.selection.prototype.moveToFront = function() {
+  return this.each(function() {
+    this.parentNode.appendChild(this);
+  });
+};
+d3.selection.prototype.moveToBack = function() {
+  return this.each(function() {
+    var firstChild = this.parentNode.firstChild;
+    if (firstChild) {
+      this.parentNode.insertBefore(this, firstChild);
+    }
+  });
+};
+
 function mouseOverFunction(d, i) {
+  if (corrOn) {
+    // highlight the circles
+    d3.selectAll(".officecircles")
+      .filter(function(d1, i1) {
+        return d1[0] == i;
+      })
+      .style("fill-opacity", "1")
+      .style("stroke", function(d, i) {
+        return "black";
+      });
+  }
+
   d3.select(".viz-body")
     .selectAll(".line")
     .style("stroke-opacity", function(d1, i1) {
@@ -975,12 +985,14 @@ function mouseOverFunction(d, i) {
 
   // .style("stroke", "black")
 
-  d3.select(this).style("stroke-width", lineWidthOnHover);
+  d3.select(this)
+    .style("stroke-width", lineWidthOnHover)
+    .moveToFront();
   currentLabel = labelsOnBasisOfPerformance[i];
 }
 
 function mouseMoveFunction() {
-/*  var year = x.invert(d3.mouse(this)[0]);
+  /*  var year = x.invert(d3.mouse(this)[0]);
   var y = getEventName(year);
 
   tooltip
@@ -1039,7 +1051,8 @@ function getTextValues(label, index) {
 
   text.attr("class", "update");
   text.text("User IDs within this cluster : ").merge(text);
-  text.enter()
+  text
+    .enter()
     .append("text")
     .attr("class", "enter")
     .attr("x", function(d, i) {
@@ -1069,8 +1082,7 @@ function getEventName(year) {
   var event =
     " - " + (y.getMonth() + 1) + "/" + y.getDay() + "/" + y.getFullYear();
   return (
-    calendarData[getSimpleDate(irregDatesToRegDates[y])]["description"] +
-    event
+    calendarData[getSimpleDate(irregDatesToRegDates[y])]["description"] + event
   );
 }
 
@@ -1088,10 +1100,8 @@ function convertIrregToReg(completeDateList, studentGradeData, calendarData) {
   var dataForVisualization = [];
   var date_j = 0;
   completeDateList.forEach(function(date_i, i) {
-    
     var element = {};
     irregDatesToRegDates[date_i] = parseTime(dateList[date_j]);
-
 
     element["date"] = date_i;
     if (date_i >= parseTime(dateList[date_j + 1])) {
@@ -1236,13 +1246,10 @@ function DTWDistance(s1, s2) {
 
   for (var i = 1; i < s1.length; i++) {
     for (var j = 1; j < s2.length; j++) {
-      var dist =
-        (s1[i].scores - s2[j].scores) * (s1[i].scores - s2[j].scores);
+      var dist = (s1[i].scores - s2[j].scores) * (s1[i].scores - s2[j].scores);
       DTW[i][j] =
         dist +
-        Math.sqrt(
-          Math.min(DTW[i - 1][j], DTW[i][j - 1], DTW[i - 1][j - 1])
-        );
+        Math.sqrt(Math.min(DTW[i - 1][j], DTW[i][j - 1], DTW[i - 1][j - 1]));
     }
   }
 
@@ -1385,17 +1392,8 @@ function calculateSilhouette(clusters, students, labels) {
   var result = 0;
   var plot = [];
   Object.keys(labels).forEach(function(d, i) {
-    var a = calculateSilhouetteForOneClusterA(
-      clusters,
-      students,
-      labels[d]
-    );
-    var b = calculateSilhouetteForOneClusterB(
-      clusters,
-      students,
-      labels,
-      d
-    );
+    var a = calculateSilhouetteForOneClusterA(clusters, students, labels[d]);
+    var b = calculateSilhouetteForOneClusterB(clusters, students, labels, d);
     var s = a.map(function(d, i) {
       if (d < b[i]) {
         return 1 - d / b[i];
@@ -1405,9 +1403,9 @@ function calculateSilhouette(clusters, students, labels) {
         return 0;
       }
     });
-    s.sort(function(a,b) {
-      return a-b;
-    })
+    s.sort(function(a, b) {
+      return a - b;
+    });
     plot[i] = _.sum(s) / s.length;
     result = result + plot[i];
   });
@@ -1476,14 +1474,7 @@ function calculateSumSquareDistance(clusters, studentData) {
   var x = 0;
   label_iterator.forEach(function(d, i1) {
     labels[d].forEach(function(e, i2) {
-      x =
-        x +
-        getSquareDifference(
-          d,
-          e,
-          studentData[e]["values"],
-          clusters[i1]
-        );
+      x = x + getSquareDifference(d, e, studentData[e]["values"], clusters[i1]);
     });
   });
   return x;
@@ -1674,191 +1665,181 @@ function getFilterData(
     });
 
   d3.request("data/spring2017/oh.csv")
-  .mimeType("text/csv")
-  .response(xhr => d3.csvParseRows(xhr.responseText, d => d))
-  .get(function(data) {
-    var TAdata = data.splice(1).map(function(tad) {
-      return {
-        "Username":tad[0],
-        "Timestamp":+tad[1],
-        "Events":tad[2],
-        "Time Spent":+tad[3],
-        "Helped":tad[4],
-      }
-    })
-  // })
-
-  
-  // d3.csv("data/spring2017/oh.csv", type, function(error, TAdata) {
-  //   if (error) throw error;
-    var data = [];
-    columns.splice(1).forEach(function(studentID, id) {
-      var object = {};
-      object["id"] = studentID;
-      object["values"] = [];
-      object["values"] = spring_date_list.map(function(date, i) {
-        var x = date % 100;
-        var y = ((date % 10000) - x) / 100 - 1;
-        var z = 2017;
+    .mimeType("text/csv")
+    .response(xhr => d3.csvParseRows(xhr.responseText, d => d))
+    .get(function(data) {
+      var TAdata = data.splice(1).map(function(tad) {
         return {
-          date: new Date(z, y, x),
-          hours: 0
+          Username: tad[0],
+          Timestamp: +tad[1],
+          Events: tad[2],
+          "Time Spent": +tad[3],
+          Helped: tad[4]
         };
       });
+      // })
 
-      TAdata.map(function(d, i) {
-        if (d["Username"] == object["id"]) {
-          var index = spring_date_list.indexOf(d["Timestamp"]);
-          object["values"][index]["hours"] = d["Time Spent"];
+      // d3.csv("data/spring2017/oh.csv", type, function(error, TAdata) {
+      //   if (error) throw error;
+      var data = [];
+      columns.splice(1).forEach(function(studentID, id) {
+        var object = {};
+        object["id"] = studentID;
+        object["values"] = [];
+        object["values"] = spring_date_list.map(function(date, i) {
+          var x = date % 100;
+          var y = ((date % 10000) - x) / 100 - 1;
+          var z = 2017;
+          return {
+            date: new Date(z, y, x),
+            hours: 0
+          };
+        });
+
+        TAdata.map(function(d, i) {
+          if (d["Username"] == object["id"]) {
+            var index = spring_date_list.indexOf(d["Timestamp"]);
+            object["values"][index]["hours"] = d["Time Spent"];
+          }
+        });
+        data.push(object);
+      });
+
+      var svg = d3.select(".filter-body").select("svg"),
+        margin = { top: 30, right: 80, bottom: 30, left: 50 },
+        width = svg.attr("width") - margin.left - margin.right,
+        height = svg.attr("height") - margin.top - margin.bottom,
+        g = svg
+          .append("g")
+          .attr(
+            "transform",
+            "translate(" + margin.left + "," + margin.top + ")"
+          );
+
+      // var brush = d3.brush().on("end", brushended).extent([[0, 0], [width, height]]),
+      //  idleTimeout,
+      //  idleDelay = 10000;
+
+      data = clusterSimilarPerformingStudents(data, labelsOnBasisOfPerformance);
+      var officeHourData = data;
+      dataSecondary = data;
+
+      var data = [
+        { date: parseTime(spring_date_list[0]), value: 93.24 },
+        {
+          date: parseTime(spring_date_list[spring_date_list.length - 1]),
+          value: 95.35
         }
-      });
-      data.push(object);
-    });
+      ];
 
-    var svg = d3.select(".filter-body").select("svg"),
-      margin = { top: 30, right: 80, bottom: 30, left: 50 },
-      width = svg.attr("width") - margin.left - margin.right,
-      height = svg.attr("height") - margin.top - margin.bottom,
-      g = svg
+      x.domain(
+        d3.extent(data, function(d) {
+          return d.date;
+        })
+      );
+      y.domain([
+        d3.min(officeHourData, function(c) {
+          return d3.min(c.values, function(d) {
+            return d.max;
+          });
+        }),
+        d3.max(officeHourData, function(c) {
+          return d3.max(c.values, function(d) {
+            return d.max;
+          });
+        })
+      ]);
+      // z.domain(officeHourData.map(function(c,i) {return c.id; }));
+
+      g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+      g.append("g")
+        .attr("class", "axis axis--y")
+        .call(d3.axisLeft(y))
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", "0.71em")
+        .attr("fill", "#000")
+        .text("minutes");
+
+      var officeHourDatum = g
+        .selectAll(".officeHourDatum")
+        .data(officeHourData)
+        .enter()
         .append("g")
-        .attr(
-          "transform",
-          "translate(" + margin.left + "," + margin.top + ")"
-        );
+        .attr("class", "officeHourDatum");
 
-    // var brush = d3.brush().on("end", brushended).extent([[0, 0], [width, height]]),
-    //  idleTimeout,
-    //  idleDelay = 10000;
+      d3.selectAll(".officeHourline").remove();
+      officeHourDatum
+        .append("path")
+        .attr("class", "officeHourline")
+        .attr("d", function(d) {
+          return line1(d.values);
+        })
+        .style("stroke", function(d, i) {
+          return z(i);
+        })
+        .style("stroke-width", "1.5px")
+        .on("mouseover", mouseOverFunction)
+        .on("mouseout", mouseOutFunction)
+        .on("mousemove", mouseMoveFunction)
+        .on("click", clickOnLineToSeeDistribution);
 
-    data = clusterSimilarPerformingStudents(
-      data,
-      labelsOnBasisOfPerformance
-    );
-    var officeHourData = data;
-    dataSecondary = data;
+      officeHourDatum.exit().remove();
 
-    var data = [
-      { date: parseTime(spring_date_list[0]), value: 93.24 },
-      {
-        date: parseTime(spring_date_list[spring_date_list.length - 1]),
-        value: 95.35
+      officeHourDatum
+        .append("path")
+        .attr("class", "officeHourlineMin")
+        .attr("d", function(d) {
+          return line2(d.values);
+        })
+        .style("stroke", function(d, i) {
+          return z(i);
+        })
+        .style("stroke-width", "4px")
+        .on("mouseover", mouseOverFunction)
+        .on("mouseout", mouseOutFunction)
+        .on("mousemove", mouseMoveFunction)
+        .on("click", clickOnLineToSeeDistribution);
+
+      officeHourDatum
+        .append("path")
+        .attr("class", "officeHourlineMax")
+        .attr("d", function(d) {
+          return line3(d.values);
+        })
+        .style("stroke", function(d, i) {
+          return z(i);
+        })
+        .style("stroke-width", "0.5px")
+        .on("mouseover", mouseOverFunction)
+        .on("mouseout", mouseOutFunction)
+        .on("mousemove", mouseMoveFunction)
+        .on("click", clickOnLineToSeeDistribution);
+
+      officeHourDatum
+        .append("text")
+        .datum(function(d) {
+          return { id: d.id, value: d.values[d.values.length - 1] };
+        })
+        .attr("transform", function(d) {
+          return "translate(" + x(d.value.date) + "," + y(d.value.hours) + ")";
+        })
+        .attr("x", 3)
+        .attr("dy", "0.35em")
+        .style("font", "10px sans-serif")
+        .text(function(d) {
+          return d.id;
+        });
+
+      if (getLineData && typeof getLineData == "function") {
+        getLineData(originalData, students, dataSecondary);
       }
-    ];
-
-    x.domain(
-      d3.extent(data, function(d) {
-        return d.date;
-      })
-    );
-    y.domain([
-      d3.min(officeHourData, function(c) {
-        return d3.min(c.values, function(d) {
-          return d.max;
-        });
-      }),
-      d3.max(officeHourData, function(c) {
-        return d3.max(c.values, function(d) {
-          return d.max;
-        });
-      })
-    ]);
-    // z.domain(officeHourData.map(function(c,i) {return c.id; }));
-
-    g.append("g")
-      .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
-
-    g.append("g")
-      .attr("class", "axis axis--y")
-      .call(d3.axisLeft(y))
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", "0.71em")
-      .attr("fill", "#000")
-      .text("minutes");
-
-    var officeHourDatum = g
-      .selectAll(".officeHourDatum")
-      .data(officeHourData)
-      .enter()
-      .append("g")
-      .attr("class", "officeHourDatum");
-
-    d3.selectAll(".officeHourline").remove();
-    officeHourDatum
-      .append("path")
-      .attr("class", "officeHourline")
-      .attr("d", function(d) {
-        return line1(d.values);
-      })
-      .style("stroke", function(d, i) {
-        return z(i);
-      })
-      .style("stroke-width", "1.5px")
-      .on("mouseover", mouseOverFunction)
-      .on("mouseout", mouseOutFunction)
-      .on("mousemove", mouseMoveFunction)
-      .on("click", clickOnLineToSeeDistribution);
-
-    officeHourDatum.exit().remove();
-
-    officeHourDatum
-      .append("path")
-      .attr("class", "officeHourlineMin")
-      .attr("d", function(d) {
-        return line2(d.values);
-      })
-      .style("stroke", function(d, i) {
-        return z(i);
-      })
-      .style("stroke-width", "4px")
-      .on("mouseover", mouseOverFunction)
-      .on("mouseout", mouseOutFunction)
-      .on("mousemove", mouseMoveFunction)
-      .on("click", clickOnLineToSeeDistribution);
-
-    officeHourDatum
-      .append("path")
-      .attr("class", "officeHourlineMax")
-      .attr("d", function(d) {
-        return line3(d.values);
-      })
-      .style("stroke", function(d, i) {
-        return z(i);
-      })
-      .style("stroke-width", "0.5px")
-      .on("mouseover", mouseOverFunction)
-      .on("mouseout", mouseOutFunction)
-      .on("mousemove", mouseMoveFunction)
-      .on("click", clickOnLineToSeeDistribution);
-
-    officeHourDatum
-      .append("text")
-      .datum(function(d) {
-        return { id: d.id, value: d.values[d.values.length - 1] };
-      })
-      .attr("transform", function(d) {
-        return (
-          "translate(" +
-          x(d.value.date) +
-          "," +
-          y(d.value.hours) +
-          ")"
-        );
-      })
-      .attr("x", 3)
-      .attr("dy", "0.35em")
-      .style("font", "10px sans-serif")
-      .text(function(d) {
-        return d.id;
-      });
-
-    if (getLineData && typeof getLineData == "function") {
-      getLineData(originalData, students, dataSecondary);
-    }
-  });
+    });
 }
 
 function brushended() {
@@ -1902,12 +1883,7 @@ function getFilteredLabels(data, filters) {
   var set = new Set();
   data.forEach(function(d, i) {
     d.values.forEach(function(d1, i1) {
-      if (
-        d1.date > x0 &&
-        d1.date < x1 &&
-        d1.hours < y0 &&
-        d1.hours > y1
-      ) {
+      if (d1.date > x0 && d1.date < x1 && d1.hours < y0 && d1.hours > y1) {
         set.add(i);
       }
     });
@@ -2056,9 +2032,7 @@ function getLineData(data, students, dataSecondary) {
       return { id: d.id, value: d.values[d.values.length - 1] };
     })
     .attr("transform", function(d) {
-      return (
-        "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"
-      );
+      return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")";
     })
     .attr("x", 3)
     .attr("dy", "0.35em")
