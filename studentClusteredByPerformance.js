@@ -1097,8 +1097,6 @@ function convertIrregToReg(completeDateList, studentGradeData, calendarData) {
 			date_j = date_j + 1;
 		}
 
-		console.log(date_i,dateList[date_j]);
-
 		if (dateList[date_j] !== undefined) {
 			var x = calendarData[dateList[date_j]].description;
 			for (var i = 0; i < studentGradeData.length; i++) {
@@ -1372,13 +1370,15 @@ function findOptimalClusterUsingElbow(students, iterations) {
 
 function findOptimalClusterUsingSil(students, iterations) {
 	var silMap = {};
-	for (var i = 1; i <= 10; i++) {
+	for (var i = 10; i <= 10; i++) {
 		var clusters = kmeans(students, i, iterations);
 		silMap[i] = calculateSilhouette(
 			clusters,
 			students,
 			labelsOnBasisOfPerformance
 		);
+		console.log("SilMap");
+		console.log(silMap);
 	}
 }
 
@@ -1406,6 +1406,10 @@ function calculateSilhouette(clusters, students, labels) {
 				return 0;
 			}
 		});
+		s.sort(function(a,b) {
+			return a-b;
+		})
+		console.log(s);
 		plot[i] = _.sum(s) / s.length;
 		result = result + plot[i];
 	});
