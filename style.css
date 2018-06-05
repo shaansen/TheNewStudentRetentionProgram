@@ -149,12 +149,16 @@ body {
 }
 
 .text-body {
-  height: 100px;
+  height: 150px;
   width: 140px;
   padding: 10px 10px 10px 10px;
   margin: 10px 10px 10px 10px;
   background-color: white;
   color: black;
+  overflow-y: scroll;
+}
+
+.navfilter-body {
   overflow-y: scroll;
 }
 

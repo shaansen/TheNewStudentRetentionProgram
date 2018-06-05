@@ -1,6 +1,5 @@
 var lineWidthOriginal = "1.5px";
 var lineWidthOnHover = "6px";
-
 var choices = new Set();
 
 var svg = d3.select(".viz-body").select("svg"),
@@ -49,6 +48,8 @@ var labelsOnBasisOfPerformance;
 var tickOn = false;
 var corrOn = false;
 var distOn = false;
+var TAdata;
+var overallOHdata = {};
 // -----------------------------------------------------------------------------------------
 //
 // Code to read Calendar and Map dates to events
@@ -600,6 +601,7 @@ function initializePanel() {
   d3.selectAll(".tick").text("Ticks ON");
   d3.selectAll(".corr").text("Correlation ON");
   d3.selectAll(".dist").text("Distribution ON");
+  enableNavFilters();
 }
 
 function toggleTick() {
@@ -664,7 +666,6 @@ function enableTicks() {
 }
 
 function toggleDist() {
-  
   if (!distOn) {
     d3.selectAll(".distText").text("Distribution ON");
     // enableDistribution();
@@ -677,14 +678,14 @@ function toggleDist() {
 }
 
 function disableDistribution() {
-  d3.selectAll(".serie").remove()
-  d3.selectAll(".enter").remove()
+  d3.selectAll(".serie").remove();
+  d3.selectAll(".enter").remove();
 }
 
 function toggleCorr() {
   if (!corrOn) {
     d3.selectAll(".corrText").text("Correlation ON");
-    enableCorrelation();
+    // enableCorrelation();
   } else {
     d3.selectAll(".corrText").text("Correlation OFF");
     disableCorrelation();
@@ -725,11 +726,12 @@ function enableNavFilters() {
   })
   
   navbarElements.exit().remove();*/
+
   var svg = d3
     .select(".navfilter-body")
     .append("svg")
     .attr("width", "160px")
-    .attr("height", "400px")
+    .attr("height", "220px")
     .append("g")
     .attr("transform", "translate(" + 10 + "," + 10 + ")");
 
@@ -1016,45 +1018,145 @@ function mouseMoveFunction() {
     .style("font-size", "11px");*/
 }
 
-function clickOnLineToSeeSubLines(d, i) {
-  // d3.select(".viz-body").selectAll(".line")
-  //  .style("stroke-opacity",function(d1,i1) {
-
-  //    if(d.id != d1.id) {
-  //      return "0.60";
-  //    }
-  //  })
-
-  // d3.select(".filter-body").selectAll(".officeHourline")
-  //  .style("stroke-width",function(d1,i1) {
-  //    if(d.id != d1.id) {
-  //      return "1.5px"
-  //    } else {
-  //      return "10px"
-  //    }
-  //  })
-  //  // .style("stroke", "black")
-
-  console.log(distOn)
+function clickOnLineToSeeDistribution(d, i) {
   currentLabel = labelsOnBasisOfPerformance[i];
   getTextValues(currentLabel, i);
-  getStackedBarData(currentLabel, filterCriteria);
-  
+  if (distOn) getStackedBarData(currentLabel, filterCriteria);
+  if (corrOn) selectALineToViewOHData(i);
 }
 
-function clickOnLineToSeeDistribution(d, i) {
-  console.log("corrOn",corrOn,"distOn",distOn)
-  currentLabel = labelsOnBasisOfPerformance[i];
-  getTextValues(currentLabel, i);
-  if(distOn)
-    getStackedBarData(currentLabel, filterCriteria);
-  if(corrOn)
-    getIntegratedCircles(i)
-    
+function selectALineToViewOHData(currentLabel) {
+  getIntegratedCircles(currentLabel);
+  fillUpTheOHArea(currentLabel);
+}
+
+function fillUpTheOHArea(currentLabel) {
+  var eventMap = {};
+
+  var users = labelsOnBasisOfPerformance[currentLabel].map(function(d) {
+    return originalStudentData[d]["id"];
+  });
+
+  var OHToShow = [];
+  TAdata.forEach(function(taElement, taID) {
+    if (users.includes(taElement["Username"])) {
+      eventMap[taElement["Events"]] =
+        (eventMap[taElement["Events"]] || 0) +
+        taElement["Time Spent"] /
+          labelsOnBasisOfPerformance[currentLabel].length;
+      OHToShow.push(taElement);
+    }
+  });
+
+  var comparisonData = getComparisonWithClassAverage(overallOHdata, eventMap);
+  var comparisonDisplay = getComparisonDisplayResults(comparisonData)
+  displayComparisonDataResults(comparisonDisplay);
+}
+
+function displayComparisonDataResults(data) {
+
+  d3.select(".oh-comparison-body").selectAll("svg").remove()
+  var calendarList = Object.keys(calendarData).map(function(d,i) {
+    return calendarData[d]["description"];
+  })
+  console.log(calendarList)
+
+  var svg = d3
+    .select(".oh-comparison-body")
+    .append("svg")
+    .attr("width", "160px")
+    .attr("height", "400px")
+    .append("g")
+    .attr("transform", "translate(" + 10 + "," + 10 + ")");
+
+  var width = 10;
+
+  var legend = svg
+    .selectAll(".oh-compare-Elements")
+    .data(calendarList)
+    .enter()
+    .append("g")
+    .attr("class", "oh-compare-Elements")
+    .attr("transform", function(d, i) {
+      return "translate(0," + i * 20 + ")";
+    });
+
+  legend
+    .append("rect")
+    .attr("class", "oh-compare-rect")
+    .attr("x", width - 10)
+    .attr("width", 130)
+    .attr("height", 18)
+    .style("fill", function(event, i) {
+      if(d["type"]==0) {
+        return "yellow";
+      } else if(d["type"]==-1) {
+        return "red";
+      } else {
+        return "green";
+      }
+    });
+
+  legend
+    .append("text")
+    .attr("class", "oh-compare-text")
+    .attr("x", width)
+    .attr("y", 9)
+    .attr("dy", ".35em")
+    .style("text-anchor", "start")
+    .text(function(d, i) {
+      return d["Event"]+"\t\t\t"+d["result"];
+    })
+    .style("fill", function(d, i) {
+      if(d["type"]==0) {
+        return "black";
+      } else {
+        return "white";
+      }
+    })
+
+  legend.exit().remove();
+}
+
+function getComparisonWithClassAverage(overallOHdata, eventMap) {
+  var result = {}
+  Object.keys(overallOHdata).forEach(function(event,i) {
+    var a = eventMap[event] || 0;
+    var b = overallOHdata[event] || 0;
+    var number = a == 0 ? -1 : (a-b)/60
+    result[event] = Math.round(number * 100) / 100;
+  })
+  return result;
+}
+
+function getComparisonDisplayResults(comparisonData) {
+
+  return Object.keys(comparisonData).map(function(event,i) {
+
+    var result = null;
+    var type = -1;
+    if(comparisonData[event] == -1) {
+      result = "Did not attend";
+      type = 0;
+    } else if(comparisonData[event] < 0) {
+      result = comparisonData[event];
+      type = -1;
+    } else {
+      result = comparisonData[event];
+      type = 1;
+    }
+
+
+    return {
+      Event : event,
+      result : result,
+      type: type
+    };
+
+  })
 }
 
 function getIntegratedCircles(currentLabel) {
-  console.log("Inside Correlation")
   var svg = d3.select(".viz-body").select("svg"),
     g = svg
       .append("g")
@@ -1080,12 +1182,11 @@ function getIntegratedCircles(currentLabel) {
 
   officeHourDots
     .append("circle")
-    .filter(function(d,i) {
-      console.log(d[0],currentLabel,d[0] == currentLabel);
+    .filter(function(d, i) {
       return d[0] == currentLabel;
     })
     .attr("class", "officecircles")
-    .attr("cx", function(d,i) {
+    .attr("cx", function(d, i) {
       return d[1];
     })
     .attr("cy", function(d) {
@@ -1097,7 +1198,7 @@ function getIntegratedCircles(currentLabel) {
     .style("fill", function(d, i) {
       return z(d[0]);
     })
-    .style("fill-opacity", "0.50")
+    .style("fill-opacity", "0.50");
 
   officeHourDots.exit().remove();
 
@@ -1130,7 +1231,7 @@ function getTextValues(label, index) {
   // var text = d3.select(".text-body-cluster-description");
   // text.text("Cluster Size : " + label.length);
 
-  var heading = [label.length]
+  var heading = [label.length];
 
   var text = d3
     .select(".text-body-cluster-description")
@@ -1148,10 +1249,8 @@ function getTextValues(label, index) {
     .attr("dy", ".35em")
     .merge(text)
     .text(function(d) {
-      return "Cluster Size : "+d;
+      return "Cluster Size : " + d;
     });
-
-
 
   var text = d3
     .select(".text-body-cluster-content")
@@ -1776,7 +1875,8 @@ function getFilterData(
     .mimeType("text/csv")
     .response(xhr => d3.csvParseRows(xhr.responseText, d => d))
     .get(function(data) {
-      var TAdata = data.splice(1).map(function(tad) {
+      TAdata = data.splice(1).map(function(tad) {
+
         return {
           Username: tad[0],
           Timestamp: +tad[1],
@@ -1812,6 +1912,10 @@ function getFilterData(
         });
         data.push(object);
       });
+
+      TAdata.forEach(function(d,i) {
+        overallOHdata[d["Events"]] = (overallOHdata[d["Events"]] || 0) + d["Time Spent"]/TAdata.length;
+      })
 
       var svg = d3.select(".filter-body").select("svg"),
         margin = { top: 30, right: 80, bottom: 30, left: 50 },
@@ -2064,7 +2168,8 @@ function getLineData(data, students, dataSecondary) {
         y(entry["scores"]),
         dataSecondary[i]["values"][i1]["hours"],
         dataSecondary[i]["values"][i1]["min"],
-        dataSecondary[i]["values"][i1]["max"]
+        dataSecondary[i]["values"][i1]["max"],
+        entry["date"]
       ]);
     });
   });

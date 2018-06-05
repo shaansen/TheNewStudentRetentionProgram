@@ -1,95 +1,77 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-
 <head>
-	<!-- <link href='https://fonts.googleapis.com/css?family=Roboto Condensed' rel='stylesheet'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Roboto Condensed' rel='stylesheet'> -->
   <link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet'>
   <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
-	<link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src="https://d3js.org/d3-color.v1.min.js"></script>
-	<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
-	<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://d3js.org/d3-color.v1.min.js"></script>
+  <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
   
 </head>
-
-
 <div>
   <div class="sidenav">
+    
     <h5>Visualizing Correlation between Office Hour and Student Performance</h5>
     
     <button type="button"
-      onclick="
-  toggleTick()"
-      class="tickText">
-      Ticks OFF
+    onclick="
+    toggleTick()"
+    class="tickText">
+    Ticks OFF
     </button>
-    <button 
-      onclick="toggleCorr()"
-      class="corrText">
-      Correlation OFF
+    
+    <button
+    onclick="toggleCorr()"
+    class="corrText">
+    Correlation OFF
     </button>
-    <button 
-      onclick="toggleDist()"
-      class="distText">
-      Distribution OFF
+    
+    <button
+    onclick="toggleDist()"
+    class="distText">
+    Distribution OFF
     </button>
-
-
+    
     <div class="text-body">
       <div class="text-body-cluster-description"></div>
       <div class="text-body-cluster-content"></div>
     </div>
-
     
     <div class="navfilter-body">
       <h5>Legends</h5>
     </div>
-    <!-- <button 
-      onclick="filterAttendingStudents()"
-      class="distText">
-      Only Students who attended office hours
-    </button>
 
-    <button 
-      onclick="filterMissingStudents()"
-      class="distText">
-      Only Students who missed office hours
-    </button> -->
+    <div class="oh-comparison-body">
+      <h5>Compared to Class Average, this group</h5>
+    </div>
 
-
-
-
+    <div class="oh-body">
+      <div class="oh-body-cluster-content"></div>
+    </div>
     
-    <!-- <h5>Choose Distance Metric</h5>
-    <div class="radio-distance">
-      <label><input type="radio" name="checkbox" value="1" onclick="updateDistanceMetric()" checked="checked">DTW</label>
-    </div>
-    <div class="radio-distance">
-      <label><input type="radio" name="checkbox" value="2" onclick="updateDistanceMetric()">Euclidean</label>
-    </div>
-    <div class="radio-distance">
-      <label><input type="radio" name="checkbox" value="3" onclick="updateDistanceMetric()">Manhattan</label>
-    </div>
-    <div class="radio-distance">
-      <label><input type="radio" name="checkbox" value="4" onclick="updateDistanceMetric()">Minkowski</label>
-    </div> -->
+  </div>
+  
+  <div class="main">
+    
+    <div class="filter-body">
+    <svg width="1700" height="400"></svg>
+    
+  </div>
+  
+  <hr>
+  
+  <div class="viz-body">
+    <svg width="1700" height="400"></svg>
   </div>
 
-  <div class="main">
-    <div class="filter-body">
-      <svg width="1700" height="400"></svg>
-    </div>
-    <hr>
-    <div class="viz-body">
-      <svg width="1700" height="400"></svg>
-    </div>
-        <div class="barchart-body">
-      <svg width="1700" height="400"></svg>
-    </div>
+  <div class="barchart-body">
+    <svg width="1700" height="400"></svg>
   </div>
 </div>
 
