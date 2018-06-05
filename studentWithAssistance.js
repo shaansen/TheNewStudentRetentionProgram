@@ -663,6 +663,24 @@ function enableTicks() {
   text.exit().remove();
 }
 
+function toggleDist() {
+  
+  if (!distOn) {
+    d3.selectAll(".distText").text("Distribution ON");
+    // enableDistribution();
+  } else {
+    d3.selectAll(".distText").text("Distribution OFF");
+    disableDistribution();
+  }
+  distOn = !distOn;
+  getFilterData;
+}
+
+function disableDistribution() {
+  d3.selectAll(".serie").remove()
+  d3.selectAll(".enter").remove()
+}
+
 function toggleCorr() {
   if (!corrOn) {
     d3.selectAll(".corrText").text("Correlation ON");
@@ -752,7 +770,7 @@ function enableNavFilters() {
 }
 
 function enableCorrelation() {
-  var svg = d3.select(".viz-body").select("svg"),
+  /*var svg = d3.select(".viz-body").select("svg"),
     g = svg
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -790,7 +808,7 @@ function enableCorrelation() {
     .style("fill", function(d, i) {
       return z(d[0]);
     })
-    .style("fill-opacity", "0.50");
+    .style("fill-opacity", "0.50")
 
   officeHourDots.exit().remove();
 
@@ -814,21 +832,12 @@ function enableCorrelation() {
   // .attr("cx", function(d) { return d[1]; })
   // .attr("cy", function(d) { return d[2]; })
   // .attr("r", function(d) { return 15*d[3]/maxRadius; })
-  // .style("fill",  function(d) {return z(d[0]); })
+  // .style("fill",  function(d) {return z(d[0]); })*/
 }
 
 function disableCorrelation() {
   d3.selectAll(".officeHourDots").remove();
   d3.selectAll(".officecircles").remove();
-}
-
-function toggleDist() {
-  distOn = !distOn;
-  if (!distOn) {
-    d3.selectAll(".distText").text("Distribution ON");
-  } else {
-    d3.selectAll(".distText").text("Distribution OFF");
-  }
 }
 
 function mouseOutFunction() {
@@ -1026,23 +1035,123 @@ function clickOnLineToSeeSubLines(d, i) {
   //  })
   //  // .style("stroke", "black")
 
+  console.log(distOn)
   currentLabel = labelsOnBasisOfPerformance[i];
   getTextValues(currentLabel, i);
   getStackedBarData(currentLabel, filterCriteria);
+  
 }
 
 function clickOnLineToSeeDistribution(d, i) {
+  console.log("corrOn",corrOn,"distOn",distOn)
   currentLabel = labelsOnBasisOfPerformance[i];
   getTextValues(currentLabel, i);
-  getStackedBarData(currentLabel, filterCriteria);
+  if(distOn)
+    getStackedBarData(currentLabel, filterCriteria);
+  if(corrOn)
+    getIntegratedCircles(i)
+    
+}
+
+function getIntegratedCircles(currentLabel) {
+  console.log("Inside Correlation")
+  var svg = d3.select(".viz-body").select("svg"),
+    g = svg
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  d3.selectAll(".officeHourDots").remove();
+  d3.selectAll(".officecircles").remove();
+
+  var officeHourDots = g
+    .selectAll(".officeHourDots")
+    .data(circles)
+    .enter()
+    .append("g")
+    .attr("class", "officeHourDots");
+
+  // officeHourDots.append("circle")
+  // .attr("class", "officecircles")
+  // .attr("cx", function(d) { return d[1]; })
+  // .attr("cy", function(d) { return d[2]; })
+  // .attr("r", function(d) { return d[5]/7; })
+  // .style("fill",  function(d) {return z(d[0]); })
+  // .style("fill-opacity", "0.75")
+
+  officeHourDots
+    .append("circle")
+    .filter(function(d,i) {
+      console.log(d[0],currentLabel,d[0] == currentLabel);
+      return d[0] == currentLabel;
+    })
+    .attr("class", "officecircles")
+    .attr("cx", function(d,i) {
+      return d[1];
+    })
+    .attr("cy", function(d) {
+      return d[2];
+    })
+    .attr("r", function(d) {
+      return (20 * d[3]) / maxRadius;
+    })
+    .style("fill", function(d, i) {
+      return z(d[0]);
+    })
+    .style("fill-opacity", "0.50")
+
+  officeHourDots.exit().remove();
+
+  // officeHourDots.append("circle")
+  // .attr("class", "officecircles")
+  // .attr("cx", function(d) { return d[1]; })
+  // .attr("cy", function(d) { return d[2]; })
+  // .attr("r", function(d) { return d[4]/7; })
+  // .style("fill",  function(d) {return z(d[0]); })
+  // .style("fill-opacity", "1")
+
+  // officeHourDots.append("circle")
+  // .attr("class", "officecircles")
+  // .attr("cx", function(d) { return d[1]; })
+  // .attr("cy", function(d) { return d[2]; })
+  // .attr("r", function(d) { return 15*d[3]/maxRadius; })
+  // .style("fill",  function(d) {return z(d[0]); })
+
+  // officeHourDots.append("circle")
+  // .attr("class", "officecircles")
+  // .attr("cx", function(d) { return d[1]; })
+  // .attr("cy", function(d) { return d[2]; })
+  // .attr("r", function(d) { return 15*d[3]/maxRadius; })
+  // .style("fill",  function(d) {return z(d[0]); })
 }
 
 function getTextValues(label, index) {
   d3.select(".text-body").style("border", "1px solid black");
 
-  var text = d3.select(".text-body-cluster-description");
+  // var text = d3.select(".text-body-cluster-description");
+  // text.text("Cluster Size : " + label.length);
 
-  text.text("Cluster Size : " + label.length);
+  var heading = [label.length]
+
+  var text = d3
+    .select(".text-body-cluster-description")
+    .selectAll("text")
+    .data(heading);
+
+  text.attr("class", "update");
+  text
+    .enter()
+    .append("text")
+    .attr("class", "enter")
+    .attr("x", function(d, i) {
+      return i * 32;
+    })
+    .attr("dy", ".35em")
+    .merge(text)
+    .text(function(d) {
+      return "Cluster Size : "+d;
+    });
+
+
 
   var text = d3
     .select(".text-body-cluster-content")
@@ -1050,7 +1159,6 @@ function getTextValues(label, index) {
     .data(label);
 
   text.attr("class", "update");
-  text.text("User IDs within this cluster : ").merge(text);
   text
     .enter()
     .append("text")
