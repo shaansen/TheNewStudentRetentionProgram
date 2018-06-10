@@ -1,5 +1,5 @@
 var lineWidthOriginal = "1.5px";
-var lineWidthOnHover = "6px";
+var lineWidthOnHover = "5px";
 var choices = new Set();
 
 var svg = d3.select(".viz-body").select("svg"),
@@ -50,6 +50,7 @@ var corrOn = false;
 var distOn = false;
 var TAdata;
 var overallOHdata = {};
+var eventsByDate = {};
 // -----------------------------------------------------------------------------------------
 //
 // Code to read Calendar and Map dates to events
@@ -221,7 +222,7 @@ var spring2017_date_list = [
   20170515
 ];
 
-var fall_date_list = [
+var fall2017_date_list = [
   20170831,
   20170901,
   20170902,
@@ -542,6 +543,7 @@ function mainFunction(studentFilter) {
     }
 
     completeDateList = getCompleteDateList(dateList);
+
     var dataForVisualization = convertIrregToReg(
       completeDateList,
       studentGradeData,
@@ -558,8 +560,8 @@ function mainFunction(studentFilter) {
       };
     });
 
-    clusters = 10;
-    maxiterations = 100;
+    clusters = 6;
+    maxiterations = 1000;
     numFeatures = students[0]["values"].map(function(d) {
       return d.date;
     });
@@ -842,7 +844,7 @@ function disableCorrelation() {
   d3.selectAll(".officecircles").remove();
 }
 
-function mouseOutFunction() {
+function mouseOutLine() {
   d3.select(".viz-body")
     .selectAll(".line")
     .style("stroke-opacity", function(d1, i1) {
@@ -856,19 +858,19 @@ function mouseOutFunction() {
     })
     .style("stroke-opacity", "1");
 
-  d3.select(".filter-body")
-    .selectAll(".officeHourlineMin")
-    .style("stroke-width", function(d1, i1) {
-      return "4px";
-    })
-    .style("stroke-opacity", "1");
+  // d3.select(".filter-body")
+  //  .selectAll(".officeHourlineMin")
+  //  .style("stroke-width", function(d1, i1) {
+  //    return "4px";
+  //  })
+  //  .style("stroke-opacity", "1");
 
-  d3.select(".filter-body")
-    .selectAll(".officeHourlineMax")
-    .style("stroke-width", function(d1, i1) {
-      return "0.5px";
-    })
-    .style("stroke-opacity", "1");
+  // d3.select(".filter-body")
+  //  .selectAll(".officeHourlineMax")
+  //  .style("stroke-width", function(d1, i1) {
+  //    return "0.5px";
+  //  })
+  //  .style("stroke-opacity", "1");
   // .style("stroke", "black")
 
   d3.select(this).style("stroke-width", lineWidthOriginal);
@@ -879,10 +881,6 @@ function mouseOutFunction() {
   d3.selectAll(".navbarTexts").attr("font-weight", "normal");
 
   d3.selectAll(".navbarTexts").attr("fill", "black");
-
-  d3.selectAll(".officecircles")
-    .style("fill-opacity", "0.50")
-    .style("stroke", null);
 }
 
 // https://github.com/wbkd/d3-extended
@@ -900,9 +898,8 @@ d3.selection.prototype.moveToBack = function() {
   });
 };
 
-function mouseOverFunction(d, i) {
+function mouseOverLine(d, i) {
   if (corrOn) {
-    // highlight the circles
     d3.selectAll(".officecircles")
       .filter(function(d1, i1) {
         return d1[0] == i;
@@ -936,7 +933,7 @@ function mouseOverFunction(d, i) {
       }
     });
 
-  d3.select(".filter-body")
+  /*d3.select(".filter-body")
     .selectAll(".officeHourlineMin")
     .style("stroke-width", function(d1, i1) {
       if (d.id != d1.id) {
@@ -965,7 +962,7 @@ function mouseOverFunction(d, i) {
       if (d.id != d1.id) {
         return "0.30";
       }
-    });
+    });*/
 
   d3.selectAll(".navbarRects")
     .transition()
@@ -1002,7 +999,7 @@ function mouseOverFunction(d, i) {
   currentLabel = labelsOnBasisOfPerformance[i];
 }
 
-function mouseMoveFunction() {
+function mouseMoveOnLine() {
   /*  var year = x.invert(d3.mouse(this)[0]);
   var y = getEventName(year);
 
@@ -1018,7 +1015,11 @@ function mouseMoveFunction() {
     .style("font-size", "11px");*/
 }
 
-function clickOnLineToSeeDistribution(d, i) {
+function clickOnLine(d, i) {
+
+  d3.select(".reason-body").selectAll("h4").remove();
+  d3.select(".reason-body").selectAll("ul").remove();
+
   currentLabel = labelsOnBasisOfPerformance[i];
   getTextValues(currentLabel, i);
   if (distOn) getStackedBarData(currentLabel, filterCriteria);
@@ -1049,16 +1050,17 @@ function fillUpTheOHArea(currentLabel) {
   });
 
   var comparisonData = getComparisonWithClassAverage(overallOHdata, eventMap);
-  var comparisonDisplay = getComparisonDisplayResults(comparisonData)
+  var comparisonDisplay = getComparisonDisplayResults(comparisonData);
   displayComparisonDataResults(comparisonDisplay);
 }
 
 function displayComparisonDataResults(data) {
-
-  d3.select(".oh-comparison-body").selectAll("svg").remove()
-  var calendarList = Object.keys(calendarData).map(function(d,i) {
+  d3.select(".oh-comparison-body")
+    .selectAll("svg")
+    .remove();
+  var calendarList = Object.keys(calendarData).map(function(d, i) {
     return calendarData[d]["description"];
-  })
+  });
 
   var svg = d3
     .select(".oh-comparison-body")
@@ -1087,11 +1089,11 @@ function displayComparisonDataResults(data) {
     .attr("width", 160)
     .attr("height", 18)
     .style("fill", function(d, i) {
-      if(d["type"]=="a") {
-        return "#fff999";
-      } else if(d["type"]=="b") {
+      if (d["type"] == "a") {
+        return "#898989";
+      } else if (d["type"] == "b") {
         return "#69aac6";
-      } else if(d["type"]=="c") {
+      } else if (d["type"] == "c") {
         return "#ffa0a0";
       } else {
         return "#80c669";
@@ -1106,73 +1108,126 @@ function displayComparisonDataResults(data) {
     .attr("dy", ".35em")
     .style("text-anchor", "start")
     .text(function(d, i) {
-      return d["Event"]+"\t\t\t"+d["result"];
+      return d["Event"] + "  :: " + d["result"];
     })
     .style("fill", function(d, i) {
-      if(d["type"]=="a") {
+      if (d["type"] == "a") {
         return "black";
       } else {
         return "white";
       }
-    })
+    });
 
   legend.exit().remove();
 }
 
 function getComparisonWithClassAverage(overallOHdata, eventMap) {
-
-  console.log(overallOHdata);
-  console.log(eventMap);
-
-  var result = {}
-  Object.keys(overallOHdata).forEach(function(event,i) {
+  var result = {};
+  Object.keys(overallOHdata).forEach(function(event, i) {
     var a = eventMap[event] || 0;
     var b = overallOHdata[event] || 0;
-    if(a == 0) {
-      if(b == 0) {
+    if (a == 0) {
+      if (b == 0) {
         number = 1;
       } else {
         number = -1;
       }
     } else {
-      number = (a-b)
+      number = a - b;
     }
 
     result[event] = Math.round(number * 10000) / 10000;
-  })
+  });
   return result;
 }
 
 function getComparisonDisplayResults(comparisonData) {
-
-  return Object.keys(comparisonData).map(function(event,i) {
-
+  return Object.keys(comparisonData).map(function(event, i) {
     var result = null;
     var type = -1;
-    if(comparisonData[event] == -1) {
-      // result = "Did not attend";
-      result = "";
+    if (comparisonData[event] == -1) {
+      result = "N/A";
+      // result = "";
       type = "a";
-    } else if(comparisonData[event] == 1) {
+    } else if (comparisonData[event] == 1) {
       // result = "Nobody attended";
       result = "";
-      type = "b"
-    } else if(comparisonData[event] < 0) {
+      type = "b";
+    } else if (comparisonData[event] < 0) {
       result = comparisonData[event];
-      type = "c"
+      type = "c";
     } else {
       result = comparisonData[event];
-      type = "d"
+      type = "d";
     }
 
-
     return {
-      Event : event,
-      result : result,
+      Event: event,
+      result: result,
       type: type
     };
+  });
+}
 
-  })
+function convertLongToShortDate(fullDate) {
+  return (
+    fullDate.getFullYear() * 10000 +
+    (fullDate.getMonth() + 1) * 100 +
+    fullDate.getDate()
+  );
+}
+
+function clickOnCircle(d, i) {
+  var permittedUsers = labelsOnBasisOfPerformance[d[0]].map(function(d, i) {
+    return originalStudentData[d]["id"];
+  });
+  var fullDate = d[6];
+  var shortDate = convertLongToShortDate(fullDate);
+  var eventList = eventsByDate[shortDate].filter(function(d, i) {
+    return permittedUsers.includes(d.Username);
+  });
+
+  getEventsList(d, shortDate, eventList);
+}
+
+function mouseOverCircle(d, i) {
+  d3.select(this).attr("stroke-width", "3px");
+}
+
+function mouseOutCircle(d, i) {
+  d3.select(this).attr("stroke-width", "1px");
+}
+
+function getEventsList(object, date, eventsList) {
+  d3.select(".reason-body-list")
+    .selectAll("ul")
+    .remove();
+  d3.select(".reason-body-list")
+    .selectAll("h4")
+    .remove();
+
+  d3.select(".reason-body-list")
+    .append("h4")
+    .text("Date Selected : " + date);
+
+  d3.select(".reason-body-list")
+    .append("h4")
+    .text("Average Minutes Attended : " + object[3]);
+
+  d3.select(".reason-body-list")
+    .append("h4")
+    .text("Reason for attending office hours");
+
+  eventsReasonsList = eventsList.map(function(d, i) {
+    return d.Event;
+  });
+
+  var ul = d3.select(".reason-body-list").append("ul");
+  ul.selectAll("li")
+    .data(eventsReasonsList)
+    .enter()
+    .append("li")
+    .html(String);
 }
 
 function getIntegratedCircles(currentLabel) {
@@ -1189,7 +1244,10 @@ function getIntegratedCircles(currentLabel) {
     .data(circles)
     .enter()
     .append("g")
-    .attr("class", "officeHourDots");
+    .attr("class", "officeHourDots")
+    .on("mouseover", mouseOverCircle)
+    .on("mouseout", mouseOutCircle)
+    .on("click", clickOnCircle);
 
   // officeHourDots.append("circle")
   // .attr("class", "officecircles")
@@ -1217,7 +1275,30 @@ function getIntegratedCircles(currentLabel) {
     .style("fill", function(d, i) {
       return z(d[0]);
     })
-    .style("fill-opacity", "0.50");
+    .style("fill-opacity", "1")
+    .style("stroke", function(d, i) {
+      return "black";
+    });
+  // .style("fill-opacity", "0.50");
+
+  officeHourDots
+    .append("circle")
+    .filter(function(d, i) {
+      return d[0] == currentLabel;
+    })
+    .attr("class", "officecircles")
+    .attr("cx", function(d, i) {
+      return d[1];
+    })
+    .attr("cy", function(d) {
+      return d[2];
+    })
+    .attr("r", function(d) {
+      if (d[3] != 0) return (20 * d[3]) / maxRadius + 4;
+      else return 0;
+    })
+    .style("fill", "none")
+    .style("stroke", "black");
 
   officeHourDots.exit().remove();
 
@@ -1292,26 +1373,6 @@ function getTextValues(label, index) {
   text.exit().remove();
 }
 
-function getSimpleDate(d) {
-  var mm = d.getMonth() + 1; // getMonth() is zero-based
-  var dd = d.getDate();
-  return [
-    d.getFullYear(),
-    (mm > 9 ? "" : "0") + mm,
-    (dd > 9 ? "" : "0") + dd
-  ].join("");
-}
-
-function getEventName(year) {
-  var y = new Date(year);
-  y.setHours(0, 0, 0, 0);
-  var event =
-    " - " + (y.getMonth() + 1) + "/" + y.getDay() + "/" + y.getFullYear();
-  return (
-    calendarData[getSimpleDate(irregDatesToRegDates[y])]["description"] + event
-  );
-}
-
 function type(d, _, columns) {
   d.date = parseTime(d.date);
   for (var i = 1, n = columns.length, c; i < n; ++i)
@@ -1369,7 +1430,6 @@ function getCompleteDateList(dateList) {
       }
     }
   });
-
   return completeDateList;
 }
 
@@ -1878,7 +1938,7 @@ function getFilterData(
       return x(d.date);
     })
     .y(function(d, i) {
-      return y(d.min);
+      return y(d.median);
     });
 
   var line3 = d3
@@ -1895,7 +1955,6 @@ function getFilterData(
     .response(xhr => d3.csvParseRows(xhr.responseText, d => d))
     .get(function(data) {
       TAdata = data.splice(1).map(function(tad) {
-
         return {
           Username: tad[0],
           Timestamp: +tad[1],
@@ -1904,11 +1963,18 @@ function getFilterData(
           Helped: tad[4]
         };
       });
-      // })
 
-      // d3.csv("data/spring2017/oh.csv", type, function(error, TAdata) {
-      //   if (error) throw error;
+      TAdata.forEach(function(event) {
+        var oldArray = eventsByDate[event["Timestamp"]] || [];
+        oldArray.push({
+          Username: event["Username"],
+          Event: event["Helped"]
+        });
+        eventsByDate[event["Timestamp"]] = oldArray;
+      });
+
       var data = [];
+
       columns.splice(1).forEach(function(studentID, id) {
         var object = {};
         object["id"] = studentID;
@@ -1932,9 +1998,10 @@ function getFilterData(
         data.push(object);
       });
 
-      TAdata.forEach(function(d,i) {
-        overallOHdata[d["Events"]] = (overallOHdata[d["Events"]] || 0) + d["Time Spent"]/TAdata.length;
-      })
+      TAdata.forEach(function(d, i) {
+        overallOHdata[d["Events"]] =
+          (overallOHdata[d["Events"]] || 0) + d["Time Spent"] / TAdata.length;
+      });
 
       var svg = d3.select(".filter-body").select("svg"),
         margin = { top: 30, right: 80, bottom: 30, left: 50 },
@@ -1952,13 +2019,16 @@ function getFilterData(
       //  idleDelay = 10000;
 
       data = clusterSimilarPerformingStudents(data, labelsOnBasisOfPerformance);
+
       var officeHourData = data;
       dataSecondary = data;
 
       var data = [
         { date: parseTime(spring2017_date_list[0]), value: 93.24 },
         {
-          date: parseTime(spring2017_date_list[spring2017_date_list.length - 1]),
+          date: parseTime(
+            spring2017_date_list[spring2017_date_list.length - 1]
+          ),
           value: 95.35
         }
       ];
@@ -1971,12 +2041,12 @@ function getFilterData(
       y.domain([
         d3.min(officeHourData, function(c) {
           return d3.min(c.values, function(d) {
-            return d.max;
+            return d.hours;
           });
         }),
         d3.max(officeHourData, function(c) {
           return d3.max(c.values, function(d) {
-            return d.max;
+            return d.hours;
           });
         })
       ]);
@@ -2015,29 +2085,30 @@ function getFilterData(
           return z(i);
         })
         .style("stroke-width", "1.5px")
-        .on("mouseover", mouseOverFunction)
-        .on("mouseout", mouseOutFunction)
-        .on("mousemove", mouseMoveFunction)
-        .on("click", clickOnLineToSeeDistribution);
+        .on("mouseover", mouseOverLine)
+        .on("mouseout", mouseOutLine)
+        .on("mousemove", mouseMoveOnLine)
+        .on("click", clickOnLine);
 
       officeHourDatum.exit().remove();
 
-      officeHourDatum
+      /*            officeHourDatum
         .append("path")
-        .attr("class", "officeHourlineMin")
+        .attr("class", "officeHourlineMedian")
         .attr("d", function(d) {
           return line2(d.values);
         })
         .style("stroke", function(d, i) {
-          return z(i);
+          // return z(i);
+          return "black";
         })
-        .style("stroke-width", "4px")
-        .on("mouseover", mouseOverFunction)
-        .on("mouseout", mouseOutFunction)
-        .on("mousemove", mouseMoveFunction)
-        .on("click", clickOnLineToSeeDistribution);
+        .style("stroke-width", "1.5px")
+        .on("mouseover", mouseOverLine)
+        .on("mouseout", mouseOutLine)
+        .on("mousemove", mouseMoveOnLine)
+        .on("click", clickOnLine);*/
 
-      officeHourDatum
+      /*officeHourDatum
         .append("path")
         .attr("class", "officeHourlineMax")
         .attr("d", function(d) {
@@ -2047,10 +2118,10 @@ function getFilterData(
           return z(i);
         })
         .style("stroke-width", "0.5px")
-        .on("mouseover", mouseOverFunction)
-        .on("mouseout", mouseOutFunction)
-        .on("mousemove", mouseMoveFunction)
-        .on("click", clickOnLineToSeeDistribution);
+        .on("mouseover", mouseOverLine)
+        .on("mouseout", mouseOutLine)
+        .on("mousemove", mouseMoveOnLine)
+        .on("click", clickOnLine);*/
 
       officeHourDatum
         .append("text")
@@ -2143,20 +2214,31 @@ function clusterOfficeHourData(studentGroup, data) {
   result = data[0]["values"].map(function(d, i) {
     return {
       date: d["date"],
-      hours: 0,
-      min: 0,
-      max: 0
+      hours: 0
+      // min: 0,
+      // max: 0
     };
   });
 
   studentGroup.forEach(function(student) {
     data.forEach(function(tadata) {
       if (tadata["id"] == originalStudentData[student]["id"]) {
+        // var medianArray = tadata["values"].map(function(d,i) {
+        //  return d.hours;
+        // })
+        // // console.log(medianArray);
+        // medianArray.sort(function(a,b) {
+        //  return a-b;
+        // })
+        // // console.log(medianArray);
+        // var mid = Math.round((medianArray.length+1)/2);
+
         tadata["values"].forEach(function(d, i) {
           result[i]["hours"] =
             result[i]["hours"] + d["hours"] / studentGroup.length;
-          result[i]["min"] = Math.min(result[i]["min"], d["hours"]);
-          result[i]["max"] = Math.max(result[i]["max"], d["hours"]);
+          // result[i]["median"] = medianArray[mid];
+          // result[i]["min"] = Math.min(result[i]["min"], d["hours"]);
+          // result[i]["max"] = Math.max(result[i]["max"], d["hours"]);
         });
       }
     });
@@ -2235,10 +2317,10 @@ function getLineData(data, students, dataSecondary) {
   //  .attr("d", function(d) {return studentline(d.values) })
   //  .style("stroke", function(d) {return z(d.id); })
   //  .style("stroke-width", "1.5px")
-  //  .on("mouseover", mouseOverFunction)
-  //  .on("mouseout", mouseOutFunction)
-  //  .on("mousemove", mouseMoveFunction)
-  //  .on("click", clickOnLineToSeeDistribution)
+  //  .on("mouseover", mouseOverLine)
+  //  .on("mouseout", mouseOutLine)
+  //  .on("mousemove", mouseMoveOnLine)
+  //  .on("click", clickOnLine)
 
   studentData
     .append("path")
@@ -2250,10 +2332,10 @@ function getLineData(data, students, dataSecondary) {
       return z(i);
     })
     .style("stroke-width", lineWidthOriginal)
-    .on("mouseover", mouseOverFunction)
-    .on("mouseout", mouseOutFunction)
-    .on("mousemove", mouseMoveFunction)
-    .on("click", clickOnLineToSeeDistribution);
+    .on("mouseover", mouseOverLine)
+    .on("mouseout", mouseOutLine)
+    .on("mousemove", mouseMoveOnLine)
+    .on("click", clickOnLine);
 
   studentData.exit().remove();
 
