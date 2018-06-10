@@ -50,6 +50,7 @@ var corrOn = false;
 var distOn = false;
 var TAdata;
 var overallOHdata = {};
+var eventsByDate = {};
 // -----------------------------------------------------------------------------------------
 //
 // Code to read Calendar and Map dates to events
@@ -657,7 +658,7 @@ function mainFunction(studentFilter) {
 			};
 		});
 
-		clusters = 10;
+		clusters = 3;
 		maxiterations = 1000;
 		numFeatures = students[0]["values"].map(function(d) {
 			return d.date;
@@ -942,7 +943,7 @@ function disableCorrelation() {
 	d3.selectAll(".officecircles").remove();
 }
 
-function mouseOutFunction() {
+function mouseOutLine() {
 	d3.select(".viz-body")
 		.selectAll(".line")
 		.style("stroke-opacity", function(d1, i1) {
@@ -979,7 +980,6 @@ function mouseOutFunction() {
 	d3.selectAll(".navbarTexts").attr("font-weight", "normal");
 
 	d3.selectAll(".navbarTexts").attr("fill", "black");
-
 }
 
 // https://github.com/wbkd/d3-extended
@@ -997,7 +997,7 @@ d3.selection.prototype.moveToBack = function() {
 	});
 };
 
-function mouseOverFunction(d, i) {
+function mouseOverLine(d, i) {
 	if (corrOn) {
 		d3.selectAll(".officecircles")
 			.filter(function(d1, i1) {
@@ -1098,7 +1098,7 @@ function mouseOverFunction(d, i) {
 	currentLabel = labelsOnBasisOfPerformance[i];
 }
 
-function mouseMoveFunction() {
+function mouseMoveOnLine() {
 	/*  var year = x.invert(d3.mouse(this)[0]);
 	var y = getEventName(year);
 
@@ -1114,7 +1114,7 @@ function mouseMoveFunction() {
 		.style("font-size", "11px");*/
 }
 
-function clickOnLineToSeeDistribution(d, i) {
+function clickOnLine(d, i) {
 	currentLabel = labelsOnBasisOfPerformance[i];
 	getTextValues(currentLabel, i);
 	if (distOn) getStackedBarData(currentLabel, filterCriteria);
@@ -1264,6 +1264,56 @@ function getComparisonDisplayResults(comparisonData) {
 	});
 }
 
+function convertLongToShortDate(fullDate) {
+	return (
+		fullDate.getFullYear() * 10000 +
+		(fullDate.getMonth() + 1) * 100 +
+		fullDate.getDate()
+	);
+}
+
+function clickOnCircle(d, i) {
+	console.log(originalStudentData)
+	var permittedUsers = labelsOnBasisOfPerformance[d[0]].map(function(d,i) {
+		// console.log()
+		return originalStudentData[d]["id"]
+	})
+	console.log("permittedUsers",permittedUsers)
+	var fullDate = d[6];
+	var shortDate = convertLongToShortDate(fullDate);
+	var eventList = eventsByDate[shortDate].filter(function(d,i) {
+		return permittedUsers.includes(d.Username);
+	})
+
+	getEventsList(shortDate, eventList);
+}
+
+function mouseOverCircle(d, i) {
+	d3.select(this)
+	.attr("stroke-width","3px")
+}
+
+function mouseOutCircle(d, i) {
+	d3.select(this)
+	.attr("stroke-width","1px")
+}
+
+function getEventsList(date, eventsList) {
+	console.log(eventsList)
+	d3.select('.reason-body-list').selectAll("li").remove();
+	eventsReasonsList = eventsList.map(function(d,i) {
+		return d.Event;
+	}) 
+	var ul = d3.select('.reason-body-list').append('ul');
+	ul.selectAll('li')
+	.data(eventsReasonsList)
+	.enter()
+	.append('li')
+	.html(String);
+}
+
+
+
 function getIntegratedCircles(currentLabel) {
 	var svg = d3.select(".viz-body").select("svg"),
 		g = svg
@@ -1278,7 +1328,10 @@ function getIntegratedCircles(currentLabel) {
 		.data(circles)
 		.enter()
 		.append("g")
-		.attr("class", "officeHourDots");
+		.attr("class", "officeHourDots")
+		.on("mouseover", mouseOverCircle)
+		.on("mouseout", mouseOutCircle)
+		.on("click", clickOnCircle);
 
 	// officeHourDots.append("circle")
 	// .attr("class", "officecircles")
@@ -1402,26 +1455,6 @@ function getTextValues(label, index) {
 			return originalStudentData[d]["id"] + ", ";
 		});
 	text.exit().remove();
-}
-
-function getSimpleDate(d) {
-	var mm = d.getMonth() + 1; // getMonth() is zero-based
-	var dd = d.getDate();
-	return [
-		d.getFullYear(),
-		(mm > 9 ? "" : "0") + mm,
-		(dd > 9 ? "" : "0") + dd
-	].join("");
-}
-
-function getEventName(year) {
-	var y = new Date(year);
-	y.setHours(0, 0, 0, 0);
-	var event =
-		" - " + (y.getMonth() + 1) + "/" + y.getDay() + "/" + y.getFullYear();
-	return (
-		calendarData[getSimpleDate(irregDatesToRegDates[y])]["description"] + event
-	);
 }
 
 function type(d, _, columns) {
@@ -2015,10 +2048,16 @@ function getFilterData(
 					Helped: tad[4]
 				};
 			});
-			// })
 
-			// d3.csv("data/fall2017/oh.csv", type, function(error, TAdata) {
-			//   if (error) throw error;
+			TAdata.forEach(function(event) {
+				var oldArray = eventsByDate[event["Timestamp"]] || [];
+				oldArray.push({
+					"Username" : event["Username"],
+					"Event" : event["Helped"]
+				});
+				eventsByDate[event["Timestamp"]] = oldArray;
+			});
+
 			var data = [];
 
 			columns.splice(1).forEach(function(studentID, id) {
@@ -2129,14 +2168,14 @@ function getFilterData(
 					return z(i);
 				})
 				.style("stroke-width", "1.5px")
-				.on("mouseover", mouseOverFunction)
-				.on("mouseout", mouseOutFunction)
-				.on("mousemove", mouseMoveFunction)
-				.on("click", clickOnLineToSeeDistribution);
+				.on("mouseover", mouseOverLine)
+				.on("mouseout", mouseOutLine)
+				.on("mousemove", mouseMoveOnLine)
+				.on("click", clickOnLine);
 
 			officeHourDatum.exit().remove();
 
-/*			officeHourDatum
+			/*			officeHourDatum
 				.append("path")
 				.attr("class", "officeHourlineMin")
 				.attr("d", function(d) {
@@ -2146,10 +2185,10 @@ function getFilterData(
 					return z(i);
 				})
 				.style("stroke-width", "4px")
-				.on("mouseover", mouseOverFunction)
-				.on("mouseout", mouseOutFunction)
-				.on("mousemove", mouseMoveFunction)
-				.on("click", clickOnLineToSeeDistribution);officeHourline
+				.on("mouseover", mouseOverLine)
+				.on("mouseout", mouseOutLine)
+				.on("mousemove", mouseMoveOnLine)
+				.on("click", clickOnLine);officeHourline
 
 			officeHourDatum
 				.append("path")
@@ -2161,10 +2200,10 @@ function getFilterData(
 					return z(i);
 				})
 				.style("stroke-width", "0.5px")
-				.on("mouseover", mouseOverFunction)
-				.on("mouseout", mouseOutFunction)
-				.on("mousemove", mouseMoveFunction)
-				.on("click", clickOnLineToSeeDistribution);*/
+				.on("mouseover", mouseOverLine)
+				.on("mouseout", mouseOutLine)
+				.on("mousemove", mouseMoveOnLine)
+				.on("click", clickOnLine);*/
 
 			officeHourDatum
 				.append("text")
@@ -2349,10 +2388,10 @@ function getLineData(data, students, dataSecondary) {
 	//  .attr("d", function(d) {return studentline(d.values) })
 	//  .style("stroke", function(d) {return z(d.id); })
 	//  .style("stroke-width", "1.5px")
-	//  .on("mouseover", mouseOverFunction)
-	//  .on("mouseout", mouseOutFunction)
-	//  .on("mousemove", mouseMoveFunction)
-	//  .on("click", clickOnLineToSeeDistribution)
+	//  .on("mouseover", mouseOverLine)
+	//  .on("mouseout", mouseOutLine)
+	//  .on("mousemove", mouseMoveOnLine)
+	//  .on("click", clickOnLine)
 
 	studentData
 		.append("path")
@@ -2364,10 +2403,10 @@ function getLineData(data, students, dataSecondary) {
 			return z(i);
 		})
 		.style("stroke-width", lineWidthOriginal)
-		.on("mouseover", mouseOverFunction)
-		.on("mouseout", mouseOutFunction)
-		.on("mousemove", mouseMoveFunction)
-		.on("click", clickOnLineToSeeDistribution);
+		.on("mouseover", mouseOverLine)
+		.on("mouseout", mouseOutLine)
+		.on("mousemove", mouseMoveOnLine)
+		.on("click", clickOnLine);
 
 	studentData.exit().remove();
 

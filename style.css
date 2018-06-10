@@ -32,7 +32,7 @@ button {
 
 body {
   font-family: "Cabin", "Roboto Condensed";
-  font-size: 13px;
+  font-size: 15px;
   /*font-weight: bold;*/
 }
 
@@ -164,7 +164,7 @@ body {
 }
 
 .cluster-text-name {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 h4,
@@ -184,4 +184,9 @@ h5,
 
 .bar--negative {
   fill: brown;
+}
+
+.reason-body {
+  overflow-y: scroll;
+  height: 400px;
 }
