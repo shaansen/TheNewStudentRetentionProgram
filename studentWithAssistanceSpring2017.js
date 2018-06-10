@@ -43,7 +43,7 @@ var tipBox;
 var tooltip;
 var completeDateList;
 var dateSet;
-var spring_date_list;
+var spring2017_date_list;
 var labelsOnBasisOfPerformance;
 var tickOn = false;
 var corrOn = false;
@@ -114,7 +114,7 @@ var hourSpent = {
 };
 
 var filteredSet = [];
-var spring_date_list = [
+var spring2017_date_list = [
   20170201,
   20170202,
   20170203,
@@ -331,7 +331,7 @@ var fall_date_list = [
   20171215
 ];
 
-var studentsWithAssistance_spring = [
+var studentsWithAssistance_spring2017 = [
   "316",
   "227",
   "184",
@@ -515,7 +515,7 @@ function mainFunction(studentFilter) {
       });
     } else if (studentFilter == 2) {
       studentGradeData.forEach(function(d, i) {
-        if (studentsWithAssistance_spring.includes(d.Username)) {
+        if (studentsWithAssistance_spring2017.includes(d.Username)) {
           var total = 0;
           for (var i = 0; i < dateList.length; i++) {
             var x = calendarData[dateList[i]].description;
@@ -528,7 +528,7 @@ function mainFunction(studentFilter) {
       });
     } else if (studentFilter == 3) {
       studentGradeData.forEach(function(d, i) {
-        if (!studentsWithAssistance_spring.includes(d.Username)) {
+        if (!studentsWithAssistance_spring2017.includes(d.Username)) {
           var total = 0;
           for (var i = 0; i < dateList.length; i++) {
             var x = calendarData[dateList[i]].description;
@@ -973,7 +973,7 @@ function mouseOverFunction(d, i) {
       if (d1 != i) {
         return "18px";
       } else {
-        return "140px";
+        return "160px";
       }
     });
 
@@ -1059,13 +1059,12 @@ function displayComparisonDataResults(data) {
   var calendarList = Object.keys(calendarData).map(function(d,i) {
     return calendarData[d]["description"];
   })
-  console.log(calendarList)
 
   var svg = d3
     .select(".oh-comparison-body")
     .append("svg")
     .attr("width", "160px")
-    .attr("height", "400px")
+    .attr("height", "500px")
     .append("g")
     .attr("transform", "translate(" + 10 + "," + 10 + ")");
 
@@ -1073,7 +1072,7 @@ function displayComparisonDataResults(data) {
 
   var legend = svg
     .selectAll(".oh-compare-Elements")
-    .data(calendarList)
+    .data(data)
     .enter()
     .append("g")
     .attr("class", "oh-compare-Elements")
@@ -1085,15 +1084,17 @@ function displayComparisonDataResults(data) {
     .append("rect")
     .attr("class", "oh-compare-rect")
     .attr("x", width - 10)
-    .attr("width", 130)
+    .attr("width", 160)
     .attr("height", 18)
-    .style("fill", function(event, i) {
-      if(d["type"]==0) {
-        return "yellow";
-      } else if(d["type"]==-1) {
-        return "red";
+    .style("fill", function(d, i) {
+      if(d["type"]=="a") {
+        return "#fff999";
+      } else if(d["type"]=="b") {
+        return "#69aac6";
+      } else if(d["type"]=="c") {
+        return "#ffa0a0";
       } else {
-        return "green";
+        return "#80c669";
       }
     });
 
@@ -1108,7 +1109,7 @@ function displayComparisonDataResults(data) {
       return d["Event"]+"\t\t\t"+d["result"];
     })
     .style("fill", function(d, i) {
-      if(d["type"]==0) {
+      if(d["type"]=="a") {
         return "black";
       } else {
         return "white";
@@ -1119,12 +1120,25 @@ function displayComparisonDataResults(data) {
 }
 
 function getComparisonWithClassAverage(overallOHdata, eventMap) {
+
+  console.log(overallOHdata);
+  console.log(eventMap);
+
   var result = {}
   Object.keys(overallOHdata).forEach(function(event,i) {
     var a = eventMap[event] || 0;
     var b = overallOHdata[event] || 0;
-    var number = a == 0 ? -1 : (a-b)/60
-    result[event] = Math.round(number * 100) / 100;
+    if(a == 0) {
+      if(b == 0) {
+        number = 1;
+      } else {
+        number = -1;
+      }
+    } else {
+      number = (a-b)
+    }
+
+    result[event] = Math.round(number * 10000) / 10000;
   })
   return result;
 }
@@ -1136,14 +1150,19 @@ function getComparisonDisplayResults(comparisonData) {
     var result = null;
     var type = -1;
     if(comparisonData[event] == -1) {
-      result = "Did not attend";
-      type = 0;
+      // result = "Did not attend";
+      result = "";
+      type = "a";
+    } else if(comparisonData[event] == 1) {
+      // result = "Nobody attended";
+      result = "";
+      type = "b"
     } else if(comparisonData[event] < 0) {
       result = comparisonData[event];
-      type = -1;
+      type = "c"
     } else {
       result = comparisonData[event];
-      type = 1;
+      type = "d"
     }
 
 
@@ -1342,7 +1361,7 @@ function getCompleteDateList(dateList) {
   dateSet = new Set();
   var completeDateList = [];
 
-  spring_date_list.map(function(date_i, i) {
+  spring2017_date_list.map(function(date_i, i) {
     if (parseTime(date_i) <= parseTime(dateList[dateList.length - 1])) {
       if (!dateSet.has(parseTime(date_i).toString())) {
         dateSet.add(parseTime(date_i).toString());
@@ -1894,7 +1913,7 @@ function getFilterData(
         var object = {};
         object["id"] = studentID;
         object["values"] = [];
-        object["values"] = spring_date_list.map(function(date, i) {
+        object["values"] = spring2017_date_list.map(function(date, i) {
           var x = date % 100;
           var y = ((date % 10000) - x) / 100 - 1;
           var z = 2017;
@@ -1906,7 +1925,7 @@ function getFilterData(
 
         TAdata.map(function(d, i) {
           if (d["Username"] == object["id"]) {
-            var index = spring_date_list.indexOf(d["Timestamp"]);
+            var index = spring2017_date_list.indexOf(d["Timestamp"]);
             object["values"][index]["hours"] = d["Time Spent"];
           }
         });
@@ -1937,9 +1956,9 @@ function getFilterData(
       dataSecondary = data;
 
       var data = [
-        { date: parseTime(spring_date_list[0]), value: 93.24 },
+        { date: parseTime(spring2017_date_list[0]), value: 93.24 },
         {
-          date: parseTime(spring_date_list[spring_date_list.length - 1]),
+          date: parseTime(spring2017_date_list[spring2017_date_list.length - 1]),
           value: 95.35
         }
       ];
