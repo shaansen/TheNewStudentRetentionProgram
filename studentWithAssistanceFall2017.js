@@ -658,19 +658,18 @@ function mainFunction(studentFilter) {
 			};
 		});
 
-		clusters = 3;
+		clusters = 6;
 		maxiterations = 1000;
 		numFeatures = students[0]["values"].map(function(d) {
 			return d.date;
 		});
 
 		// K-MEANS CLUSTERING
-		studentClusters = kmeans(students, clusters, maxiterations);
-		console.log(labelsOnBasisOfPerformance);
+		// studentClusters = kmeans(students, clusters, maxiterations);
 
 		// HIERARCHICAL CLUSTERING
-		// labelsOnBasisOfPerformance = hierarch(students,DTWDistance, clusters)
-		// studentClusters = getCentroids(students, labelsOnBasisOfPerformance, clusters)
+		labelsOnBasisOfPerformance = hierarch(students,DTWDistance, clusters)
+		studentClusters = getCentroids(students, labelsOnBasisOfPerformance, clusters)
 
 		// findOptimalClusterUsingElbow(students, maxiterations)
 		// findOptimalClusterUsingSil(students, maxiterations)
@@ -1203,7 +1202,7 @@ function displayComparisonDataResults(data) {
 		.attr("dy", ".35em")
 		.style("text-anchor", "start")
 		.text(function(d, i) {
-			return d["Event"] + " : " + d["result"];
+			return d["Event"] + "  :: " + d["result"];
 		})
 		.style("fill", function(d, i) {
 			if (d["type"] == "a") {
@@ -1273,19 +1272,17 @@ function convertLongToShortDate(fullDate) {
 }
 
 function clickOnCircle(d, i) {
-	console.log(originalStudentData)
 	var permittedUsers = labelsOnBasisOfPerformance[d[0]].map(function(d,i) {
-		// console.log()
 		return originalStudentData[d]["id"]
 	})
-	console.log("permittedUsers",permittedUsers)
+	console.log(d)
 	var fullDate = d[6];
 	var shortDate = convertLongToShortDate(fullDate);
 	var eventList = eventsByDate[shortDate].filter(function(d,i) {
 		return permittedUsers.includes(d.Username);
 	})
 
-	getEventsList(shortDate, eventList);
+	getEventsList(d, shortDate, eventList);
 }
 
 function mouseOverCircle(d, i) {
@@ -1298,12 +1295,24 @@ function mouseOutCircle(d, i) {
 	.attr("stroke-width","1px")
 }
 
-function getEventsList(date, eventsList) {
-	console.log(eventsList)
-	d3.select('.reason-body-list').selectAll("li").remove();
+function getEventsList(object, date, eventsList) {
+	d3.select('.reason-body-list').selectAll("ul").remove();
+	d3.select('.reason-body-list').selectAll("h4").remove();
+
+	d3.select(".reason-body-list").append('h4')
+	.text("Date Selected : "+date)
+
+	d3.select(".reason-body-list").append('h4')
+	.text("Average Minutes Attended : "+object[3])
+
+	d3.select(".reason-body-list").append('h4')
+	.text("Reason for attending office hours")
+	
+
 	eventsReasonsList = eventsList.map(function(d,i) {
 		return d.Event;
 	}) 
+
 	var ul = d3.select('.reason-body-list').append('ul');
 	ul.selectAll('li')
 	.data(eventsReasonsList)
@@ -2023,7 +2032,7 @@ function getFilterData(
 			return x(d.date);
 		})
 		.y(function(d, i) {
-			return y(d.min);
+			return y(d.median);
 		});
 
 	var line3 = d3
@@ -2175,22 +2184,23 @@ function getFilterData(
 
 			officeHourDatum.exit().remove();
 
-			/*			officeHourDatum
+/*						officeHourDatum
 				.append("path")
-				.attr("class", "officeHourlineMin")
+				.attr("class", "officeHourlineMedian")
 				.attr("d", function(d) {
 					return line2(d.values);
 				})
 				.style("stroke", function(d, i) {
-					return z(i);
+					// return z(i);
+					return "black";
 				})
-				.style("stroke-width", "4px")
+				.style("stroke-width", "1.5px")
 				.on("mouseover", mouseOverLine)
 				.on("mouseout", mouseOutLine)
 				.on("mousemove", mouseMoveOnLine)
-				.on("click", clickOnLine);officeHourline
+				.on("click", clickOnLine);*/
 
-			officeHourDatum
+			/*officeHourDatum
 				.append("path")
 				.attr("class", "officeHourlineMax")
 				.attr("d", function(d) {
@@ -2297,19 +2307,30 @@ function clusterOfficeHourData(studentGroup, data) {
 		return {
 			date: d["date"],
 			hours: 0,
-			min: 0,
-			max: 0
+			// min: 0,
+			// max: 0
 		};
 	});
 
 	studentGroup.forEach(function(student) {
 		data.forEach(function(tadata) {
 			if (tadata["id"] == originalStudentData[student]["id"]) {
+				// var medianArray = tadata["values"].map(function(d,i) {
+				// 	return d.hours;
+				// })
+				// // console.log(medianArray);
+				// medianArray.sort(function(a,b) {
+				// 	return a-b;
+				// })
+				// // console.log(medianArray);
+				// var mid = Math.round((medianArray.length+1)/2);
+
 				tadata["values"].forEach(function(d, i) {
 					result[i]["hours"] =
-						result[i]["hours"] + d["hours"] / studentGroup.length;
-					result[i]["min"] = Math.min(result[i]["min"], d["hours"]);
-					result[i]["max"] = Math.max(result[i]["max"], d["hours"]);
+					result[i]["hours"] + d["hours"] / studentGroup.length;
+					// result[i]["median"] = medianArray[mid];
+					// result[i]["min"] = Math.min(result[i]["min"], d["hours"]);
+					// result[i]["max"] = Math.max(result[i]["max"], d["hours"]);
 				});
 			}
 		});

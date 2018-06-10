@@ -190,3 +190,7 @@ h5,
   overflow-y: scroll;
   height: 400px;
 }
+
+.reason-body p {
+  padding-left: 40px;
+}
