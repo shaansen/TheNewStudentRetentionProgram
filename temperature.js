@@ -1,5 +1,3 @@
-console.log("Shantanu Sengupta")
-
 var lineWidthOriginal = "1.5px";
 var lineWidthOnHover = "6px";
 
@@ -35,6 +33,7 @@ var filterLimits = {
 
 var circles = []
 var maxRadius
+var minRadius
 var tipBox
 var tooltip
 var completeDateList
@@ -110,7 +109,7 @@ function mainFunction() {
 		});
 
 
-		clusters = 10
+		clusters = 5
 		maxiterations = 1000
 		numFeatures = cities[0]["values"].map(function(d) {
 			return d.date;
@@ -328,7 +327,7 @@ function enableCorrelation() {
 	.attr("class", "officecircles")
 	.attr("cx", function(d) { return d[1]; })
 	.attr("cy", function(d) { return d[2]; })
-	.attr("r", function(d) { return 15*d[3]/maxRadius; })
+	.attr("r", function(d) { return 15*(d[3]-minRadius)/maxRadius; })
 	.style("fill",  function(d) {return z(d[0]); })
 	.style("fill-opacity", "0.85")
 
@@ -1300,6 +1299,7 @@ function getLineData(data,cities,dataSecondary) {
 	})
 
 	maxRadius = d3.max(circles, function(c) {return c[3] })
+	minRadius = d3.min(circles, function(c) {return c[3] })
 	
 	g.append("g")
 		.attr("class", "axis axis--x")

@@ -883,7 +883,6 @@ function mouseOutLine() {
   d3.selectAll(".navbarTexts").attr("fill", "black");
 }
 
-// https://github.com/wbkd/d3-extended
 d3.selection.prototype.moveToFront = function() {
   return this.each(function() {
     this.parentNode.appendChild(this);
