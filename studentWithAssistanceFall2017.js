@@ -565,7 +565,7 @@ var studentsWithAssistance_fall2017 = [
 	"446"
 ];
 
-mainFunction(1);
+mainFunction(2);
 
 function mainFunction(studentFilter) {
 	// Below code parses the calendar csv to mark events on the basis of the date
@@ -658,7 +658,7 @@ function mainFunction(studentFilter) {
 			};
 		});
 
-		clusters = 6;
+		clusters = 8;
 		maxiterations = 1000;
 		numFeatures = students[0]["values"].map(function(d) {
 			return d.date;
@@ -956,19 +956,19 @@ function mouseOutLine() {
 		})
 		.style("stroke-opacity", "1");
 
-	// d3.select(".filter-body")
-	// 	.selectAll(".officeHourlineMin")
-	// 	.style("stroke-width", function(d1, i1) {
-	// 		return "4px";
-	// 	})
-	// 	.style("stroke-opacity", "1");
+	d3.select(".filter-body")
+		.selectAll(".officeHourlineMin")
+		.style("stroke-width", function(d1, i1) {
+			return "4px";
+		})
+		.style("stroke-opacity", "1");
 
-	// d3.select(".filter-body")
-	// 	.selectAll(".officeHourlineMax")
-	// 	.style("stroke-width", function(d1, i1) {
-	// 		return "0.5px";
-	// 	})
-	// 	.style("stroke-opacity", "1");
+	d3.select(".filter-body")
+		.selectAll(".officeHourlineMax")
+		.style("stroke-width", function(d1, i1) {
+			return "0.5px";
+		})
+		.style("stroke-opacity", "1");
 	// .style("stroke", "black")
 
 	d3.select(this).style("stroke-width", lineWidthOriginal);
@@ -1031,7 +1031,7 @@ function mouseOverLine(d, i) {
 			}
 		});
 
-	/*d3.select(".filter-body")
+	d3.select(".filter-body")
 		.selectAll(".officeHourlineMin")
 		.style("stroke-width", function(d1, i1) {
 			if (d.id != d1.id) {
@@ -1060,7 +1060,7 @@ function mouseOverLine(d, i) {
 			if (d.id != d1.id) {
 				return "0.30";
 			}
-		});*/
+		});
 
 	d3.selectAll(".navbarRects")
 		.transition()
@@ -2133,12 +2133,12 @@ function getFilterData(
 			y.domain([
 				d3.min(officeHourData, function(c) {
 					return d3.min(c.values, function(d) {
-						return d.hours;
+						return d.min;
 					});
 				}),
 				d3.max(officeHourData, function(c) {
 					return d3.max(c.values, function(d) {
-						return d.hours;
+						return d.max;
 					});
 				})
 			]);
@@ -2184,23 +2184,23 @@ function getFilterData(
 
 			officeHourDatum.exit().remove();
 
-/*						officeHourDatum
+			officeHourDatum
 				.append("path")
-				.attr("class", "officeHourlineMedian")
+				.attr("class", "officeHourlineMin")
 				.attr("d", function(d) {
 					return line2(d.values);
 				})
 				.style("stroke", function(d, i) {
-					// return z(i);
-					return "black";
+					return z(i);
+					// return "black";
 				})
 				.style("stroke-width", "1.5px")
 				.on("mouseover", mouseOverLine)
 				.on("mouseout", mouseOutLine)
 				.on("mousemove", mouseMoveOnLine)
-				.on("click", clickOnLine);*/
+				.on("click", clickOnLine);
 
-			/*officeHourDatum
+			officeHourDatum
 				.append("path")
 				.attr("class", "officeHourlineMax")
 				.attr("d", function(d) {
@@ -2213,7 +2213,7 @@ function getFilterData(
 				.on("mouseover", mouseOverLine)
 				.on("mouseout", mouseOutLine)
 				.on("mousemove", mouseMoveOnLine)
-				.on("click", clickOnLine);*/
+				.on("click", clickOnLine);
 
 			officeHourDatum
 				.append("text")
@@ -2307,8 +2307,8 @@ function clusterOfficeHourData(studentGroup, data) {
 		return {
 			date: d["date"],
 			hours: 0,
-			// min: 0,
-			// max: 0
+			min: 0,
+			max: 0
 		};
 	});
 
@@ -2329,8 +2329,8 @@ function clusterOfficeHourData(studentGroup, data) {
 					result[i]["hours"] =
 					result[i]["hours"] + d["hours"] / studentGroup.length;
 					// result[i]["median"] = medianArray[mid];
-					// result[i]["min"] = Math.min(result[i]["min"], d["hours"]);
-					// result[i]["max"] = Math.max(result[i]["max"], d["hours"]);
+					result[i]["min"] = Math.min(result[i]["min"], d["hours"]);
+					result[i]["max"] = Math.max(result[i]["max"], d["hours"]);
 				});
 			}
 		});
