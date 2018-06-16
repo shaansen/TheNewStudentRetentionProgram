@@ -668,8 +668,12 @@ function mainFunction(studentFilter) {
 		// studentClusters = kmeans(students, clusters, maxiterations);
 
 		// HIERARCHICAL CLUSTERING
-		labelsOnBasisOfPerformance = hierarch(students,DTWDistance, clusters)
-		studentClusters = getCentroids(students, labelsOnBasisOfPerformance, clusters)
+		labelsOnBasisOfPerformance = hierarch(students, DTWDistance, clusters);
+		studentClusters = getCentroids(
+			students,
+			labelsOnBasisOfPerformance,
+			clusters
+		);
 
 		// findOptimalClusterUsingElbow(students, maxiterations)
 		// findOptimalClusterUsingSil(students, maxiterations)
@@ -691,7 +695,12 @@ function mainFunction(studentFilter) {
 			initializePanel &&
 			typeof initializePanel == "function"
 		) {
-			getFilterData(labelsOnBasisOfPerformance, data, students, getLineData);
+			getFilterData(
+				labelsOnBasisOfPerformance,
+				data,
+				students,
+				getLineData
+			);
 			initializePanel();
 		}
 	});
@@ -724,7 +733,10 @@ function enableTicks() {
 	var svg = d3.select(".viz-body").select("svg"),
 		g = svg
 			.append("g")
-			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			.attr(
+				"transform",
+				"translate(" + margin.left + "," + margin.top + ")"
+			);
 
 	var pillars = g
 		.selectAll(".pillars")
@@ -747,8 +759,7 @@ function enableTicks() {
 		.data(dateList)
 		.enter();
 
-	text
-		.append("text")
+	text.append("text")
 		.attr("class", "pillar-text")
 		.attr("x", "10px")
 		.attr("y", "10px")
@@ -845,7 +856,11 @@ function enableNavFilters() {
 		.attr("class", "navbarElements")
 		.attr("transform", function(d, i) {
 			return "translate(0," + i * 20 + ")";
-		});
+		})
+		.on("mouseover", mouseOverLine)
+		.on("mouseout", mouseOutLine)
+		.on("mousemove", mouseMoveOnLine)
+		.on("click", clickOnLine);
 
 	legend
 		.append("rect")
@@ -855,7 +870,8 @@ function enableNavFilters() {
 		.attr("height", 18)
 		.style("fill", function(d, i) {
 			return z(i);
-		});
+		})
+
 
 	legend
 		.append("text")
@@ -945,6 +961,9 @@ function disableCorrelation() {
 function mouseOutLine() {
 	d3.select(".viz-body")
 		.selectAll(".line")
+		.style("stroke-width", function(d1, i1) {
+			return lineWidthOriginal;
+		})
 		.style("stroke-opacity", function(d1, i1) {
 			return "1";
 		});
@@ -997,6 +1016,9 @@ d3.selection.prototype.moveToBack = function() {
 };
 
 function mouseOverLine(d, i) {
+
+
+
 	if (corrOn) {
 		d3.selectAll(".officecircles")
 			.filter(function(d1, i1) {
@@ -1010,8 +1032,15 @@ function mouseOverLine(d, i) {
 
 	d3.select(".viz-body")
 		.selectAll(".line")
+		.style("stroke-width", function(d1, i1) {
+			if (i!=i1) {
+				return lineWidthOriginal;
+			} else {
+				return lineWidthOnHover;
+			}
+		})
 		.style("stroke-opacity", function(d1, i1) {
-			if (d.id != d1.id) {
+			if (i!=i1) {
 				return "0.30";
 			}
 		});
@@ -1019,14 +1048,14 @@ function mouseOverLine(d, i) {
 	d3.select(".filter-body")
 		.selectAll(".officeHourline")
 		.style("stroke-width", function(d1, i1) {
-			if (d.id != d1.id) {
+			if (i!=i1) {
 				return lineWidthOriginal;
 			} else {
 				return lineWidthOnHover;
 			}
 		})
 		.style("stroke-opacity", function(d1, i1) {
-			if (d.id != d1.id) {
+			if (i!=i1) {
 				return "0.30";
 			}
 		});
@@ -1034,7 +1063,7 @@ function mouseOverLine(d, i) {
 	d3.select(".filter-body")
 		.selectAll(".officeHourlineMin")
 		.style("stroke-width", function(d1, i1) {
-			if (d.id != d1.id) {
+			if (i!=i1) {
 				return "4px";
 			} else {
 				return "6px";
@@ -1042,7 +1071,7 @@ function mouseOverLine(d, i) {
 			mouseOver;
 		})
 		.style("stroke-opacity", function(d1, i1) {
-			if (d.id != d1.id) {
+			if (i!=i1) {
 				return "0.30";
 			}
 		});
@@ -1050,14 +1079,14 @@ function mouseOverLine(d, i) {
 	d3.select(".filter-body")
 		.selectAll(".officeHourlineMax")
 		.style("stroke-width", function(d1, i1) {
-			if (d.id != d1.id) {
+			if (i!=i1) {
 				return "0.5px";
 			} else {
 				return "4px";
 			}
 		})
 		.style("stroke-opacity", function(d1, i1) {
-			if (d.id != d1.id) {
+			if (i!=i1) {
 				return "0.30";
 			}
 		});
@@ -1272,62 +1301,93 @@ function convertLongToShortDate(fullDate) {
 }
 
 function clickOnCircle(d, i) {
-	var permittedUsers = labelsOnBasisOfPerformance[d[0]].map(function(d,i) {
-		return originalStudentData[d]["id"]
-	})
-	console.log(d)
+	var permittedUsers = labelsOnBasisOfPerformance[d[0]].map(function(d, i) {
+		return originalStudentData[d]["id"];
+	});
 	var fullDate = d[6];
 	var shortDate = convertLongToShortDate(fullDate);
-	var eventList = eventsByDate[shortDate].filter(function(d,i) {
+	var eventList = eventsByDate[shortDate].filter(function(d, i) {
 		return permittedUsers.includes(d.Username);
-	})
+	});
 
 	getEventsList(d, shortDate, eventList);
 }
 
 function mouseOverCircle(d, i) {
-	d3.select(this)
-	.attr("stroke-width","3px")
+	d3.select(this).attr("stroke-width", "3px");
 }
 
 function mouseOutCircle(d, i) {
-	d3.select(this)
-	.attr("stroke-width","1px")
+	d3.select(this).attr("stroke-width", "1px");
 }
 
 function getEventsList(object, date, eventsList) {
-	d3.select('.reason-body-list').selectAll("ul").remove();
-	d3.select('.reason-body-list').selectAll("h4").remove();
+	var d = object[6];
+	var days = [
+		"Sunday",
+		"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday",
+		"Saturday"
+	];
+	var displayDate =
+		days[d.getDay()] +
+		", " +
+		d.getMonth() +
+		"-" +
+		d.getDate() +
+		"-" +
+		d.getFullYear();
 
-	d3.select(".reason-body-list").append('h4')
-	.text("Date Selected : "+date)
+	d3.select(".reason-body-list")
+		.selectAll("ul")
+		.remove();
+	d3.select(".reason-body-list")
+		.selectAll("h4")
+		.remove();
+	d3.select(".reason-body-list")
+		.selectAll("h2")
+		.remove();
 
-	d3.select(".reason-body-list").append('h4')
-	.text("Average Minutes Attended : "+object[3])
+	d3.select(".reason-body-list")
+		.append("h2")
+		.attr("class", "reason-panel-header-date")
+		.text(displayDate);
 
-	d3.select(".reason-body-list").append('h4')
-	.text("Reason for attending office hours")
-	
+	d3.select(".reason-body-list")
+		.append("h4")
+		.text(
+			"Students attended an average of " +
+				Math.round(object[3] * 1000) / 1000 +
+				" minutes"
+		);
 
-	eventsReasonsList = eventsList.map(function(d,i) {
+	d3.select(".reason-body-list")
+		.append("h4")
+		.text("To discuss the following items : ");
+
+	eventsReasonsList = eventsList.map(function(d, i) {
 		return d.Event;
-	}) 
+	});
 
-	var ul = d3.select('.reason-body-list').append('ul');
-	ul.selectAll('li')
-	.data(eventsReasonsList)
-	.enter()
-	.append('li')
-	.html(String);
+	var ul = d3.select(".reason-body-list").append("ul");
+	ul.selectAll("li")
+		.data(eventsReasonsList)
+		.enter()
+		.append("li")
+		.html(String);
 }
-
-
 
 function getIntegratedCircles(currentLabel) {
 	var svg = d3.select(".viz-body").select("svg"),
 		g = svg
 			.append("g")
-			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			.attr(
+				"transform",
+				"translate(" + margin.left + "," + margin.top + ")"
+			);
 
 	d3.selectAll(".officeHourDots").remove();
 	d3.selectAll(".officecircles").remove();
@@ -1432,8 +1492,7 @@ function getTextValues(label, index) {
 		.data(heading);
 
 	text.attr("class", "update");
-	text
-		.enter()
+	text.enter()
 		.append("text")
 		.attr("class", "enter")
 		.attr("x", function(d, i) {
@@ -1451,8 +1510,7 @@ function getTextValues(label, index) {
 		.data(label);
 
 	text.attr("class", "update");
-	text
-		.enter()
+	text.enter()
 		.append("text")
 		.attr("class", "enter")
 		.attr("x", function(d, i) {
@@ -1626,10 +1684,13 @@ function DTWDistance(s1, s2) {
 
 	for (var i = 1; i < s1.length; i++) {
 		for (var j = 1; j < s2.length; j++) {
-			var dist = (s1[i].scores - s2[j].scores) * (s1[i].scores - s2[j].scores);
+			var dist =
+				(s1[i].scores - s2[j].scores) * (s1[i].scores - s2[j].scores);
 			DTW[i][j] =
 				dist +
-				Math.sqrt(Math.min(DTW[i - 1][j], DTW[i][j - 1], DTW[i - 1][j - 1]));
+				Math.sqrt(
+					Math.min(DTW[i - 1][j], DTW[i][j - 1], DTW[i - 1][j - 1])
+				);
 		}
 	}
 
@@ -1772,8 +1833,17 @@ function calculateSilhouette(clusters, students, labels) {
 	var result = 0;
 	var plot = [];
 	Object.keys(labels).forEach(function(d, i) {
-		var a = calculateSilhouetteForOneClusterA(clusters, students, labels[d]);
-		var b = calculateSilhouetteForOneClusterB(clusters, students, labels, d);
+		var a = calculateSilhouetteForOneClusterA(
+			clusters,
+			students,
+			labels[d]
+		);
+		var b = calculateSilhouetteForOneClusterB(
+			clusters,
+			students,
+			labels,
+			d
+		);
 		var s = a.map(function(d, i) {
 			if (d < b[i]) {
 				return 1 - d / b[i];
@@ -1854,7 +1924,14 @@ function calculateSumSquareDistance(clusters, studentData) {
 	var x = 0;
 	label_iterator.forEach(function(d, i1) {
 		labels[d].forEach(function(e, i2) {
-			x = x + getSquareDifference(d, e, studentData[e]["values"], clusters[i1]);
+			x =
+				x +
+				getSquareDifference(
+					d,
+					e,
+					studentData[e]["values"],
+					clusters[i1]
+				);
 		});
 	});
 	return x;
@@ -2061,8 +2138,8 @@ function getFilterData(
 			TAdata.forEach(function(event) {
 				var oldArray = eventsByDate[event["Timestamp"]] || [];
 				oldArray.push({
-					"Username" : event["Username"],
-					"Event" : event["Helped"]
+					Username: event["Username"],
+					Event: event["Helped"]
 				});
 				eventsByDate[event["Timestamp"]] = oldArray;
 			});
@@ -2094,7 +2171,8 @@ function getFilterData(
 
 			TAdata.forEach(function(d, i) {
 				overallOHdata[d["Events"]] =
-					(overallOHdata[d["Events"]] || 0) + d["Time Spent"] / TAdata.length;
+					(overallOHdata[d["Events"]] || 0) +
+					d["Time Spent"] / TAdata.length;
 			});
 
 			var svg = d3.select(".filter-body").select("svg"),
@@ -2112,7 +2190,10 @@ function getFilterData(
 			//  idleTimeout,
 			//  idleDelay = 10000;
 
-			data = clusterSimilarPerformingStudents(data, labelsOnBasisOfPerformance);
+			data = clusterSimilarPerformingStudents(
+				data,
+				labelsOnBasisOfPerformance
+			);
 
 			var officeHourData = data;
 			dataSecondary = data;
@@ -2120,7 +2201,9 @@ function getFilterData(
 			var data = [
 				{ date: parseTime(fall2017_date_list[0]), value: 93.24 },
 				{
-					date: parseTime(fall2017_date_list[fall2017_date_list.length - 1]),
+					date: parseTime(
+						fall2017_date_list[fall2017_date_list.length - 1]
+					),
 					value: 95.35
 				}
 			];
@@ -2221,7 +2304,13 @@ function getFilterData(
 					return { id: d.id, value: d.values[d.values.length - 1] };
 				})
 				.attr("transform", function(d) {
-					return "translate(" + x(d.value.date) + "," + y(d.value.hours) + ")";
+					return (
+						"translate(" +
+						x(d.value.date) +
+						"," +
+						y(d.value.hours) +
+						")"
+					);
 				})
 				.attr("x", 3)
 				.attr("dy", "0.35em")
@@ -2277,7 +2366,12 @@ function getFilteredLabels(data, filters) {
 	var set = new Set();
 	data.forEach(function(d, i) {
 		d.values.forEach(function(d1, i1) {
-			if (d1.date > x0 && d1.date < x1 && d1.hours < y0 && d1.hours > y1) {
+			if (
+				d1.date > x0 &&
+				d1.date < x1 &&
+				d1.hours < y0 &&
+				d1.hours > y1
+			) {
 				set.add(i);
 			}
 		});
@@ -2327,7 +2421,7 @@ function clusterOfficeHourData(studentGroup, data) {
 
 				tadata["values"].forEach(function(d, i) {
 					result[i]["hours"] =
-					result[i]["hours"] + d["hours"] / studentGroup.length;
+						result[i]["hours"] + d["hours"] / studentGroup.length;
 					// result[i]["median"] = medianArray[mid];
 					result[i]["min"] = Math.min(result[i]["min"], d["hours"]);
 					result[i]["max"] = Math.max(result[i]["max"], d["hours"]);
@@ -2438,7 +2532,9 @@ function getLineData(data, students, dataSecondary) {
 			return { id: d.id, value: d.values[d.values.length - 1] };
 		})
 		.attr("transform", function(d) {
-			return "translate(" + x(d.value.date) + "," + y(d.value.scores) + ")";
+			return (
+				"translate(" + x(d.value.date) + "," + y(d.value.scores) + ")"
+			);
 		})
 		.attr("x", 3)
 		.attr("dy", "0.35em")

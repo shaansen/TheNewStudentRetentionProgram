@@ -560,7 +560,7 @@ function mainFunction(studentFilter) {
       };
     });
 
-    clusters = 6;
+    clusters = 8;
     maxiterations = 1000;
     numFeatures = students[0]["values"].map(function(d) {
       return d.date;

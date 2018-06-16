@@ -1,5 +1,5 @@
 var lineWidthOriginal = "1.5px";
-var lineWidthOnHover = "6px";
+var lineWidthOnHover = "3px";
 
 var choices = new Set();
 
@@ -1264,7 +1264,7 @@ function getStackedBarData(currentLabel, filterCriteria) {
 		.attr("height", function(d) {
 			return y(d[0]) - y(d[1]);
 		})
-		.attr("width", 1);
+		.attr("width", 2);
 
 	function type(d, i, columns) {
 		for (i = 1, t = 0; i < columns.length; ++i)
