@@ -565,7 +565,7 @@ var studentsWithAssistance_fall2017 = [
 	"446"
 ];
 
-mainFunction(3);
+mainFunction(1);
 
 function mainFunction(studentFilter) {
 	// Below code parses the calendar csv to mark events on the basis of the date
