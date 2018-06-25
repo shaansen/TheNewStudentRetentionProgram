@@ -285,12 +285,10 @@ function toggleCorr() {
 function enableNavFilters() {
 	var data = Object.keys(labelsOnBasisOfPerformance);
 	/*  d3.select(".navfilter-body").select(".navfilter-body-svg").selectAll(".navbarElements").remove();
-
   var navbarElements = d3.select(".navfilter-body").select(".navfilter-body-svg").selectAll(".navbarElements")
   .data(data)
   .enter().append("g")
   .attr("class", "navbarElements")
-
   navbarElements.append("rect")
   .attr("class", "navbarRects")
   .attr("width","11px")
@@ -364,17 +362,14 @@ function enableCorrelation() {
     g = svg
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
   d3.selectAll(".officeHourDots").remove();
   d3.selectAll(".officecircles").remove();
-
   var officeHourDots = g
     .selectAll(".officeHourDots")
     .data(circles)
     .enter()
     .append("g")
     .attr("class", "officeHourDots");
-
   // officeHourDots.append("circle")
   // .attr("class", "officecircles")
   // .attr("cx", function(d) { return d[1]; })
@@ -382,7 +377,6 @@ function enableCorrelation() {
   // .attr("r", function(d) { return d[5]/7; })
   // .style("fill",  function(d) {return z(d[0]); })
   // .style("fill-opacity", "0.75")
-
   officeHourDots
     .append("circle")
     .attr("class", "officecircles")
@@ -399,9 +393,7 @@ function enableCorrelation() {
       return z(d[0]);
     })
     .style("fill-opacity", "0.50")
-
   officeHourDots.exit().remove();
-
   // officeHourDots.append("circle")
   // .attr("class", "officecircles")
   // .attr("cx", function(d) { return d[1]; })
@@ -409,14 +401,12 @@ function enableCorrelation() {
   // .attr("r", function(d) { return d[4]/7; })
   // .style("fill",  function(d) {return z(d[0]); })
   // .style("fill-opacity", "1")
-
   // officeHourDots.append("circle")
   // .attr("class", "officecircles")
   // .attr("cx", function(d) { return d[1]; })
   // .attr("cy", function(d) { return d[2]; })
   // .attr("r", function(d) { return 15*d[3]/maxRadius; })
   // .style("fill",  function(d) {return z(d[0]); })
-
   // officeHourDots.append("circle")
   // .attr("class", "officecircles")
   // .attr("cx", function(d) { return d[1]; })
@@ -586,7 +576,6 @@ function mouseOverLine(d, i) {
 function mouseMoveOnLine() {
 	/*  var year = x.invert(d3.mouse(this)[0]);
   var y = getEventName(year);
-
   tooltip
     .style("top", event.pageY - 30 + "px")
     .style("visibility", "visible")
@@ -1375,6 +1364,7 @@ function getFilterData(
 		data = clusterSimilarPerformingcities(data, labelsOnBasisOfPerformance);
 		var officeHourData = data;
 		var dataSecondary = data;
+		console.log(data)
 
 		var data = [
 			{ date: new Date(date_list[0]), value: 93.24 },
@@ -1440,7 +1430,7 @@ function getFilterData(
 
 		officeHourDatum.exit().remove();
 
-		/*	officeHourDatum.append("path")
+			officeHourDatum.append("path")
 	.attr("class", "officeHourlineMin")
 	.attr("d", function(d) { return line2(d.values); })
 	.style("stroke", function(d,i) { return z(i); })
@@ -1449,6 +1439,7 @@ function getFilterData(
 	.on("mouseout", mouseOutLine)
 	.on("mousemove", mouseMoveOnLine)
 	.on("click", clickOnLine)
+
 	officeHourDatum.append("path")
 	.attr("class", "officeHourlineMax")
 	.attr("d", function(d) { return line3(d.values); })
@@ -1457,7 +1448,7 @@ function getFilterData(
 	.on("mouseover", mouseOverLine)
 	.on("mouseout", mouseOutLine)
 	.on("mousemove", mouseMoveOnLine)
-	.on("click", clickOnLine)*/
+	.on("click", clickOnLine)
 
 		officeHourDatum
 			.append("text")
@@ -1562,8 +1553,8 @@ function clusterOfficeHourData(cityGroup, data) {
 		return {
 			date: d["date"],
 			hours: 0,
-			min: 0,
-			max: 0
+			min: Infinity,
+			max: -(Infinity)
 		};
 	});
 

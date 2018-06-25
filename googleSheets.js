@@ -565,7 +565,7 @@ var studentsWithAssistance_fall2017 = [
 	"446"
 ];
 
-mainFunction(2);
+mainFunction(3);
 
 function mainFunction(studentFilter) {
 	// Below code parses the calendar csv to mark events on the basis of the date
@@ -1173,7 +1173,9 @@ function fillUpTheOHArea(currentLabel) {
 	});
 
 	var comparisonData = getComparisonWithClassAverage(overallOHdata, eventMap);
-	var comparisonDisplay = getComparisonDisplayResults(comparisonData);
+	var array = Object.keys(comparisonData);
+	array.sort()
+	var comparisonDisplay = getComparisonDisplayResults(comparisonData, array);
 	displayComparisonDataResults(comparisonDisplay);
 }
 
@@ -1261,11 +1263,12 @@ function getComparisonWithClassAverage(overallOHdata, eventMap) {
 
 		result[event] = Math.round(number * 10000) / 10000;
 	});
+
 	return result;
 }
 
-function getComparisonDisplayResults(comparisonData) {
-	return Object.keys(comparisonData).map(function(event, i) {
+function getComparisonDisplayResults(comparisonData, array) {
+	return array.map(function(event, i) {
 		var result = null;
 		var type = -1;
 		if (comparisonData[event] == -1) {
@@ -1366,10 +1369,13 @@ function getEventsList(object, date, eventsList) {
 
 	d3.select(".reason-body-list")
 		.append("h4")
-		.text("To discuss the following items : ");
+		.text("To discuss the following items (Total entries - "+eventsList.length+")");
 
+	eventsList.sort(function(a,b) {
+		return a.Username - b.Username;
+	})
 	eventsReasonsList = eventsList.map(function(d, i) {
-		return d.Event;
+		return d.Username+" :: "+d.Event;
 	});
 
 	var ul = d3.select(".reason-body-list").append("ul");
@@ -2401,8 +2407,8 @@ function clusterOfficeHourData(studentGroup, data) {
 		return {
 			date: d["date"],
 			hours: 0,
-			min: 0,
-			max: 0
+			min: Infinity,
+			max: -(Infinity)
 		};
 	});
 
@@ -2684,4 +2690,23 @@ function linkageCriteriaComplete(a, b) {
 
 function linkageCriteriaAverage(a, b) {
 	return (a + b) / 2;
+}
+
+function searchEvents() {
+    var input;
+    input = document.getElementById("searchEvent");
+
+	d3.select(".reason-body-list")
+		.selectAll("ul")
+		.remove();
+
+	var ul = d3.select(".reason-body-list").append("ul");
+	ul.selectAll("li")
+		.data(eventsReasonsList)
+		.enter()
+		.filter(function(d,i) {
+			return d.includes(input.value);
+		})
+		.append("li")
+		.html(String);
 }
