@@ -169,6 +169,8 @@ body {
 
 h4,
 h5,
+h6,
+input,
 .radio-distance {
   margin: 5px 10px 5px 10px;
 }
@@ -201,3 +203,6 @@ h5,
   padding: 10px 10px 10px 10px;
 }
 
+hr {
+  border: 1px solid black;
+}
