@@ -2724,14 +2724,23 @@ function upload_button(el, callback) {
 }
 
 function renderVisualization() {
-	callbackTester5(mainFunction, 1);
-	// mainFunction(1,csvFromGrades,csvFromOH1,csvFromCalendar)
-}
+	if (
+		csvFromGrades == undefined ||
+		csvFromOH1 == undefined ||
+		csvFromCalendar == undefined
+	) {
+		var missingText = "Upload Following Files before continuing";
+		var listOfMissingFiles = [];
+		if (csvFromGrades == undefined) listOfMissingFiles.push("Grades");
+		if (csvFromOH1 == undefined) listOfMissingFiles.push("Office-hours");
+		if (csvFromCalendar == undefined) listOfMissingFiles.push("Calendar");
 
-function callbackTester3(callback) {
-	callback(arguments[1], arguments[2]);
-}
+		listOfMissingFiles.forEach(function(d,i){
+			missingText = missingText + "\n" + i +".\t" + d;
+		}) 
 
-function callbackTester5(callback) {
-	callback(arguments[1]);
+		alert(missingText);
+	} else {
+		mainFunction(1, csvFromGrades, csvFromOH1, csvFromCalendar);
+	}
 }
