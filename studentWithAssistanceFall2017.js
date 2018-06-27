@@ -658,7 +658,7 @@ function mainFunction(studentFilter) {
 			};
 		});
 
-		clusters = 8;
+		clusters = 2;
 		maxiterations = 1000;
 		numFeatures = students[0]["values"].map(function(d) {
 			return d.date;
@@ -870,8 +870,7 @@ function enableNavFilters() {
 		.attr("height", 18)
 		.style("fill", function(d, i) {
 			return z(i);
-		})
-
+		});
 
 	legend
 		.append("text")
@@ -1016,9 +1015,6 @@ d3.selection.prototype.moveToBack = function() {
 };
 
 function mouseOverLine(d, i) {
-
-
-
 	if (corrOn) {
 		d3.selectAll(".officecircles")
 			.filter(function(d1, i1) {
@@ -1033,14 +1029,14 @@ function mouseOverLine(d, i) {
 	d3.select(".viz-body")
 		.selectAll(".line")
 		.style("stroke-width", function(d1, i1) {
-			if (i!=i1) {
+			if (i != i1) {
 				return lineWidthOriginal;
 			} else {
 				return lineWidthOnHover;
 			}
 		})
 		.style("stroke-opacity", function(d1, i1) {
-			if (i!=i1) {
+			if (i != i1) {
 				return "0.30";
 			}
 		});
@@ -1048,14 +1044,14 @@ function mouseOverLine(d, i) {
 	d3.select(".filter-body")
 		.selectAll(".officeHourline")
 		.style("stroke-width", function(d1, i1) {
-			if (i!=i1) {
+			if (i != i1) {
 				return lineWidthOriginal;
 			} else {
 				return lineWidthOnHover;
 			}
 		})
 		.style("stroke-opacity", function(d1, i1) {
-			if (i!=i1) {
+			if (i != i1) {
 				return "0.30";
 			}
 		});
@@ -1063,7 +1059,7 @@ function mouseOverLine(d, i) {
 	d3.select(".filter-body")
 		.selectAll(".officeHourlineMin")
 		.style("stroke-width", function(d1, i1) {
-			if (i!=i1) {
+			if (i != i1) {
 				return "4px";
 			} else {
 				return "6px";
@@ -1071,7 +1067,7 @@ function mouseOverLine(d, i) {
 			mouseOver;
 		})
 		.style("stroke-opacity", function(d1, i1) {
-			if (i!=i1) {
+			if (i != i1) {
 				return "0.30";
 			}
 		});
@@ -1079,14 +1075,14 @@ function mouseOverLine(d, i) {
 	d3.select(".filter-body")
 		.selectAll(".officeHourlineMax")
 		.style("stroke-width", function(d1, i1) {
-			if (i!=i1) {
+			if (i != i1) {
 				return "0.5px";
 			} else {
 				return "4px";
 			}
 		})
 		.style("stroke-opacity", function(d1, i1) {
-			if (i!=i1) {
+			if (i != i1) {
 				return "0.30";
 			}
 		});
@@ -1174,7 +1170,7 @@ function fillUpTheOHArea(currentLabel) {
 
 	var comparisonData = getComparisonWithClassAverage(overallOHdata, eventMap);
 	var array = Object.keys(comparisonData);
-	array.sort()
+	array.sort();
 	var comparisonDisplay = getComparisonDisplayResults(comparisonData, array);
 	displayComparisonDataResults(comparisonDisplay);
 }
@@ -1369,13 +1365,17 @@ function getEventsList(object, date, eventsList) {
 
 	d3.select(".reason-body-list")
 		.append("h4")
-		.text("To discuss the following items (Total entries - "+eventsList.length+")");
+		.text(
+			"To discuss the following items (Total entries - " +
+				eventsList.length +
+				")"
+		);
 
-	eventsList.sort(function(a,b) {
+	eventsList.sort(function(a, b) {
 		return a.Username - b.Username;
-	})
+	});
 	eventsReasonsList = eventsList.map(function(d, i) {
-		return d.Username+" :: "+d.Event;
+		return d.Username + " :: " + d.Event;
 	});
 
 	var ul = d3.select(".reason-body-list").append("ul");
@@ -2099,8 +2099,6 @@ function getFilterData(
 		y = d3.scaleLinear().range([height, 0]),
 		z = d3.scaleOrdinal(d3.schemeCategory10);
 
-	
-
 	var dataSecondary;
 	var line1 = d3
 		.line()
@@ -2206,18 +2204,8 @@ function getFilterData(
 			var officeHourData = data;
 			dataSecondary = data;
 
-			var data = [
-				{ date: parseTime(fall2017_date_list[0]), value: 93.24 },
-				{
-					date: parseTime(
-						fall2017_date_list[fall2017_date_list.length - 1]
-					),
-					value: 95.35
-				}
-			];
-
 			x.domain(
-				d3.extent(data, function(d) {
+				d3.extent(officeHourData[0].values, function(d) {
 					return d.date;
 				})
 			);
@@ -2235,22 +2223,24 @@ function getFilterData(
 			]);
 			// z.domain(officeHourData.map(function(c,i) {return c.id; }));
 
+			console.log(x.domain(), d3.axisBottom(x));
+
 			g.append("g")
 				.attr("class", "axis axis--x")
 				.attr("transform", "translate(0," + height + ")")
-				.call(d3.axisBottom(x));
+				.call(d3.axisBottom(x).tickFormat(d3.timeFormat("%a %d")));
 
-			g.append("g")
-				.attr("class", "axis axis--y")
-				.call(d3.axisLeft(y))
-				.append("text")
-				.attr("transform", "rotate(-90)")
-				.attr("y", 6)
-				.attr("dy", "0.71em")
-				.attr("fill", "#000")
-				.text("minutes");
+			// g.append("g")
+			// 	.attr("class", "axis axis--y")
+			// 	.call(d3.axisLeft(y))
+			// 	.append("text")
+			// 	.attr("transform", "rotate(-90)")
+			// 	.attr("y", 6)
+			// 	.attr("dy", "0.71em")
+			// 	.attr("fill", "#000")
+			// 	.text("minutes");
 
-			var officeHourDatum = g
+			/*var officeHourDatum = g
 				.selectAll(".officeHourDatum")
 				.data(officeHourData)
 				.enter()
@@ -2329,7 +2319,7 @@ function getFilterData(
 
 			if (getLineData && typeof getLineData == "function") {
 				getLineData(originalData, students, dataSecondary);
-			}
+			}*/
 		});
 }
 
@@ -2410,7 +2400,7 @@ function clusterOfficeHourData(studentGroup, data) {
 			date: d["date"],
 			hours: 0,
 			min: Infinity,
-			max: -(Infinity)
+			max: -Infinity
 		};
 	});
 
@@ -2695,8 +2685,8 @@ function linkageCriteriaAverage(a, b) {
 }
 
 function searchEvents() {
-    var input;
-    input = document.getElementById("searchEvent");
+	var input;
+	input = document.getElementById("searchEvent");
 
 	d3.select(".reason-body-list")
 		.selectAll("ul")
@@ -2706,7 +2696,7 @@ function searchEvents() {
 	ul.selectAll("li")
 		.data(eventsReasonsList)
 		.enter()
-		.filter(function(d,i) {
+		.filter(function(d, i) {
 			return d.includes(input.value);
 		})
 		.append("li")

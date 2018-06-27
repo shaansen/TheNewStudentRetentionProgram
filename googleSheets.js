@@ -685,9 +685,9 @@ function mainFunction(studentFilter) {
 }
 
 function initializePanel() {
-	d3.selectAll(".tick").text("Ticks ON");
-	d3.selectAll(".corr").text("Correlation ON");
-	d3.selectAll(".dist").text("Distribution ON");
+	d3.selectAll(".tickers").text("Ticks ON");
+	d3.selectAll(".corrers").text("Correlation ON");
+	d3.selectAll(".disters").text("Distribution ON");
 	enableNavFilters();
 }
 
@@ -1286,7 +1286,6 @@ function clickOnCircle(d, i) {
 	var eventList = eventsByDate[shortDate].filter(function(d, i) {
 		return permittedUsers.includes(d.Username);
 	});
-
 	getEventsList(d, shortDate, eventList);
 }
 
@@ -2067,17 +2066,10 @@ function getDateIndex(completeDateList, date) {
 	return -1;
 }
 
-function getFilterData(
-	labelsOnBasisOfPerformance,
-	originalData,
-	students,
-	getLineData
-) {
-	var dataSecondary;
-
-	TAdata = csvFromOH1.splice(1).map(function(tad) {
+function getTAdataFromCSV(csvFromOH1) {
+	var TAdata = csvFromOH1.splice(1).map(function(tad) {
 		return {
-			Username: tad[0],
+			Username: +tad[0],
 			Timestamp: +tad[1],
 			Events: tad[2],
 			"Time Spent": +tad[3],
@@ -2094,8 +2086,11 @@ function getFilterData(
 		eventsByDate[event["Timestamp"]] = oldArray;
 	});
 
-	var data = [];
+	return TAdata;
+}
 
+function getUnclusteredOHDataFromTAData(TAdata) {
+	var data = [];
 	columns.splice(1).forEach(function(studentID, id) {
 		var object = {};
 		object["id"] = studentID;
@@ -2118,7 +2113,16 @@ function getFilterData(
 		});
 		data.push(object);
 	});
+	return data;
+}
 
+function getFilterData(
+	labelsOnBasisOfPerformance,
+	originalData,
+	students,
+	getLineData
+) {
+	TAdata = getTAdataFromCSV(csvFromOH1);
 	TAdata.forEach(function(d, i) {
 		overallOHdata[d["Events"]] =
 			(overallOHdata[d["Events"]] || 0) + d["Time Spent"] / TAdata.length;
@@ -2135,69 +2139,75 @@ function getFilterData(
 				"translate(" + margin.left + "," + margin.top + ")"
 			);
 
-	data = clusterSimilarPerformingStudents(data, labelsOnBasisOfPerformance);
-
-	var officeHourData = data;
-	dataSecondary = data;
-
-	var x = d3.scaleTime().range([0, width]),
-		y = d3.scaleLinear().range([height, 0]);
-
-	x.domain(
-		d3.extent(data[0].values, function(d) {
-			return d.date;
-		})
+	var unclusteredOHData = getUnclusteredOHDataFromTAData(TAdata);
+	var officeHourData = clusterSimilarPerformingStudents(
+		unclusteredOHData,
+		labelsOnBasisOfPerformance
 	);
+	var dataSecondary = officeHourData;
 
-	y.domain([
-		d3.min(officeHourData, function(c) {
-			return d3.min(c.values, function(d) {
-				return d.min;
-			});
-		}),
-		d3.max(officeHourData, function(c) {
-			return d3.max(c.values, function(d) {
-				return d.max;
-			});
-		})
-	]);
+	var x_filter = d3
+		.scaleTime()
+		.range([0, width])
+		.domain(
+			d3.extent(officeHourData[0].values, function(d) {
+				return d.date;
+			})
+		);
+
+	var y_filter = d3
+		.scaleLinear()
+		.range([height, 0])
+		.domain([
+			d3.min(officeHourData, function(c) {
+				return d3.min(c.values, function(d) {
+					return d.min;
+				});
+			}),
+			d3.max(officeHourData, function(c) {
+				return d3.max(c.values, function(d) {
+					return d.max;
+				});
+			})
+		]);
 
 	var line1 = d3
 		.line()
 		.x(function(d, i) {
-			return x(d.date);
+			return x_filter(d.date);
 		})
 		.y(function(d, i) {
-			return y(d.hours);
+			return y_filter(d.hours);
 		});
 
 	var line2 = d3
 		.line()
 		.x(function(d, i) {
-			return x(d.date);
+			return x_filter(d.date);
 		})
 		.y(function(d, i) {
-			return y(d.min);
+			return y_filter(d.min);
 		});
 
 	var line3 = d3
 		.line()
 		.x(function(d, i) {
-			return x(d.date);
+			return x_filter(d.date);
 		})
 		.y(function(d, i) {
-			return y(d.max);
+			return y_filter(d.max);
 		});
+
 	// z.domain(officeHourData.map(function(c,i) {return c.id; }));
 
 	g.append("g")
 		.attr("class", "axis axis--x")
 		.attr("transform", "translate(0," + height + ")")
-		.call(d3.axisBottom(x));
+		.call(d3.axisBottom(x_filter).tickFormat(d3.timeFormat("%a %d")));
 
 	g.append("g")
 		.attr("class", "axis axis--y")
-		.call(d3.axisLeft(y))
+		.call(d3.axisLeft(y_filter))
 		.append("text")
 		.attr("transform", "rotate(-90)")
 		.attr("y", 6)
@@ -2266,7 +2276,11 @@ function getFilterData(
 		})
 		.attr("transform", function(d) {
 			return (
-				"translate(" + x(d.value.date) + "," + y(d.value.hours) + ")"
+				"translate(" +
+				x_filter(d.value.date) +
+				"," +
+				y_filter(d.value.hours) +
+				")"
 			);
 		})
 		.attr("x", 3)
@@ -2415,7 +2429,7 @@ function getLineData(data, students, dataSecondary) {
 	g.append("g")
 		.attr("class", "axis axis--x")
 		.attr("transform", "translate(0," + height + ")")
-		.call(d3.axisBottom(x));
+		.call(d3.axisBottom(x).tickFormat(d3.timeFormat("%a %d")));
 
 	g.append("g")
 		.attr("class", "axis axis--y")
@@ -2697,8 +2711,13 @@ function upload_button(el, callback) {
 
 	grade_uploader.addEventListener("change", handleFiles, false);
 
+	// function handleFiles() {
+	// 	d3.select("#table").text("loading...");
+	// 	var file = this.files[0];
+	// 	reader.readAsText(file);
+	// }
 	function handleFiles() {
-		d3.select("#table").text("loading...");
+		// d3.select("#table").text("loading...");
 		var file = this.files[0];
 		reader.readAsText(file);
 	}

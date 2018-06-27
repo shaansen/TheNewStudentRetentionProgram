@@ -2149,7 +2149,7 @@ function getFilterData(
         .attr("fill", "#000")
         .text("minutes");
 
-      var officeHourDatum = g
+      /*var officeHourDatum = g
         .selectAll(".officeHourDatum")
         .data(officeHourData)
         .enter()
@@ -2228,7 +2228,7 @@ function getFilterData(
 
       if (getLineData && typeof getLineData == "function") {
         getLineData(originalData, students, dataSecondary);
-      }
+      }*/
     });
 }
 
