@@ -7,10 +7,10 @@
   <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://d3js.org/d3-color.v1.min.js"></script>
+  <script src="ht/tps://d3js.org/d3-color.v1.min.js"></script>
   <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
   <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
   
 </head>
@@ -18,98 +18,121 @@
 
   <div class="sidenav">
     
-    <h5>Visualizing Correlation between Office Hour and Student Performance</h5>
+    <h6>Visualizing Correlation between Office Hour and Student Performance</h6>
     
+    <hr>
 
     <div class="upload-div">
-      <h5>Upload</h5>
-      
-      <div>
-        <h6>Grades File</h6>
-        <div><input type="file" id="grade_uploader"></div>
-      </div>
+      <button class="accordion">Upload</button>
+      <div class="panel">
+        <div>
+          <p>Grades File</p>
+          <div><input type="file" id="grade_uploader"></div>
+        </div>
 
-      <div>
-        <h6>OH File</h6>
-        <div><input type="file" id="oh_uploader"></div>
-      </div>
+        <div>
+          <p>OH File</p>
+          <div><input type="file" id="oh_uploader"></div>
+        </div>
 
-      <div>
-        <h6>Calendar File</h6>
-        <div><input type="file" id="calendar_uploader"></div>
-      </div>
+        <div>
+          <p>Calendar File</p>
+          <div><input type="file" id="calendar_uploader"></div>
+        </div>
 
-      <button type="button"
-      onclick="
-      renderVisualization()"
-      class="render">
-      Render
-      </button>
-  
+        <form id="criteria">
+          <input  type='radio' id="all" name="mode" checked>All</input>
+          <input type='radio' id="attended" name="mode">Attended</input>
+          <input type='radio' id="missed" name="mode">Missed</input>
+        </form>
+
+        <button type="button"
+          onclick="
+          renderVisualization()"
+          class="render">
+          Render
+        </button>
+      </div>
     </div>
 
     <hr>
-
 
     <div>
-      <h5>Disable/Enable View Elements</h5>
-      <button type="button"
-      onclick="
-      toggleTick()"
-      class="tickText">
-      Ticks OFF
-      </button>
-      
-      <button
-      onclick="toggleCorr()"
-      class="corrText">
-      Correlation OFF
-      </button>
-      
-      <button
-      onclick="toggleDist()"
-      class="distText">
-      Distribution OFF
-      </button>  
-    </div>
-    
-    
-<!--     <div class="text-body">
-      <div class="text-body-cluster-description"></div>
-      <div class="text-body-cluster-content"></div>
-    </div> -->
-
-    <hr>
-    
-    <div class="navfilter-body">
-      <h5>Legends</h5>
+      <button class="accordion">Choose View</button>
+      <div class="panel">
+        <button type="button"
+        onclick="
+        toggleTick()"
+        class="tickText">
+        Ticks OFF
+        </button>
+        
+        <button
+        onclick="toggleCorr()"
+        class="corrText">
+        Correlation OFF
+        </button>
+        
+        <button
+        onclick="toggleDist()"
+        class="distText">
+        Distribution OFF
+        </button>  
+      </div>
     </div>
 
     <hr>
+    
+    <div>
+      <button class="accordion">View Cluster Members</button>
+      <div class="panel">
+        <div class="text-body">
+          <!-- <div class="text-body-cluster-description"></div> -->
+          <div class="text-body-cluster-content"></div>
+        </div>
+      </div>
+    </div>
 
-    <div class="oh-comparison-body">
-      <h5>Compared to Class Average, this group attended Office hours more/less minutes</h5>
+    <hr>
+    
+    <div>
+      <button class="accordion">Legends</button>
+      <div class="panel">
+        <div class="navfilter-body">
+        </div>  
+      </div>  
     </div>
 
     <hr>
 
-    <div class="oh-body">
-      <div class="oh-body-cluster-content"></div>
+    <div>
+      <button class="accordion">Cluster Legends</button>
+      <div class="panel">
+        <div class="oh-comparison-body">
+        </div>
+        <div class="oh-body">
+          <div class="oh-body-cluster-content"></div>
+        </div>
+      </div>
     </div>
+
+    <hr>
+
+    
     
   </div>
   
   <div class="main">
 
     <div class="filter-body">
-      <h4>Office hours</h4>
+      <h6>Office hours</h6>
       <svg width="1700" height="380"></svg>
     </div>
   
     <hr>
   
     <div class="viz-body">
-      <h4>Student Performance</h4>
+      <h6>Student Performance</h6>
       <svg width="1700" height="380"></svg>
     </div>
 
@@ -136,4 +159,20 @@
 upload_button("grade_uploader", load_grade_dataset);
 upload_button("oh_uploader", load_oh_dataset);
 upload_button("calendar_uploader", load_calendar_dataset);
+</script>
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = "block";
+        }
+    });
+}
 </script>

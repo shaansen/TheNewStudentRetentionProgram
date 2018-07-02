@@ -16,10 +16,6 @@ var x = d3.scaleTime().range([0, width]),
 	y = d3.scaleLinear().range([height, 0]),
 	z = d3.scaleOrdinal(d3.schemeCategory10);
 
-var yellow = d3.interpolateYlGn(), // "rgb(255, 255, 229)"
-	yellowGreen = d3.interpolateYlGn(0.5), // "rgb(120, 197, 120)"
-	green = d3.interpolateYlGn(1); // "rgb(0, 69, 41)"
-
 var studentline = d3
 	.line()
 	.x(function(d) {
@@ -658,7 +654,7 @@ function mainFunction(studentFilter) {
 			};
 		});
 
-		clusters = 2;
+		clusters = 8;
 		maxiterations = 1000;
 		numFeatures = students[0]["values"].map(function(d) {
 			return d.date;
@@ -687,7 +683,7 @@ function mainFunction(studentFilter) {
 		});
 
 		originalStudentData = students;
-		students = clusteredData;
+		// students = clusteredData;
 
 		if (
 			getFilterData &&
@@ -2018,7 +2014,8 @@ function getStackedBarData(currentLabel, filterCriteria) {
 
 	var y = d3.scaleLinear().rangeRound([height, 0]);
 
-	var z = d3.interpolateRdYlBu();
+	// var z = d3.interpolateRdYlBu();
+
 	var stack = d3.stack();
 	data = result;
 	var columns = Object.keys(result[0]);
@@ -2223,24 +2220,22 @@ function getFilterData(
 			]);
 			// z.domain(officeHourData.map(function(c,i) {return c.id; }));
 
-			console.log(x.domain(), d3.axisBottom(x));
-
 			g.append("g")
 				.attr("class", "axis axis--x")
 				.attr("transform", "translate(0," + height + ")")
 				.call(d3.axisBottom(x).tickFormat(d3.timeFormat("%a %d")));
 
-			// g.append("g")
-			// 	.attr("class", "axis axis--y")
-			// 	.call(d3.axisLeft(y))
-			// 	.append("text")
-			// 	.attr("transform", "rotate(-90)")
-			// 	.attr("y", 6)
-			// 	.attr("dy", "0.71em")
-			// 	.attr("fill", "#000")
-			// 	.text("minutes");
+			g.append("g")
+				.attr("class", "axis axis--y")
+				.call(d3.axisLeft(y))
+				.append("text")
+				.attr("transform", "rotate(-90)")
+				.attr("y", 6)
+				.attr("dy", "0.71em")
+				.attr("fill", "#000")
+				.text("minutes");
 
-			/*var officeHourDatum = g
+			var officeHourDatum = g
 				.selectAll(".officeHourDatum")
 				.data(officeHourData)
 				.enter()
@@ -2319,7 +2314,7 @@ function getFilterData(
 
 			if (getLineData && typeof getLineData == "function") {
 				getLineData(originalData, students, dataSecondary);
-			}*/
+			}
 		});
 }
 
@@ -2445,7 +2440,7 @@ function getLineData(data, students, dataSecondary) {
 
 	circles = [];
 
-	students.forEach(function(studentID, i) {
+	/*students.forEach(function(studentID, i) {
 		studentID["values"].forEach(function(entry, i1) {
 			circles.push([
 				i,
@@ -2457,7 +2452,7 @@ function getLineData(data, students, dataSecondary) {
 				entry["date"]
 			]);
 		});
-	});
+	});*/
 
 	maxRadius = d3.max(circles, function(c) {
 		return c[3];
@@ -2513,6 +2508,8 @@ function getLineData(data, students, dataSecondary) {
 			return studentline(d.values);
 		})
 		.style("stroke", function(d, i) {
+			// console.log(z(getLabelNumber(labelsOnBasisOfPerformance, id)))
+			// return z(getLabelNumber(labelsOnBasisOfPerformance, i));
 			return z(i);
 		})
 		.style("stroke-width", lineWidthOriginal)
@@ -2555,6 +2552,8 @@ function getLabelNumber(labelsOnBasisOfPerformance, id) {
 	Object.keys(labelsOnBasisOfPerformance).forEach(function(d1, i1) {
 		if (labelsOnBasisOfPerformance[d1].includes(id)) {
 			result = i1;
+			console.log("Found",id,"in",result)
+			return result;
 		}
 	});
 	return result;

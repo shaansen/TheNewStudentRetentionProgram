@@ -20,10 +20,6 @@ var x = d3.scaleTime().range([0, width]),
 	y = d3.scaleLinear().range([height, 0]),
 	z = d3.scaleOrdinal(d3.schemeCategory10);
 
-var yellow = d3.interpolateYlGn(), // "rgb(255, 255, 229)"
-	yellowGreen = d3.interpolateYlGn(0.5), // "rgb(120, 197, 120)"
-	green = d3.interpolateYlGn(1); // "rgb(0, 69, 41)"
-
 var studentline = d3
 	.line()
 	.x(function(d) {
@@ -336,242 +332,8 @@ var fall2017_date_list = [
 	20171215
 ];
 
-var studentsWithAssistance_fall2017 = [
-	"238",
-	"362",
-	"144",
-	"586",
-	"504",
-	"224",
-	"190",
-	"174",
-	"564",
-	"340",
-	"274",
-	"437",
-	"529",
-	"292",
-	"511",
-	"229",
-	"414",
-	"524",
-	"491",
-	"555",
-	"246",
-	"516",
-	"311",
-	"208",
-	"112",
-	"283",
-	"500",
-	"242",
-	"427",
-	"219",
-	"358",
-	"116",
-	"426",
-	"117",
-	"200",
-	"354",
-	"503",
-	"355",
-	"578",
-	"171",
-	"535",
-	"412",
-	"408",
-	"376",
-	"225",
-	"251",
-	"428",
-	"471",
-	"337",
-	"130",
-	"520",
-	"140",
-	"478",
-	"193",
-	"429",
-	"194",
-	"575",
-	"463",
-	"407",
-	"474",
-	"276",
-	"361",
-	"549",
-	"319",
-	"235",
-	"510",
-	"264",
-	"522",
-	"265",
-	"543",
-	"367",
-	"527",
-	"338",
-	"325",
-	"257",
-	"393",
-	"303",
-	"114",
-	"203",
-	"396",
-	"314",
-	"536",
-	"381",
-	"252",
-	"115",
-	"525",
-	"570",
-	"467",
-	"327",
-	"343",
-	"275",
-	"390",
-	"259",
-	"169",
-	"435",
-	"173",
-	"460",
-	"456",
-	"378",
-	"445",
-	"187",
-	"494",
-	"375",
-	"181",
-	"512",
-	"223",
-	"470",
-	"397",
-	"364",
-	"218",
-	"518",
-	"366",
-	"188",
-	"552",
-	"557",
-	"318",
-	"147",
-	"320",
-	"569",
-	"465",
-	"123",
-	"261",
-	"233",
-	"262",
-	"517",
-	"185",
-	"585",
-	"350",
-	"477",
-	"415",
-	"287",
-	"373",
-	"228",
-	"176",
-	"270",
-	"484",
-	"271",
-	"237",
-	"499",
-	"561",
-	"420",
-	"285",
-	"434",
-	"583",
-	"547",
-	"452",
-	"466",
-	"486",
-	"263",
-	"457",
-	"134",
-	"153",
-	"502",
-	"359",
-	"139",
-	"422",
-	"546",
-	"580",
-	"284",
-	"479",
-	"136",
-	"122",
-	"301",
-	"409",
-	"322",
-	"449",
-	"508",
-	"124",
-	"222",
-	"306",
-	"469",
-	"298",
-	"294",
-	"164",
-	"266",
-	"196",
-	"385",
-	"401",
-	"198",
-	"410",
-	"245",
-	"299",
-	"372",
-	"346",
-	"100",
-	"149",
-	"436",
-	"273",
-	"205",
-	"155",
-	"156",
-	"394",
-	"333",
-	"534",
-	"151",
-	"281",
-	"329",
-	"579",
-	"402",
-	"157",
-	"204",
-	"244",
-	"513",
-	"253",
-	"417",
-	"563",
-	"368",
-	"201",
-	"202",
-	"282",
-	"255",
-	"572",
-	"528",
-	"369",
-	"305",
-	"216",
-	"424",
-	"519",
-	"386",
-	"230",
-	"387",
-	"566",
-	"587",
-	"403",
-	"179",
-	"161",
-	"129",
-	"544",
-	"442",
-	"446"
-];
+function mainFunction(studentList) {
 
-// mainFunction(1);
-
-function mainFunction(studentFilter) {
 	csvFromCalendar.forEach(function(d, i) {
 		cTotal = cTotal + d.total;
 		dateList.push(d.date);
@@ -585,8 +347,9 @@ function mainFunction(studentFilter) {
 		catWiseStudentData[hourSpent[d]] = new Set();
 	});
 
-	if (studentFilter == 1) {
-		csvFromGrades.forEach(function(d, i) {
+	csvFromGrades.forEach(function(d, i) {
+		if (studentList.includes(d.Username)) {
+
 			var total = 0;
 			for (var i = 0; i < dateList.length; i++) {
 				var x = calendarData[dateList[i]].description;
@@ -595,34 +358,8 @@ function mainFunction(studentFilter) {
 				d[x] = (total / y) * 100;
 			}
 			columns.push(d.Username);
-		});
-	} else if (studentFilter == 2) {
-		csvFromGrades.forEach(function(d, i) {
-			if (studentsWithAssistance_fall2017.includes(d.Username)) {
-				var total = 0;
-				for (var i = 0; i < dateList.length; i++) {
-					var x = calendarData[dateList[i]].description;
-					var y = calendarData[dateList[i]].total;
-					total = total + d[x];
-					d[x] = (total / y) * 100;
-				}
-				columns.push(d.Username);
-			}
-		});
-	} else if (studentFilter == 3) {
-		csvFromGrades.forEach(function(d, i) {
-			if (!studentsWithAssistance_fall2017.includes(d.Username)) {
-				var total = 0;
-				for (var i = 0; i < dateList.length; i++) {
-					var x = calendarData[dateList[i]].description;
-					var y = calendarData[dateList[i]].total;
-					total = total + d[x];
-					d[x] = (total / y) * 100;
-				}
-				columns.push(d.Username);
-			}
-		});
-	}
+		}
+	});
 
 	completeDateList = getCompleteDateList(dateList);
 	var dataForVisualization = convertIrregToReg(
@@ -641,22 +378,22 @@ function mainFunction(studentFilter) {
 		};
 	});
 
-	clusters = 2;
+	clusters = 8;
 	maxiterations = 1000;
 	numFeatures = students[0]["values"].map(function(d) {
 		return d.date;
 	});
 
 	// K-MEANS CLUSTERING
-	// studentClusters = kmeans(students, clusters, maxiterations);
+	studentClusters = kmeans(students, clusters, maxiterations);
 
 	// HIERARCHICAL CLUSTERING
-	labelsOnBasisOfPerformance = hierarch(students, DTWDistance, clusters);
-	studentClusters = getCentroids(
-		students,
-		labelsOnBasisOfPerformance,
-		clusters
-	);
+	// labelsOnBasisOfPerformance = hierarch(students, DTWDistance, clusters);
+	// studentClusters = getCentroids(
+	// 	students,
+	// 	labelsOnBasisOfPerformance,
+	// 	clusters
+	// );
 
 	// findOptimalClusterUsingElbow(students, maxiterations)
 	// findOptimalClusterUsingSil(students, maxiterations)
@@ -1321,19 +1058,19 @@ function getEventsList(object, date, eventsList) {
 		.selectAll("ul")
 		.remove();
 	d3.select(".reason-body-list")
-		.selectAll("h4")
+		.selectAll("h5")
 		.remove();
 	d3.select(".reason-body-list")
-		.selectAll("h2")
+		.selectAll("h3")
 		.remove();
 
 	d3.select(".reason-body-list")
-		.append("h2")
+		.append("h3")
 		.attr("class", "reason-panel-header-date")
 		.text(displayDate);
 
 	d3.select(".reason-body-list")
-		.append("h4")
+		.append("h5")
 		.text(
 			"Students attended an average of " +
 				Math.round(object[3] * 1000) / 1000 +
@@ -1341,7 +1078,7 @@ function getEventsList(object, date, eventsList) {
 		);
 
 	d3.select(".reason-body-list")
-		.append("h4")
+		.append("h5")
 		.text(
 			"To discuss the following items (Total entries - " +
 				eventsList.length +
@@ -1462,12 +1199,15 @@ function getIntegratedCircles(currentLabel) {
 }
 
 function getTextValues(label, index) {
+	var array = label.map(function(d) {
+		return originalStudentData[d]["id"];
+	});
+
+	array = array.sort();
+
 	d3.select(".text-body").style("border", "1px solid black");
 
-	// var text = d3.select(".text-body-cluster-description");
-	// text.text("Cluster Size : " + label.length);
-
-	var heading = [label.length];
+	/*var heading = [label.length];
 
 	var text = d3
 		.select(".text-body-cluster-description")
@@ -1485,12 +1225,12 @@ function getTextValues(label, index) {
 		.merge(text)
 		.text(function(d) {
 			return "Cluster Size : " + d;
-		});
+		});*/
 
 	var text = d3
 		.select(".text-body-cluster-content")
 		.selectAll("text")
-		.data(label);
+		.data(array);
 
 	text.attr("class", "update");
 	text.enter()
@@ -1502,7 +1242,7 @@ function getTextValues(label, index) {
 		.attr("dy", ".35em")
 		.merge(text)
 		.text(function(d) {
-			return originalStudentData[d]["id"] + ", ";
+			return d + ", ";
 		});
 	text.exit().remove();
 }
@@ -1995,7 +1735,8 @@ function getStackedBarData(currentLabel, filterCriteria) {
 
 	var y = d3.scaleLinear().rangeRound([height, 0]);
 
-	var z = d3.interpolateRdYlBu();
+	// var z = d3.interpolateRdYlBu();
+
 	var stack = d3.stack();
 	data = result;
 	var columns = Object.keys(result[0]);
@@ -2066,10 +1807,10 @@ function getDateIndex(completeDateList, date) {
 	return -1;
 }
 
-function getTAdataFromCSV(csvFromOH1) {
-	var TAdata = csvFromOH1.splice(1).map(function(tad) {
+function getTAdataFromCSV(oh) {
+	var TAdata = oh.slice(1,oh.length).map(function(tad) {
 		return {
-			Username: +tad[0],
+			Username: tad[0]+"",
 			Timestamp: +tad[1],
 			Events: tad[2],
 			"Time Spent": +tad[3],
@@ -2091,7 +1832,7 @@ function getTAdataFromCSV(csvFromOH1) {
 
 function getUnclusteredOHDataFromTAData(TAdata) {
 	var data = [];
-	columns.splice(1).forEach(function(studentID, id) {
+	columns.slice(1,columns.length).forEach(function(studentID, id) {
 		var object = {};
 		object["id"] = studentID;
 		object["values"] = [];
@@ -2123,6 +1864,7 @@ function getFilterData(
 	getLineData
 ) {
 	TAdata = getTAdataFromCSV(csvFromOH1);
+	
 	TAdata.forEach(function(d, i) {
 		overallOHdata[d["Events"]] =
 			(overallOHdata[d["Events"]] || 0) + d["Time Spent"] / TAdata.length;
@@ -2144,6 +1886,7 @@ function getFilterData(
 		unclusteredOHData,
 		labelsOnBasisOfPerformance
 	);
+
 	var dataSecondary = officeHourData;
 
 	var x_filter = d3
@@ -2547,7 +2290,7 @@ function hierarch(students, distance, clusterSize) {
 	// m[0] = {}
 	// m[1] = {}
 	// m[2] = {}
-	// m[3] = {}
+	// m[3] = {}man
 	// m[4] = {}
 	// m[5] = {}
 
@@ -2674,10 +2417,14 @@ var dz;
 // load dataset and create table
 function load_grade_dataset(csv) {
 	var data = d3.csvParseRows(csv);
-	csvFromGrades = data.splice(1).map(function(d, i) {
+	csvFromGrades = data.slice(1,data.length).map(function(d, i) {
 		var object = {};
 		data[0].forEach(function(c, k) {
-			object[c] = +d[k];
+			if(k!=0) {
+				object[c] = +d[k];
+			} else {
+				object[c] = d[k]+"";
+			}
 		});
 		return object;
 	});
@@ -2685,12 +2432,11 @@ function load_grade_dataset(csv) {
 
 function load_oh_dataset(csv) {
 	csvFromOH1 = d3.csvParseRows(csv);
-	// mainFunction(1)
 }
 
 function load_calendar_dataset(csv) {
 	var data = d3.csvParseRows(csv);
-	csvFromCalendar = data.splice(1).map(function(d, i) {
+	csvFromCalendar = data.slice(1,data.length).map(function(d, i) {
 		return {
 			date: d[0],
 			description: d[1],
@@ -2735,12 +2481,57 @@ function renderVisualization() {
 		if (csvFromOH1 == undefined) listOfMissingFiles.push("Office-hours");
 		if (csvFromCalendar == undefined) listOfMissingFiles.push("Calendar");
 
-		listOfMissingFiles.forEach(function(d,i){
-			missingText = missingText + "\n" + i +".\t" + d;
-		}) 
+		listOfMissingFiles.forEach(function(d, i) {
+			missingText = missingText + "\n" + (i + 1) + ".\t" + d;
+		});
 
 		alert(missingText);
 	} else {
-		mainFunction(1, csvFromGrades, csvFromOH1, csvFromCalendar);
+		var form_val = getFilterCriteria();
+		var studentList = getCommonUsers(form_val,csvFromGrades,csvFromOH1);
+		mainFunction(studentList);
 	}
 }
+
+function getFilterCriteria() {
+	var form = document.getElementById("criteria");
+	var form_val;
+	for (var i = 0; i < form.length; i++) {
+		if (form[i].checked) {
+			form_val = form[i].id;
+		}
+	}
+
+	if (form_val == "all") return 1;
+	else if (form_val == "attended") return 2;
+	else if (form_val == "missed") return 3;
+	else return -1;
+}
+
+function getCommonUsers(form_val,grades,oh) {
+
+	var all = grades.map(function(d) {
+		return d.Username + "";
+	});
+
+	if (form_val == 1) return all;
+
+	var attended = oh.slice(1,oh.length).map(function(d) {
+		return d[0] + "";
+	});
+
+	attended = attended.filter(unique);
+
+	if (form_val == 2) return attended;
+
+	var missed = _.difference(all, attended);
+
+	if (form_val == 3) return missed;
+}
+
+const unique = (value, index, self) => {
+	return self.indexOf(value) === index;
+};
+
+// const sampleValues = [1, 4, 5, 2, 'a', 'e', 'b', 'e', 2, 2, 4];
+// const uniqueValues = sampleValues.filter(unique);

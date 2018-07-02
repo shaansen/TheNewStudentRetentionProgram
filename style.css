@@ -1,6 +1,6 @@
 button {
   width: 160px;
-  margin: 2px 10px 2px 10px;
+  margin: 1px 10px 1px 10px;
   border: 1px solid black;
 }
 
@@ -32,7 +32,7 @@ button {
 
 body {
   font-family: "Cabin", "Roboto Condensed";
-  font-size: 15px;
+  font-size: 12px;
   /*font-weight: bold;*/
 }
 
@@ -65,7 +65,7 @@ body {
 
 .axis text {
   font-family: "Cabin", "Roboto Condensed", sans-serif;
-  font-size: 15px;
+  font-size: 12px;
 }
 
 /*------------------------------------------------------------------------------------*/
@@ -135,7 +135,7 @@ body {
 .sidenav a {
   padding: 6px 8px 6px 16px;
   text-decoration: none;
-  font-size: 25px;
+  font-size: 12px;
   color: #818181;
   display: block;
 }
@@ -153,7 +153,7 @@ body {
   height: 150px;
   width: 160px;
   padding: 10px 10px 10px 10px;
-  margin: 10px 10px 10px 10px;
+  margin: 1px 10px 1px 10px;
   background-color: white;
   color: black;
   overflow-y: scroll;
@@ -164,19 +164,17 @@ body {
 }
 
 .cluster-text-name {
-  font-size: 15px;
+  font-size: 12px;
 }
 
-h4,
-h5,
-h6,
+p, h6,
 input,
 .radio-distance {
-  margin: 5px 10px 5px 10px;
+  margin: 1px 10px 1px 10px;
 }
 
 .navbarElements {
-  margin: 10px 10px 10px 10px;
+  margin: 1px 10px 1px 10px;
   display: block;
 }
 
@@ -191,11 +189,17 @@ input,
 .reason-body {
   overflow-y: scroll;
   height: 400px;
+
 }
 
-.reason-body p {
-  padding-left: 40px;
+.reason-body-list p,h3,h5 {
+  padding-left: 20px;
 }
+
+.reason-body-list p{
+  font-size: 15px;
+}
+
 
 #searchEvent {
   width: 100%;
@@ -204,5 +208,26 @@ input,
 }
 
 hr {
-  border: 1px solid black;
+  border: 0.5px dotted grey;
+}
+
+p {
+  font-size: 12px;
+}
+
+.accordion {
+    background-color: #ededed;
+    color: #444;
+    border: none;
+}
+
+.active, .accordion:hover {
+    background-color: #ededed; 
+    cursor: pointer;
+}
+
+.panel {
+    display: none;
+    background-color: #ededed;
+    overflow: hidden;
 }
