@@ -1689,7 +1689,7 @@ function getFilterData(
 	g.append("g")
 		.attr("class", "axis axis--x")
 		.attr("transform", "translate(0," + height + ")")
-		.call(d3.axisBottom(x_filter).tickFormat(d3.timeFormat("%a %d")));
+		.call(d3.axisBottom(x_filter));
 
 	g.append("g")
 		.attr("class", "axis axis--y")
@@ -1915,7 +1915,7 @@ function getLineData(data, students, dataSecondary) {
 	g.append("g")
 		.attr("class", "axis axis--x")
 		.attr("transform", "translate(0," + height + ")")
-		.call(d3.axisBottom(x).tickFormat(d3.timeFormat("%a %d")));
+		.call(d3.axisBottom(x));
 
 	g.append("g")
 		.attr("class", "axis axis--y")
@@ -2323,6 +2323,3 @@ function getTheCompleteDateList() {
 const unique = (value, index, self) => {
 	return self.indexOf(value) === index;
 };
-
-// const sampleValues = [1, 4, 5, 2, 'a', 'e', 'b', 'e', 2, 2, 4];
-// const uniqueValues = sampleValues.filter(unique);
