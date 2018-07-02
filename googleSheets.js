@@ -4,6 +4,7 @@ var studentGradeData;
 var csvFromCalendar;
 var csvFromOH1;
 var csvFromGrades;
+var dataSecondary;
 
 var svg = d3.select(".viz-body").select("svg"),
 	margin = { top: 30, right: 80, bottom: 30, left: 50 },
@@ -11,13 +12,18 @@ var svg = d3.select(".viz-body").select("svg"),
 	height = svg.attr("height") - margin.top - margin.bottom,
 	g = svg
 		.append("g")
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+		.attr("class", "overlayGradeSVG");
 
 var parseTime = d3.timeParse("%Y%m%d");
 
 var x = d3.scaleTime().range([0, width]),
 	y = d3.scaleLinear().range([height, 0]),
 	z = d3.scaleOrdinal(d3.schemeCategory10);
+
+var x_filter = d3.scaleTime().range([0, width]),
+	y_filter = d3.scaleLinear().range([height, 0]),
+	z_filter = d3.scaleOrdinal(d3.schemeCategory10);
 
 var studentline = d3
 	.line()
@@ -47,9 +53,11 @@ var labelsOnBasisOfPerformance;
 var tickOn = false;
 var corrOn = false;
 var distOn = false;
+var numbersOn = false;
 var TAdata;
 var overallOHdata = {};
 var eventsByDate = {};
+var bisectDate = d3.bisector(d => d).left;
 // -----------------------------------------------------------------------------------------
 //
 // Code to read Calendar and Map dates to events
@@ -79,6 +87,7 @@ var helpSeekingCSVdata = [];
 var studentWiseTAdata = [];
 var filterCriteria = [];
 var currentLabel;
+var currentIndex = 0;
 var filteredSet = [];
 
 function mainFunction(studentList) {
@@ -180,6 +189,201 @@ function toggleTick() {
 		disableTicks();
 	}
 	tickOn = !tickOn;
+}
+
+function toggleNumbers() {
+	if (!numbersOn) {
+		d3.selectAll(".numbersText").text("Numbers ON");
+		enableNumbers();
+	} else {
+		d3.selectAll(".numbersText").text("Numbers OFF");
+		disableNumbers();
+	}
+	numbersOn = !numbersOn;
+}
+
+function disableNumbers() {
+	console.log("Removing Overlay");
+	d3.select(".viz-body")
+		.selectAll(".line")
+		.style("stroke-width", function(d1, i1) {
+			return lineWidthOriginal;
+		})
+		.style("stroke-opacity", function(d1, i1) {
+			return "1";
+		});
+
+	d3.select(".filter-body")
+		.selectAll(".officeHourline")
+		.style("stroke-width", function(d1, i1) {
+			return lineWidthOriginal;
+		})
+		.style("stroke-opacity", "1");
+
+	d3.select(".filter-body")
+		.selectAll(".officeHourlineMin")
+		.style("stroke-width", function(d1, i1) {
+			return "4px";
+		})
+		.style("stroke-opacity", "1");
+
+	d3.select(".filter-body")
+		.selectAll(".officeHourlineMax")
+		.style("stroke-width", function(d1, i1) {
+			return "0.5px";
+		})
+		.style("stroke-opacity", "1");
+
+	d3.select(".filter-body")
+		.select(".overlayOHSVG")
+		.selectAll("rect")
+		.remove();
+
+	d3.select(".viz-body")
+		.select(".overlayGradeSVG")
+		.selectAll("rect")
+		.remove();
+}
+
+function enableNumbers() {
+	console.log("Adding Overlay");
+
+	d3.select(".viz-body")
+		.selectAll(".line")
+		.style("stroke-width", function(d1, i1) {
+			if (currentIndex != i1) {
+				return lineWidthOriginal;
+			} else {
+				return lineWidthOnHover;
+			}
+		})
+		.style("stroke-opacity", function(d1, i1) {
+			if (currentIndex != i1) {
+				return "0.30";
+			}
+		});
+
+	d3.select(".filter-body")
+		.selectAll(".officeHourline")
+		.style("stroke-width", function(d1, i1) {
+			if (currentIndex != i1) {
+				return lineWidthOriginal;
+			} else {
+				return lineWidthOnHover;
+			}
+		})
+		.style("stroke-opacity", function(d1, i1) {
+			if (currentIndex != i1) {
+				return "0.30";
+			}
+		});
+
+	d3.select(".filter-body")
+		.selectAll(".officeHourlineMin")
+		.style("stroke-width", function(d1, i1) {
+			if (currentIndex != i1) {
+				return "4px";
+			} else {
+				return "6px";
+			}
+			mouseOver;
+		})
+		.style("stroke-opacity", function(d1, i1) {
+			if (currentIndex != i1) {
+				return "0.30";
+			}
+		});
+
+	d3.select(".filter-body")
+		.selectAll(".officeHourlineMax")
+		.style("stroke-width", function(d1, i1) {
+			if (currentIndex != i1) {
+				return "0.5px";
+			} else {
+				return "4px";
+			}
+		})
+		.style("stroke-opacity", function(d1, i1) {
+			if (currentIndex != i1) {
+				return "0.30";
+			}
+		});
+
+	var g = d3.select(".filter-body").select(".overlayOHSVG");
+
+	var focusAvg = g
+		.append("g")
+		.attr("class", "focusAvg")
+		.style("display", "none");
+
+	focusAvg.append("circle").attr("r", 4.5);
+
+	focusAvg.append("line").classed("x", true);
+
+	focusAvg.append("line").classed("y", true);
+
+	focusAvg
+		.append("text")
+		.attr("x", 9)
+		.attr("dy", ".35em");
+
+	var focusMin = g
+		.append("g")
+		.attr("class", "focusMin")
+		.style("display", "none");
+
+	focusMin.append("circle").attr("r", 4.5);
+
+	focusMin.append("line").classed("x", true);
+
+	focusMin.append("line").classed("y", true);
+
+	focusMin
+		.append("text")
+		.attr("x", 9)
+		.attr("dy", ".35em");
+
+
+	var focusMax = g
+		.append("g")
+		.attr("class", "focusMax")
+		.style("display", "none");
+
+	focusMax.append("circle").attr("r", 4.5);
+
+	focusMax.append("line").classed("x", true);
+
+	focusMax.append("line").classed("y", true);
+
+	focusMax
+		.append("text")
+		.attr("x", 9)
+		.attr("dy", ".35em");
+
+	g.append("rect")
+		.attr("class", "overlay")
+		.attr("width", width)
+		.attr("height", height)
+		.style("fill-opacity", "0")
+		.on("mouseover", function() {
+			focusAvg.style("display", null);
+			focusMin.style("display", null);
+			focusMax.style("display", null);
+		})
+		.on("mouseout", function() {
+			focusAvg.style("display", "none");
+			focusMin.style("display", "none");
+			focusMax.style("display", "none");
+		})
+		.on("mousemove", mousemoveOverlayOH);
+
+	var g = d3.select(".viz-body").select(".overlayGradeSVG");
+	g.append("rect")
+		.attr("class", "overlay")
+		.attr("width", width)
+		.attr("height", height)
+		.style("fill-opacity", "0")
+		.on("mousemove", mousemoveOverlayGrade);
 }
 
 function disableTicks() {
@@ -317,7 +521,6 @@ function enableNavFilters() {
 		})
 		.on("mouseover", mouseOverLine)
 		.on("mouseout", mouseOutLine)
-		.on("mousemove", mouseMoveOnLine)
 		.on("click", clickOnLine);
 
 	legend
@@ -577,27 +780,14 @@ function mouseOverLine(d, i) {
 	d3.select(this)
 		.style("stroke-width", lineWidthOnHover)
 		.moveToFront();
+	console.log("Why am I putting Current Label Here", i);
 	currentLabel = labelsOnBasisOfPerformance[i];
-}
-
-function mouseMoveOnLine() {
-	/*  var year = x.invert(d3.mouse(this)[0]);
-	var y = getEventName(year);
-
-	tooltip
-		.style("top", event.pageY - 30 + "px")
-		.style("visibility", "visible")
-		.style("left", event.pageX - 50 + "px")
-		.text(y)
-		.style("background-color", "grey")
-		.style("padding", "5px 5px 5px 5px")
-		.style("color", "white")
-		.style("font-family", "Cabin")
-		.style("font-size", "11px");*/
+	currentIndex = i;
 }
 
 function clickOnLine(d, i) {
 	currentLabel = labelsOnBasisOfPerformance[i];
+	currentIndex = i;
 	getTextValues(currentLabel, i);
 	if (distOn) getStackedBarData(currentLabel, filterCriteria);
 	if (corrOn) selectALineToViewOHData(i);
@@ -1622,7 +1812,8 @@ function getFilterData(
 			.attr(
 				"transform",
 				"translate(" + margin.left + "," + margin.top + ")"
-			);
+			)
+			.attr("class", "overlayOHSVG");
 
 	var unclusteredOHData = getUnclusteredOHDataFromTAData(TAdata);
 	var officeHourData = clusterSimilarPerformingStudents(
@@ -1630,32 +1821,26 @@ function getFilterData(
 		labelsOnBasisOfPerformance
 	);
 
-	var dataSecondary = officeHourData;
+	dataSecondary = officeHourData;
 
-	var x_filter = d3
-		.scaleTime()
-		.range([0, width])
-		.domain(
-			d3.extent(officeHourData[0].values, function(d) {
-				return d.date;
-			})
-		);
+	x_filter.domain(
+		d3.extent(officeHourData[0].values, function(d) {
+			return d.date;
+		})
+	);
 
-	var y_filter = d3
-		.scaleLinear()
-		.range([height, 0])
-		.domain([
-			d3.min(officeHourData, function(c) {
-				return d3.min(c.values, function(d) {
-					return d.min;
-				});
-			}),
-			d3.max(officeHourData, function(c) {
-				return d3.max(c.values, function(d) {
-					return d.max;
-				});
-			})
-		]);
+	y_filter.domain([
+		d3.min(officeHourData, function(c) {
+			return d3.min(c.values, function(d) {
+				return d.min;
+			});
+		}),
+		d3.max(officeHourData, function(c) {
+			return d3.max(c.values, function(d) {
+				return d.max;
+			});
+		})
+	]);
 
 	var line1 = d3
 		.line()
@@ -1721,7 +1906,6 @@ function getFilterData(
 		.style("stroke-width", "1.5px")
 		.on("mouseover", mouseOverLine)
 		.on("mouseout", mouseOutLine)
-		.on("mousemove", mouseMoveOnLine)
 		.on("click", clickOnLine);
 
 	officeHourDatum
@@ -1737,7 +1921,6 @@ function getFilterData(
 		.style("stroke-width", "1.5px")
 		.on("mouseover", mouseOverLine)
 		.on("mouseout", mouseOutLine)
-		.on("mousemove", mouseMoveOnLine)
 		.on("click", clickOnLine);
 
 	officeHourDatum
@@ -1752,7 +1935,6 @@ function getFilterData(
 		.style("stroke-width", "0.5px")
 		.on("mouseover", mouseOverLine)
 		.on("mouseout", mouseOutLine)
-		.on("mousemove", mouseMoveOnLine)
 		.on("click", clickOnLine);
 
 	officeHourDatum
@@ -1780,6 +1962,83 @@ function getFilterData(
 
 	if (getLineData && typeof getLineData == "function") {
 		getLineData(originalData, students, dataSecondary);
+	}
+}
+
+function mousemoveOverlayOH() {
+	if (!(corrOn || distOn)) {
+		var x0 = x_filter.invert(d3.mouse(this)[0]);
+		var i = bisectDate(completeDateList, x0, 1);
+		var d0 = completeDateList[i - 1];
+		var d1 = completeDateList[i];
+		var d = x0 - d0 > d1 - x0 ? d1 : d0;
+		
+		var y0 = y_filter(dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)]["min"])-10
+		var y1 = y_filter(dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)]["hours"])-10
+		var y2 = y_filter(dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)]["max"])-10
+
+		var des1 = "Min";
+		var des2 = "Avg";
+		var des3 = "Max";
+
+		if(y0 == y1 && y0 == y2) {
+			des1 = "Avg/Min/Max"
+			des2 = "Avg/Min/Max"
+			des3 = "Avg/Min/Max"
+		} else if(y0 == y1) {
+			des1 = "Avg/Min"
+			des2 = "Avg/Min"
+		} else if(y1 == y2) {
+			des2 = "Avg/Max"
+			des3 = "Avg/Max"
+		}
+
+		console.log("==================================")
+		console.log(y0,des1)
+		console.log(y1,des2)
+		console.log(y2,des3)
+		
+		
+		var focusAvg = d3.select(".filter-body").selectAll(".focusAvg");
+		focusAvg.attr("transform", "translate(" + x(d) + "," + y0 + ")");
+		focusAvg.select("text").text(des1+" : "+(dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)]["min"]));
+
+		var focusMin = d3.select(".filter-body").selectAll(".focusMin");
+		focusMin.attr("transform", "translate(" + x(d) + "," + y1 + ")");
+		focusMin.select("text").text(des2+" : "+(dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)]["hours"]));
+
+		var focusMax = d3.select(".filter-body").selectAll(".focusMax");
+		focusMax.attr("transform", "translate(" + x(d) + "," + y2 + ")");
+		focusMax.select("text").text(des3+" : "+(dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)]["max"]));
+
+
+
+	}
+}
+
+function mousemoveOverlayGrade() {
+	console.log(corrOn, distOn);
+	if (!(corrOn || distOn)) {
+		var x0 = x.invert(d3.mouse(this)[0]);
+		var i = bisectDate(completeDateList, x0, 1);
+		console.log(x0, " vs ", completeDateList[i]);
+		// var d0 = data[i - 1];
+		// var d1 = data[i];
+		// var d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+		// focus.attr('transform', `translate(${x(d.date)}, ${y(d.close)})`);
+		// focus.select('line.x')
+		//   .attr('x1', 0)
+		//   .attr('x2', -x(d.date))
+		//   .attr('y1', 0)
+		//   .attr('y2', 0);
+
+		// focus.select('line.y')
+		//   .attr('x1', 0)
+		//   .attr('x2', 0)
+		//   .attr('y1', 0)
+		//   .attr('y2', height - y(d.close));
+
+		// focus.select('text').text(formatCurrency(d.close));
 	}
 }
 
@@ -1952,7 +2211,6 @@ function getLineData(data, students, dataSecondary) {
 	//  .style("stroke-width", "1.5px")
 	//  .on("mouseover", mouseOverLine)
 	//  .on("mouseout", mouseOutLine)
-	//  .on("mousemove", mouseMoveOnLine)
 	//  .on("click", clickOnLine)
 
 	studentData
@@ -1967,7 +2225,6 @@ function getLineData(data, students, dataSecondary) {
 		.style("stroke-width", lineWidthOriginal)
 		.on("mouseover", mouseOverLine)
 		.on("mouseout", mouseOutLine)
-		.on("mousemove", mouseMoveOnLine)
 		.on("click", clickOnLine);
 
 	studentData.exit().remove();
@@ -2320,6 +2577,6 @@ function getTheCompleteDateList() {
 	return listOfDays;
 }
 
-const unique = (value, index, self) => {
+var unique = (value, index, self) => {
 	return self.indexOf(value) === index;
 };
