@@ -1,6 +1,5 @@
 var lineWidthOriginal = "1.5px";
 var lineWidthOnHover = "5px";
-var choices = new Set();
 var studentGradeData;
 var csvFromCalendar;
 var csvFromOH1;
@@ -43,7 +42,7 @@ var tipBox;
 var tooltip;
 var completeDateList;
 var dateSet;
-var fall2017_date_list;
+var entireTimePeriod;
 var labelsOnBasisOfPerformance;
 var tickOn = false;
 var corrOn = false;
@@ -77,263 +76,12 @@ var numFeatures;
 var boxplotdata;
 var originalStudentData;
 var helpSeekingCSVdata = [];
-var catWiseStudentData = [];
 var studentWiseTAdata = [];
-var choices = new Set();
 var filterCriteria = [];
 var currentLabel;
-var listOfEvents = [
-	"HW1",
-	"LAB2",
-	"OTHERS",
-	"HW2",
-	"HW3",
-	"LAB3",
-	"LAB4",
-	"HW4",
-	"LAB5",
-	"PROJ1",
-	"LAB6",
-	"LAB7",
-	"Midterm",
-	"HW5",
-	"LAB8",
-	"PROJ2",
-	"LAB9",
-	"HW6",
-	"LAB10",
-	"PROJ3",
-	"LAB13"
-];
-var hourSpent = {
-	1: "< 5 minutes",
-	2: "6 - 15 minutes",
-	3: "16 - 30 minutes",
-	4: "31 - 60 minutes",
-	5: "> 60 minutes",
-	6: "Not Attended"
-};
-
 var filteredSet = [];
-var spring2017_date_list = [
-	20170201,
-	20170202,
-	20170203,
-	20170204,
-	20170205,
-	20170206,
-	20170207,
-	20170208,
-	20170209,
-	20170210,
-	20170211,
-	20170212,
-	20170213,
-	20170214,
-	20170215,
-	20170216,
-	20170217,
-	20170218,
-	20170219,
-	20170220,
-	20170221,
-	20170222,
-	20170223,
-	20170224,
-	20170225,
-	20170226,
-	20170227,
-	20170228,
-	20170301,
-	20170302,
-	20170303,
-	20170304,
-	20170305,
-	20170306,
-	20170307,
-	20170308,
-	20170309,
-	20170310,
-	20170311,
-	20170312,
-	20170313,
-	20170314,
-	20170315,
-	20170316,
-	20170317,
-	20170318,
-	20170319,
-	20170320,
-	20170321,
-	20170322,
-	20170323,
-	20170324,
-	20170325,
-	20170326,
-	20170327,
-	20170328,
-	20170329,
-	20170330,
-	20170331,
-	20170401,
-	20170402,
-	20170403,
-	20170404,
-	20170405,
-	20170406,
-	20170407,
-	20170408,
-	20170409,
-	20170410,
-	20170411,
-	20170412,
-	20170413,
-	20170414,
-	20170415,
-	20170416,
-	20170417,
-	20170418,
-	20170419,
-	20170420,
-	20170421,
-	20170422,
-	20170423,
-	20170424,
-	20170425,
-	20170426,
-	20170427,
-	20170428,
-	20170429,
-	20170430,
-	20170501,
-	20170502,
-	20170503,
-	20170504,
-	20170505,
-	20170506,
-	20170507,
-	20170508,
-	20170509,
-	20170510,
-	20170511,
-	20170512,
-	20170513,
-	20170514,
-	20170515
-];
-
-var fall2017_date_list = [
-	20170831,
-	20170901,
-	20170902,
-	20170903,
-	20170904,
-	20170905,
-	20170906,
-	20170907,
-	20170908,
-	20170909,
-	20170910,
-	20170911,
-	20170912,
-	20170913,
-	20170914,
-	20170915,
-	20170916,
-	20170917,
-	20170918,
-	20170919,
-	20170920,
-	20170921,
-	20170922,
-	20170923,
-	20170924,
-	20170925,
-	20170926,
-	20170927,
-	20170928,
-	20170929,
-	20170930,
-	20171001,
-	20171002,
-	20171003,
-	20171004,
-	20171005,
-	20171006,
-	20171007,
-	20171008,
-	20171009,
-	20171010,
-	20171011,
-	20171012,
-	20171013,
-	20171014,
-	20171015,
-	20171016,
-	20171017,
-	20171018,
-	20171019,
-	20171020,
-	20171021,
-	20171022,
-	20171023,
-	20171024,
-	20171025,
-	20171026,
-	20171027,
-	20171028,
-	20171029,
-	20171030,
-	20171031,
-	20171101,
-	20171102,
-	20171103,
-	20171104,
-	20171105,
-	20171106,
-	20171107,
-	20171108,
-	20171109,
-	20171110,
-	20171111,
-	20171112,
-	20171113,
-	20171114,
-	20171115,
-	20171116,
-	20171117,
-	20171118,
-	20171119,
-	20171120,
-	20171121,
-	20171122,
-	20171123,
-	20171124,
-	20171125,
-	20171126,
-	20171127,
-	20171128,
-	20171129,
-	20171130,
-	20171201,
-	20171202,
-	20171203,
-	20171204,
-	20171205,
-	20171206,
-	20171207,
-	20171208,
-	20171209,
-	20171210,
-	20171211,
-	20171212,
-	20171213,
-	20171214,
-	20171215
-];
 
 function mainFunction(studentList) {
-
 	csvFromCalendar.forEach(function(d, i) {
 		cTotal = cTotal + d.total;
 		dateList.push(d.date);
@@ -343,13 +91,8 @@ function mainFunction(studentList) {
 		longDateToShortDate[parseTime(d.date)] = d.date;
 	});
 
-	Object.keys(hourSpent).map(function(d, i) {
-		catWiseStudentData[hourSpent[d]] = new Set();
-	});
-
 	csvFromGrades.forEach(function(d, i) {
 		if (studentList.includes(d.Username)) {
-
 			var total = 0;
 			for (var i = 0; i < dateList.length; i++) {
 				var x = calendarData[dateList[i]].description;
@@ -1296,7 +1039,7 @@ function getCompleteDateList(dateList) {
 	dateSet = new Set();
 	var completeDateList = [];
 
-	fall2017_date_list.map(function(date_i, i) {
+	entireTimePeriod.map(function(date_i, i) {
 		if (parseTime(date_i) <= parseTime(dateList[dateList.length - 1])) {
 			if (!dateSet.has(parseTime(date_i).toString())) {
 				dateSet.add(parseTime(date_i).toString());
@@ -1808,9 +1551,9 @@ function getDateIndex(completeDateList, date) {
 }
 
 function getTAdataFromCSV(oh) {
-	var TAdata = oh.slice(1,oh.length).map(function(tad) {
+	var TAdata = oh.slice(1, oh.length).map(function(tad) {
 		return {
-			Username: tad[0]+"",
+			Username: tad[0] + "",
 			Timestamp: +tad[1],
 			Events: tad[2],
 			"Time Spent": +tad[3],
@@ -1832,11 +1575,11 @@ function getTAdataFromCSV(oh) {
 
 function getUnclusteredOHDataFromTAData(TAdata) {
 	var data = [];
-	columns.slice(1,columns.length).forEach(function(studentID, id) {
+	columns.slice(1, columns.length).forEach(function(studentID, id) {
 		var object = {};
 		object["id"] = studentID;
 		object["values"] = [];
-		object["values"] = fall2017_date_list.map(function(date, i) {
+		object["values"] = entireTimePeriod.map(function(date, i) {
 			var x = date % 100;
 			var y = ((date % 10000) - x) / 100 - 1;
 			var z = 2017;
@@ -1848,7 +1591,7 @@ function getUnclusteredOHDataFromTAData(TAdata) {
 
 		TAdata.map(function(d, i) {
 			if (d["Username"] == object["id"]) {
-				var index = fall2017_date_list.indexOf(d["Timestamp"]);
+				var index = entireTimePeriod.indexOf(d["Timestamp"]);
 				object["values"][index]["hours"] = d["Time Spent"];
 			}
 		});
@@ -1864,7 +1607,7 @@ function getFilterData(
 	getLineData
 ) {
 	TAdata = getTAdataFromCSV(csvFromOH1);
-	
+
 	TAdata.forEach(function(d, i) {
 		overallOHdata[d["Events"]] =
 			(overallOHdata[d["Events"]] || 0) + d["Time Spent"] / TAdata.length;
@@ -2417,13 +2160,13 @@ var dz;
 // load dataset and create table
 function load_grade_dataset(csv) {
 	var data = d3.csvParseRows(csv);
-	csvFromGrades = data.slice(1,data.length).map(function(d, i) {
+	csvFromGrades = data.slice(1, data.length).map(function(d, i) {
 		var object = {};
 		data[0].forEach(function(c, k) {
-			if(k!=0) {
+			if (k != 0) {
 				object[c] = +d[k];
 			} else {
-				object[c] = d[k]+"";
+				object[c] = d[k] + "";
 			}
 		});
 		return object;
@@ -2436,7 +2179,7 @@ function load_oh_dataset(csv) {
 
 function load_calendar_dataset(csv) {
 	var data = d3.csvParseRows(csv);
-	csvFromCalendar = data.slice(1,data.length).map(function(d, i) {
+	csvFromCalendar = data.slice(1, data.length).map(function(d, i) {
 		return {
 			date: d[0],
 			description: d[1],
@@ -2488,7 +2231,8 @@ function renderVisualization() {
 		alert(missingText);
 	} else {
 		var form_val = getFilterCriteria();
-		var studentList = getCommonUsers(form_val,csvFromGrades,csvFromOH1);
+		var studentList = getCommonUsers(form_val, csvFromGrades, csvFromOH1);
+		entireTimePeriod = getTheCompleteDateList();
 		mainFunction(studentList);
 	}
 }
@@ -2508,15 +2252,14 @@ function getFilterCriteria() {
 	else return -1;
 }
 
-function getCommonUsers(form_val,grades,oh) {
-
+function getCommonUsers(form_val, grades, oh) {
 	var all = grades.map(function(d) {
 		return d.Username + "";
 	});
 
 	if (form_val == 1) return all;
 
-	var attended = oh.slice(1,oh.length).map(function(d) {
+	var attended = oh.slice(1, oh.length).map(function(d) {
 		return d[0] + "";
 	});
 
@@ -2527,6 +2270,54 @@ function getCommonUsers(form_val,grades,oh) {
 	var missed = _.difference(all, attended);
 
 	if (form_val == 3) return missed;
+}
+
+function getTheCompleteDateList() {
+	var startDate = d3.min(csvFromCalendar, function(c) {
+		return c.date;
+	});
+	var endDate = d3.max(csvFromCalendar, function(c) {
+		return c.date;
+	});
+
+	var month_limit = {
+		1: 31,
+		3: 31,
+		4: 30,
+		5: 31,
+		6: 30,
+		7: 31,
+		8: 31,
+		9: 30,
+		10: 31,
+		11: 30,
+		12: 31
+	};
+
+	var year = +startDate.slice(0, 4);
+	var month = +startDate.slice(4, 6);
+	var day = +startDate.slice(6, 8);
+	var currentDay = startDate;
+	var listOfDays = [+currentDay];
+
+	if (year % 4 == 0) {
+		month_limit[2] = 29;
+	} else {
+		month_limit[2] = 28;
+	}
+
+	while (currentDay != endDate) {
+		if (day == month_limit[month]) {
+			month = month + 1;
+			day = 1;
+		} else {
+			day = day + 1;
+		}
+		currentDay = year * 10000 + month * 100 + day;
+		listOfDays.push(currentDay);
+	}
+
+	return listOfDays;
 }
 
 const unique = (value, index, self) => {
