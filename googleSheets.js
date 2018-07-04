@@ -5,6 +5,30 @@ var csvFromCalendar;
 var csvFromOH1;
 var csvFromGrades;
 var dataSecondary;
+var days = [
+		"Sun",
+		"Mon",
+		"Tue",
+		"Wed",
+		"Thu",
+		"Fri",
+		"Sat"
+	];
+
+var months = [
+		"Jan",
+		"Feb",
+		"Mar",
+		"Apr",
+		"May",
+		"Jun",
+		"Jul",
+		"Aug",
+		"Sep",
+		"Oct",
+		"Nov",
+		"Dec",
+	];
 
 var svg = d3.select(".viz-body").select("svg"),
 	margin = { top: 30, right: 80, bottom: 30, left: 50 },
@@ -35,12 +59,12 @@ var studentline = d3
 	});
 // .curve(d3.curveBasis)
 
-var filterLimits = {
-	x0: new Date("December 17, 1995 03:24:00"),
-	x1: new Date("December 17, 2995 03:24:00"),
-	y0: 0,
-	y1: 300
-};
+// var filterLimits = {
+// 	x0: new Date("December 17, 1995 03:24:00"),
+// 	x1: new Date("December 17, 2995 03:24:00"),
+// 	y0: 0,
+// 	y1: 300
+// };
 
 var circles = [];
 var maxRadius;
@@ -203,7 +227,6 @@ function toggleNumbers() {
 }
 
 function disableNumbers() {
-	console.log("Removing Overlay");
 	d3.select(".viz-body")
 		.selectAll(".line")
 		.style("stroke-width", function(d1, i1) {
@@ -223,7 +246,7 @@ function disableNumbers() {
 	d3.select(".filter-body")
 		.selectAll(".officeHourlineMin")
 		.style("stroke-width", function(d1, i1) {
-			return "4px";
+			return "0.5px";
 		})
 		.style("stroke-opacity", "1");
 
@@ -246,8 +269,6 @@ function disableNumbers() {
 }
 
 function enableNumbers() {
-	console.log("Adding Overlay");
-
 	d3.select(".viz-body")
 		.selectAll(".line")
 		.style("stroke-width", function(d1, i1) {
@@ -259,7 +280,7 @@ function enableNumbers() {
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (currentIndex != i1) {
-				return "0.30";
+				return "0.05";
 			}
 		});
 
@@ -274,7 +295,7 @@ function enableNumbers() {
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (currentIndex != i1) {
-				return "0.30";
+				return "0.05";
 			}
 		});
 
@@ -282,15 +303,15 @@ function enableNumbers() {
 		.selectAll(".officeHourlineMin")
 		.style("stroke-width", function(d1, i1) {
 			if (currentIndex != i1) {
-				return "4px";
+				return "0.5px";
 			} else {
-				return "6px";
+				return "4px";
 			}
 			mouseOver;
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (currentIndex != i1) {
-				return "0.30";
+				return "0.05";
 			}
 		});
 
@@ -305,7 +326,7 @@ function enableNumbers() {
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (currentIndex != i1) {
-				return "0.30";
+				return "0.05";
 			}
 		});
 
@@ -315,17 +336,16 @@ function enableNumbers() {
 		.append("g")
 		.attr("class", "focusAvg")
 		.style("display", "none");
-
 	focusAvg.append("circle").attr("r", 4.5);
-
-	focusAvg.append("line").classed("x", true);
-
-	focusAvg.append("line").classed("y", true);
-
+	focusAvg
+		.append("rect")
+		.attr("y", -height)
+		.attr("width", 1)
+		.attr("height", height);
 	focusAvg
 		.append("text")
 		.attr("x", 9)
-		.attr("dy", ".35em");
+		.attr("dy", "-20px");
 
 	var focusMin = g
 		.append("g")
@@ -333,16 +353,10 @@ function enableNumbers() {
 		.style("display", "none");
 
 	focusMin.append("circle").attr("r", 4.5);
-
-	focusMin.append("line").classed("x", true);
-
-	focusMin.append("line").classed("y", true);
-
 	focusMin
 		.append("text")
 		.attr("x", 9)
-		.attr("dy", ".35em");
-
+		.attr("dy", "-20px");
 
 	var focusMax = g
 		.append("g")
@@ -350,15 +364,10 @@ function enableNumbers() {
 		.style("display", "none");
 
 	focusMax.append("circle").attr("r", 4.5);
-
-	focusMax.append("line").classed("x", true);
-
-	focusMax.append("line").classed("y", true);
-
 	focusMax
 		.append("text")
 		.attr("x", 9)
-		.attr("dy", ".35em");
+		.attr("dy", "-20px");
 
 	g.append("rect")
 		.attr("class", "overlay")
@@ -369,21 +378,50 @@ function enableNumbers() {
 			focusAvg.style("display", null);
 			focusMin.style("display", null);
 			focusMax.style("display", null);
+			focusGrades.style("display", null);
 		})
 		.on("mouseout", function() {
 			focusAvg.style("display", "none");
 			focusMin.style("display", "none");
 			focusMax.style("display", "none");
+			focusGrades.style("display", "none");
 		})
-		.on("mousemove", mousemoveOverlayOH);
+		.on("mousemove", makeUsefulTooltip);
 
 	var g = d3.select(".viz-body").select(".overlayGradeSVG");
+
+	var focusGrades = g
+		.append("g")
+		.attr("class", "focusGrades")
+		.style("display", "none");
+	focusGrades.append("circle").attr("r", 4.5);
+	focusGrades
+		.append("rect")
+		.attr("width", 1)
+		.attr("height", height);
+	focusGrades
+		.append("text")
+		.attr("x", "-10px")
+		.attr("dy", "-20px");
+
 	g.append("rect")
 		.attr("class", "overlay")
 		.attr("width", width)
 		.attr("height", height)
 		.style("fill-opacity", "0")
-		.on("mousemove", mousemoveOverlayGrade);
+		.on("mouseover", function() {
+			focusAvg.style("display", null);
+			focusMin.style("display", null);
+			focusMax.style("display", null);
+			focusGrades.style("display", null);
+		})
+		.on("mouseout", function() {
+			focusAvg.style("display", "none");
+			focusMin.style("display", "none");
+			focusMax.style("display", "none");
+			focusGrades.style("display", "none");
+		})
+		.on("mousemove", makeUsefulTooltip);
 }
 
 function disableTicks() {
@@ -638,7 +676,7 @@ function mouseOutLine() {
 	d3.select(".filter-body")
 		.selectAll(".officeHourlineMin")
 		.style("stroke-width", function(d1, i1) {
-			return "4px";
+			return "0.5px";
 		})
 		.style("stroke-opacity", "1");
 
@@ -698,7 +736,7 @@ function mouseOverLine(d, i) {
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (i != i1) {
-				return "0.30";
+				return "0.05";
 			}
 		});
 
@@ -713,7 +751,7 @@ function mouseOverLine(d, i) {
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (i != i1) {
-				return "0.30";
+				return "0.05";
 			}
 		});
 
@@ -721,15 +759,15 @@ function mouseOverLine(d, i) {
 		.selectAll(".officeHourlineMin")
 		.style("stroke-width", function(d1, i1) {
 			if (i != i1) {
-				return "4px";
+				return "0.5px";
 			} else {
-				return "6px";
+				return "4px";
 			}
 			mouseOver;
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (i != i1) {
-				return "0.30";
+				return "0.05";
 			}
 		});
 
@@ -744,7 +782,7 @@ function mouseOverLine(d, i) {
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (i != i1) {
-				return "0.30";
+				return "0.05";
 			}
 		});
 
@@ -780,7 +818,6 @@ function mouseOverLine(d, i) {
 	d3.select(this)
 		.style("stroke-width", lineWidthOnHover)
 		.moveToFront();
-	console.log("Why am I putting Current Label Here", i);
 	currentLabel = labelsOnBasisOfPerformance[i];
 	currentIndex = i;
 }
@@ -969,15 +1006,7 @@ function mouseOutCircle(d, i) {
 
 function getEventsList(object, date, eventsList) {
 	var d = object[6];
-	var days = [
-		"Sunday",
-		"Monday",
-		"Tuesday",
-		"Wednesday",
-		"Thursday",
-		"Friday",
-		"Saturday"
-	];
+	
 	var displayDate =
 		days[d.getDay()] +
 		", " +
@@ -1608,10 +1637,10 @@ function getQuartileData(indexes, filterCriteria) {
 		inter[d] = [];
 	});
 
-	var x0 = filterLimits["x0"];
-	var x1 = filterLimits["x1"];
-	var y0 = filterLimits["y0"];
-	var y1 = filterLimits["y1"];
+	// var x0 = filterLimits["x0"];
+	// var x1 = filterLimits["x1"];
+	// var y0 = filterLimits["y0"];
+	// var y1 = filterLimits["y1"];
 
 	originalStudentData.forEach(function(d, i) {
 		if (
@@ -1918,7 +1947,8 @@ function getFilterData(
 			return z(i);
 			// return "black";
 		})
-		.style("stroke-width", "1.5px")
+		.style("stroke-width", "0.5px")
+		.style("stroke-dasharray", "5")
 		.on("mouseover", mouseOverLine)
 		.on("mouseout", mouseOutLine)
 		.on("click", clickOnLine);
@@ -1933,6 +1963,7 @@ function getFilterData(
 			return z(i);
 		})
 		.style("stroke-width", "0.5px")
+		.style("stroke-dasharray", "5")
 		.on("mouseover", mouseOverLine)
 		.on("mouseout", mouseOutLine)
 		.on("click", clickOnLine);
@@ -1965,114 +1996,107 @@ function getFilterData(
 	}
 }
 
-function mousemoveOverlayOH() {
+function makeUsefulTooltip() {
 	if (!(corrOn || distOn)) {
 		var x0 = x_filter.invert(d3.mouse(this)[0]);
 		var i = bisectDate(completeDateList, x0, 1);
 		var d0 = completeDateList[i - 1];
 		var d1 = completeDateList[i];
 		var d = x0 - d0 > d1 - x0 ? d1 : d0;
-		
-		var y0 = y_filter(dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)]["min"])-10
-		var y1 = y_filter(dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)]["hours"])-10
-		var y2 = y_filter(dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)]["max"])-10
 
-		var des1 = "Min";
-		var des2 = "Avg";
-		var des3 = "Max";
-
-		if(y0 == y1 && y0 == y2) {
-			des1 = "Avg/Min/Max"
-			des2 = "Avg/Min/Max"
-			des3 = "Avg/Min/Max"
-		} else if(y0 == y1) {
-			des1 = "Avg/Min"
-			des2 = "Avg/Min"
-		} else if(y1 == y2) {
-			des2 = "Avg/Max"
-			des3 = "Avg/Max"
-		}
-
-		console.log("==================================")
-		console.log(y0,des1)
-		console.log(y1,des2)
-		console.log(y2,des3)
-		
-		
-		var focusAvg = d3.select(".filter-body").selectAll(".focusAvg");
-		focusAvg.attr("transform", "translate(" + x(d) + "," + y0 + ")");
-		focusAvg.select("text").text(des1+" : "+(dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)]["min"]));
-
-		var focusMin = d3.select(".filter-body").selectAll(".focusMin");
-		focusMin.attr("transform", "translate(" + x(d) + "," + y1 + ")");
-		focusMin.select("text").text(des2+" : "+(dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)]["hours"]));
-
-		var focusMax = d3.select(".filter-body").selectAll(".focusMax");
-		focusMax.attr("transform", "translate(" + x(d) + "," + y2 + ")");
-		focusMax.select("text").text(des3+" : "+(dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)]["max"]));
-
-
-
+		mousemoveOverlayOH(d);
+		mousemoveOverlayGrade(d);
 	}
 }
 
-function mousemoveOverlayGrade() {
-	console.log(corrOn, distOn);
-	if (!(corrOn || distOn)) {
-		var x0 = x.invert(d3.mouse(this)[0]);
-		var i = bisectDate(completeDateList, x0, 1);
-		console.log(x0, " vs ", completeDateList[i]);
-		// var d0 = data[i - 1];
-		// var d1 = data[i];
-		// var d = x0 - d0.date > d1.date - x0 ? d1 : d0;
-		// focus.attr('transform', `translate(${x(d.date)}, ${y(d.close)})`);
-		// focus.select('line.x')
-		//   .attr('x1', 0)
-		//   .attr('x2', -x(d.date))
-		//   .attr('y1', 0)
-		//   .attr('y2', 0);
+function mousemoveOverlayOH(d) {
 
-		// focus.select('line.y')
-		//   .attr('x1', 0)
-		//   .attr('x2', 0)
-		//   .attr('y1', 0)
-		//   .attr('y2', height - y(d.close));
+	var avg = dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)][
+			"hours"
+		]
+	var min = dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)][
+			"min"
+		]
+	var max = dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)][
+			"max"
+		]
 
-		// focus.select('text').text(formatCurrency(d.close));
+
+	var y0 = y_filter(
+		min
+	);
+	var y1 = y_filter(
+		avg
+	);
+	var y2 = y_filter(
+		max
+	);
+
+	var des1 = "Min";
+	var des2 = "Avg";
+	var des3 = "Max";
+
+	if (y0 == y1 && y0 == y2) {
+		des1 = "Avg/Min/Max";
+		des2 = "Avg/Min/Max";
+		des3 = "Avg/Min/Max";
+	} else if (y0 == y1) {
+		des1 = "Avg/Min";
+		des2 = "Avg/Min";
+	} else if (y1 == y2) {
+		des2 = "Avg/Max";
+		des3 = "Avg/Max";
 	}
+
+	var focusAvg = d3.select(".filter-body").selectAll(".focusAvg");
+	focusAvg.attr("transform", "translate(" + x(d) + "," + y0 + ")");
+	focusAvg
+		.select("text")
+		.text(
+			des1 +
+				" : " +
+				Math.round(min*100)/100
+		);
+
+	var focusMin = d3.select(".filter-body").selectAll(".focusMin");
+	focusMin.attr("transform", "translate(" + x(d) + "," + y1 + ")");
+	focusMin
+		.select("text")
+		.text(
+			des2 +
+				" : " +
+				Math.round(avg*100)/100
+		);
+
+	var focusMax = d3.select(".filter-body").selectAll(".focusMax");
+	focusMax.attr("transform", "translate(" + x(d) + "," + y2 + ")");
+	focusMax
+		.select("text")
+		.text(
+			des3 +
+				" : " +
+				Math.round(max*100)/100
+		);
 }
 
-function brushended() {
-	var s = d3.event.selection;
-	if (!s) {
-		if (!idleTimeout) return (idleTimeout = setTimeout(idled, idleDelay));
-		// x.domain(x0);
-		// y.domain(y0);
-	} else {
-		var x0 = x.invert(s[0][0]);
-		var x1 = x.invert(s[1][0]);
-		x0.setHours(x0.getHours() - 12);
-		x1.setHours(x1.getHours() - 12);
-		var y0 = y.invert(s[0][1]) + 7;
-		var y1 = y.invert(s[1][1]) + 7;
-		var filterLimits = {
-			x0: x0,
-			y0: y0,
-			x1: x1,
-			y1: y1
-		};
-	}
-	update(filterLimits);
+function mousemoveOverlayGrade(d) {
+	var grade =
+		students[currentIndex]["values"][completeDateList.indexOf(d)]["scores"];
+	var y0 = y(grade);
+
+	var focusGrades = d3.select(".viz-body").selectAll(".focusGrades");
+
+	var textToDisplay = days[d.getDay()]+" , "+months[d.getMonth()]+" "+d.getDate()+" :: "+Math.round(grade*100)/100
+
+	focusGrades.attr("transform", "translate(" + x(d) + "," + y0 + ")");
+	focusGrades.select("text").text(textToDisplay);
+	focusGrades.select("rect").attr("dy", 0);
 }
 
-function idled() {
-	idleTimeout = null;
-}
-
-function update(filterLimits) {
-	filterCriteria = getFilteredLabels(dataSecondary, filterLimits);
-	getStackedBarData(currentLabel, filterCriteria);
-}
+// function update(filterLimits) {
+// 	filterCriteria = getFilteredLabels(dataSecondary, filterLimits);
+// 	getStackedBarData(currentLabel, filterCriteria);
+// }
 
 function getFilteredLabels(data, filters) {
 	var x0 = filters["x0"];

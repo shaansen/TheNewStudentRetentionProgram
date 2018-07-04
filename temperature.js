@@ -437,16 +437,16 @@ function mouseOutLine() {
 	d3.select(".filter-body")
 		.selectAll(".officeHourlineMin")
 		.style("stroke-width", function(d1, i1) {
-			return "4px";
+			return "0.5px";
 		})
-		.style("stroke-opacity", "1");
+		.style("stroke-opacity", "0.5");
 
 	d3.select(".filter-body")
 		.selectAll(".officeHourlineMax")
 		.style("stroke-width", function(d1, i1) {
 			return "0.5px";
 		})
-		.style("stroke-opacity", "1");
+		.style("stroke-opacity", "0.5");
 
 	d3.select(this).style("stroke-width", lineWidthOriginal);
 	// tooltip.style("visibility", "hidden")
@@ -488,7 +488,7 @@ function mouseOverLine(d, i) {
 		.selectAll(".line")
 		.style("stroke-opacity", function(d1, i1) {
 			if (d.id != d1.id) {
-				return "0.30";
+				return "0.05";
 			}
 		});
 
@@ -503,7 +503,7 @@ function mouseOverLine(d, i) {
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (d.id != d1.id) {
-				return "0.30";
+				return "0.05";
 			}
 		});
 
@@ -511,15 +511,15 @@ function mouseOverLine(d, i) {
 		.selectAll(".officeHourlineMin")
 		.style("stroke-width", function(d1, i1) {
 			if (d.id != d1.id) {
-				return "4px";
+				return "0.5px";
 			} else {
-				return "6px";
+				return "4px";
 			}
 			mouseOver;
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (d.id != d1.id) {
-				return "0.30";
+				return "0.05";
 			}
 		});
 
@@ -534,7 +534,7 @@ function mouseOverLine(d, i) {
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (d.id != d1.id) {
-				return "0.30";
+				return "0.05";
 			}
 		});
 
@@ -650,7 +650,7 @@ function getIntegratedCircles(currentLabel) {
 			return d[2];
 		})
 		.attr("r", function(d) {
-			return (10 * (d[3]-minRadius)) / maxRadius;
+			return (10 * (d[3] - minRadius)) / maxRadius;
 		})
 		.style("fill", function(d, i) {
 			return z(d[0]);
@@ -832,7 +832,7 @@ function getRandomCentroids(numFeatures, k) {
 			var x = {};
 
 			x["date"] = d;
-			x["temperature"] = 40
+			x["temperature"] = 40;
 			result[i].push(x);
 		});
 	}
@@ -969,7 +969,7 @@ function getCentroids(dataset, labels, k) {
 			numFeatures.map(function(d) {
 				var x = {};
 				x["date"] = d;
-				x["temperature"] = 40
+				x["temperature"] = 40;
 				result[i].push(x);
 			});
 		} else {
@@ -1228,7 +1228,7 @@ function getStackedBarData(currentLabel, filterCriteria) {
 	// 		});
 	// 	})
 	// ]);
-		y.domain([0,80]);
+	y.domain([0, 80]);
 	g.selectAll(".serie")
 		.data(stack.keys(columns.slice(1))(data))
 		.enter()
@@ -1364,7 +1364,7 @@ function getFilterData(
 		data = clusterSimilarPerformingcities(data, labelsOnBasisOfPerformance);
 		var officeHourData = data;
 		var dataSecondary = data;
-		console.log(data)
+		console.log(data);
 
 		var data = [
 			{ date: new Date(date_list[0]), value: 93.24 },
@@ -1430,25 +1430,37 @@ function getFilterData(
 
 		officeHourDatum.exit().remove();
 
-			officeHourDatum.append("path")
-	.attr("class", "officeHourlineMin")
-	.attr("d", function(d) { return line2(d.values); })
-	.style("stroke", function(d,i) { return z(i); })
-	.style("stroke-width", "4px")
-	.on("mouseover", mouseOverLine)
-	.on("mouseout", mouseOutLine)
-	.on("mousemove", mouseMoveOnLine)
-	.on("click", clickOnLine)
+		officeHourDatum
+			.append("path")
+			.attr("class", "officeHourlineMin")
+			.attr("d", function(d) {
+				return line2(d.values);
+			})
+			.style("stroke", function(d, i) {
+				return z(i);
+			})
+			.style("stroke-width", "0.5px")
+			.style("stroke-dasharray", "5")
+			.on("mouseover", mouseOverLine)
+			.on("mouseout", mouseOutLine)
+			.on("mousemove", mouseMoveOnLine)
+			.on("click", clickOnLine);
 
-	officeHourDatum.append("path")
-	.attr("class", "officeHourlineMax")
-	.attr("d", function(d) { return line3(d.values); })
-	.style("stroke", function(d,i) { return z(i); })
-	.style("stroke-width", "0.5px")
-	.on("mouseover", mouseOverLine)
-	.on("mouseout", mouseOutLine)
-	.on("mousemove", mouseMoveOnLine)
-	.on("click", clickOnLine)
+		officeHourDatum
+			.append("path")
+			.attr("class", "officeHourlineMax")
+			.attr("d", function(d) {
+				return line3(d.values);
+			})
+			.style("stroke", function(d, i) {
+				return z(i);
+			})
+			.style("stroke-width", "0.5px")
+			.style("stroke-dasharray", "5")
+			.on("mouseover", mouseOverLine)
+			.on("mouseout", mouseOutLine)
+			.on("mousemove", mouseMoveOnLine)
+			.on("click", clickOnLine);
 
 		officeHourDatum
 			.append("text")
@@ -1554,7 +1566,7 @@ function clusterOfficeHourData(cityGroup, data) {
 			date: d["date"],
 			hours: 0,
 			min: Infinity,
-			max: -(Infinity)
+			max: -Infinity
 		};
 	});
 
@@ -1579,7 +1591,7 @@ function getLineData(data, cities, dataSecondary) {
 			return d.date;
 		})
 	);
-	y.domain([0,80]);
+	y.domain([0, 80]);
 	z.domain(
 		cities.map(function(c, i) {
 			return i;
