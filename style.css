@@ -186,7 +186,7 @@ input,
   fill: brown;
 }
 
-.reason-body {
+.reason-body-list {
   overflow-y: scroll;
   height: 400px;
 
@@ -202,9 +202,11 @@ input,
 
 
 #searchEvent {
-  width: 100%;
+  width: 98%;
   border: 1px solid black;
   padding: 10px 10px 10px 10px;
+  border-radius: 100px;
+
 }
 
 hr {

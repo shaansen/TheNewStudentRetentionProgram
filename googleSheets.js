@@ -1019,19 +1019,19 @@ function getEventsList(object, date, eventsList) {
 	d3.select(".reason-body-list")
 		.selectAll("ul")
 		.remove();
-	d3.select(".reason-body-list")
+	d3.select(".reason-body-header")
 		.selectAll("h5")
 		.remove();
-	d3.select(".reason-body-list")
+	d3.select(".reason-body-header")
 		.selectAll("h3")
 		.remove();
 
-	d3.select(".reason-body-list")
+	d3.select(".reason-body-header")
 		.append("h3")
 		.attr("class", "reason-panel-header-date")
 		.text(displayDate);
 
-	d3.select(".reason-body-list")
+	d3.select(".reason-body-header")
 		.append("h5")
 		.text(
 			"Students attended an average of " +
@@ -1039,7 +1039,7 @@ function getEventsList(object, date, eventsList) {
 				" minutes"
 		);
 
-	d3.select(".reason-body-list")
+	d3.select(".reason-body-header")
 		.append("h5")
 		.text(
 			"To discuss the following items (Total entries - " +
