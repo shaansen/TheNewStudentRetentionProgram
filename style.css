@@ -188,7 +188,7 @@ input,
 
 .reason-body-list {
   overflow-y: scroll;
-  height: 400px;
+  height: 275px;
 
 }
 
@@ -196,7 +196,7 @@ input,
   padding-left: 20px;
 }
 
-.reason-body-list p{
+.reason-body-list {
   font-size: 15px;
 }
 

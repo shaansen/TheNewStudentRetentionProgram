@@ -5,30 +5,22 @@ var csvFromCalendar;
 var csvFromOH1;
 var csvFromGrades;
 var dataSecondary;
-var days = [
-		"Sun",
-		"Mon",
-		"Tue",
-		"Wed",
-		"Thu",
-		"Fri",
-		"Sat"
-	];
+var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 var months = [
-		"Jan",
-		"Feb",
-		"Mar",
-		"Apr",
-		"May",
-		"Jun",
-		"Jul",
-		"Aug",
-		"Sep",
-		"Oct",
-		"Nov",
-		"Dec",
-	];
+	"Jan",
+	"Feb",
+	"Mar",
+	"Apr",
+	"May",
+	"Jun",
+	"Jul",
+	"Aug",
+	"Sep",
+	"Oct",
+	"Nov",
+	"Dec"
+];
 
 var svg = d3.select(".viz-body").select("svg"),
 	margin = { top: 30, right: 80, bottom: 30, left: 50 },
@@ -155,7 +147,7 @@ function mainFunction(studentList) {
 	});
 
 	clusters = 8;
-	maxiterations = 1000;
+	maxiterations = Infinity;
 	numFeatures = students[0]["values"].map(function(d) {
 		return d.date;
 	});
@@ -217,10 +209,10 @@ function toggleTick() {
 
 function toggleNumbers() {
 	if (!numbersOn) {
-		d3.selectAll(".numbersText").text("Numbers ON");
+		d3.selectAll(".numbersText").text("Highlight Numbers ON");
 		enableNumbers();
 	} else {
-		d3.selectAll(".numbersText").text("Numbers OFF");
+		d3.selectAll(".numbersText").text("Highlight Numbers OFF");
 		disableNumbers();
 	}
 	numbersOn = !numbersOn;
@@ -343,9 +335,12 @@ function enableNumbers() {
 		.attr("width", 1)
 		.attr("height", height);
 	focusAvg
-		.append("text")
-		.attr("x", 9)
-		.attr("dy", "-20px");
+		.append("rect")
+		.attr("width", 120)
+		.attr("height", 20)
+		.attr("x", "-25px")
+		.attr("y", "-35px")
+		.attr("fill-opacity", "0.7");
 
 	var focusMin = g
 		.append("g")
@@ -354,9 +349,12 @@ function enableNumbers() {
 
 	focusMin.append("circle").attr("r", 4.5);
 	focusMin
-		.append("text")
-		.attr("x", 9)
-		.attr("dy", "-20px");
+		.append("rect")
+		.attr("width", 120)
+		.attr("height", 20)
+		.attr("x", "-25px")
+		.attr("y", "-35px")
+		.attr("fill-opacity", "0.7");
 
 	var focusMax = g
 		.append("g")
@@ -365,9 +363,28 @@ function enableNumbers() {
 
 	focusMax.append("circle").attr("r", 4.5);
 	focusMax
+		.append("rect")
+		.attr("width", 120)
+		.attr("height", 20)
+		.attr("x", "-25px")
+		.attr("y", "-35px")
+		.attr("fill-opacity", "0.7");
+
+	focusAvg
 		.append("text")
-		.attr("x", 9)
-		.attr("dy", "-20px");
+		.attr("x", 5)
+		.attr("dy", "-20px")
+		.attr("fill", "white");
+	focusMin
+		.append("text")
+		.attr("x", 5)
+		.attr("dy", "-20px")
+		.attr("fill", "white");
+	focusMax
+		.append("text")
+		.attr("x", 5)
+		.attr("dy", "-20px")
+		.attr("fill", "white");
 
 	g.append("rect")
 		.attr("class", "overlay")
@@ -395,14 +412,24 @@ function enableNumbers() {
 		.attr("class", "focusGrades")
 		.style("display", "none");
 	focusGrades.append("circle").attr("r", 4.5);
+
 	focusGrades
 		.append("rect")
 		.attr("width", 1)
 		.attr("height", height);
 	focusGrades
+		.append("rect")
+		.attr("width", 120)
+		.attr("height", 20)
+		.attr("x", "-25px")
+		.attr("y", "7px")
+		.attr("fill-opacity", "0.7");
+
+	focusGrades
 		.append("text")
-		.attr("x", "-10px")
-		.attr("dy", "-20px");
+		.attr("x", "-20px")
+		.attr("dy", "20px")
+		.attr("fill", "white");
 
 	g.append("rect")
 		.attr("class", "overlay")
@@ -818,21 +845,22 @@ function mouseOverLine(d, i) {
 	d3.select(this)
 		.style("stroke-width", lineWidthOnHover)
 		.moveToFront();
-	currentLabel = labelsOnBasisOfPerformance[i];
-	currentIndex = i;
+	// currentLabel = labelsOnBasisOfPerformance[i];
+	// currentIndex = i;
 }
 
 function clickOnLine(d, i) {
 	currentLabel = labelsOnBasisOfPerformance[i];
 	currentIndex = i;
 	getTextValues(currentLabel, i);
+	fillUpTheOHArea(i);
 	if (distOn) getStackedBarData(currentLabel, filterCriteria);
 	if (corrOn) selectALineToViewOHData(i);
 }
 
 function selectALineToViewOHData(currentLabel) {
 	getIntegratedCircles(currentLabel);
-	fillUpTheOHArea(currentLabel);
+	// fillUpTheOHArea(currentLabel);
 }
 
 function fillUpTheOHArea(currentLabel) {
@@ -852,7 +880,6 @@ function fillUpTheOHArea(currentLabel) {
 			OHToShow.push(taElement);
 		}
 	});
-
 	var comparisonData = getComparisonWithClassAverage(overallOHdata, eventMap);
 	var array = Object.keys(comparisonData);
 	array.sort();
@@ -928,6 +955,7 @@ function displayComparisonDataResults(data) {
 }
 
 function getComparisonWithClassAverage(overallOHdata, eventMap) {
+
 	var result = {};
 	Object.keys(overallOHdata).forEach(function(event, i) {
 		var a = eventMap[event] || 0;
@@ -990,6 +1018,7 @@ function clickOnCircle(d, i) {
 	});
 	var fullDate = d[6];
 	var shortDate = convertLongToShortDate(fullDate);
+	
 	var eventList = eventsByDate[shortDate].filter(function(d, i) {
 		return permittedUsers.includes(d.Username);
 	});
@@ -998,15 +1027,17 @@ function clickOnCircle(d, i) {
 
 function mouseOverCircle(d, i) {
 	d3.select(this).attr("stroke-width", "3px");
+	mouseOverLine(null, currentIndex);
 }
 
 function mouseOutCircle(d, i) {
 	d3.select(this).attr("stroke-width", "1px");
+	mouseOutLine(null, currentIndex);
 }
 
 function getEventsList(object, date, eventsList) {
 	var d = object[6];
-	
+
 	var displayDate =
 		days[d.getDay()] +
 		", " +
@@ -1047,11 +1078,14 @@ function getEventsList(object, date, eventsList) {
 				")"
 		);
 
+	console.log(eventsList)
+
 	eventsList.sort(function(a, b) {
 		return a.Username - b.Username;
 	});
+
 	eventsReasonsList = eventsList.map(function(d, i) {
-		return d.Username + " :: " + d.Event;
+		return d.Username + " ("  + d.Type + ") :: "  + d.Event;
 	});
 
 	var ul = d3.select(".reason-body-list").append("ul");
@@ -1129,7 +1163,7 @@ function getIntegratedCircles(currentLabel) {
 			return d[2];
 		})
 		.attr("r", function(d) {
-			if (d[3] != 0) return (20 * d[3]) / maxRadius + 4;
+			if (d[3] != 0) return (20 * d[3]) / maxRadius + 5;
 			else return 0;
 		})
 		.style("fill", "none")
@@ -1784,7 +1818,8 @@ function getTAdataFromCSV(oh) {
 		var oldArray = eventsByDate[event["Timestamp"]] || [];
 		oldArray.push({
 			Username: event["Username"],
-			Event: event["Helped"]
+			Event: event["Helped"],
+			Type: event["Events"]
 		});
 		eventsByDate[event["Timestamp"]] = oldArray;
 	});
@@ -1826,12 +1861,10 @@ function getFilterData(
 	getLineData
 ) {
 	TAdata = getTAdataFromCSV(csvFromOH1);
-
 	TAdata.forEach(function(d, i) {
-		overallOHdata[d["Events"]] =
-			(overallOHdata[d["Events"]] || 0) + d["Time Spent"] / TAdata.length;
+		// overallOHdata[d["Events"]] = (overallOHdata[d["Events"]] || 0) + d["Time Spent"] / TAdata.length;
+		overallOHdata[d["Events"]] = (overallOHdata[d["Events"]] || 0) + d["Time Spent"] / originalStudentData.length;
 	});
-
 	var svg = d3.select(".filter-body").select("svg"),
 		margin = { top: 30, right: 80, bottom: 30, left: 50 },
 		width = svg.attr("width") - margin.left - margin.right,
@@ -2010,27 +2043,22 @@ function makeUsefulTooltip() {
 }
 
 function mousemoveOverlayOH(d) {
-
-	var avg = dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)][
+	var avg =
+		dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)][
 			"hours"
-		]
-	var min = dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)][
+		];
+	var min =
+		dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)][
 			"min"
-		]
-	var max = dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)][
+		];
+	var max =
+		dataSecondary[currentIndex]["values"][completeDateList.indexOf(d)][
 			"max"
-		]
+		];
 
-
-	var y0 = y_filter(
-		min
-	);
-	var y1 = y_filter(
-		avg
-	);
-	var y2 = y_filter(
-		max
-	);
+	var y0 = y_filter(min);
+	var y1 = y_filter(avg);
+	var y2 = y_filter(max);
 
 	var des1 = "Min";
 	var des2 = "Avg";
@@ -2050,33 +2078,15 @@ function mousemoveOverlayOH(d) {
 
 	var focusAvg = d3.select(".filter-body").selectAll(".focusAvg");
 	focusAvg.attr("transform", "translate(" + x(d) + "," + y0 + ")");
-	focusAvg
-		.select("text")
-		.text(
-			des1 +
-				" : " +
-				Math.round(min*100)/100
-		);
+	focusAvg.select("text").text(des1 + " : " + Math.round(min * 100) / 100);
 
 	var focusMin = d3.select(".filter-body").selectAll(".focusMin");
 	focusMin.attr("transform", "translate(" + x(d) + "," + y1 + ")");
-	focusMin
-		.select("text")
-		.text(
-			des2 +
-				" : " +
-				Math.round(avg*100)/100
-		);
+	focusMin.select("text").text(des2 + " : " + Math.round(avg * 100) / 100);
 
 	var focusMax = d3.select(".filter-body").selectAll(".focusMax");
 	focusMax.attr("transform", "translate(" + x(d) + "," + y2 + ")");
-	focusMax
-		.select("text")
-		.text(
-			des3 +
-				" : " +
-				Math.round(max*100)/100
-		);
+	focusMax.select("text").text(des3 + " : " + Math.round(max * 100) / 100);
 }
 
 function mousemoveOverlayGrade(d) {
@@ -2086,7 +2096,14 @@ function mousemoveOverlayGrade(d) {
 
 	var focusGrades = d3.select(".viz-body").selectAll(".focusGrades");
 
-	var textToDisplay = days[d.getDay()]+" , "+months[d.getMonth()]+" "+d.getDate()+" :: "+Math.round(grade*100)/100
+	var textToDisplay =
+		days[d.getDay()] +
+		" , " +
+		months[d.getMonth()] +
+		" " +
+		d.getDate() +
+		" :: " +
+		Math.round(grade * 100) / 100;
 
 	focusGrades.attr("transform", "translate(" + x(d) + "," + y0 + ")");
 	focusGrades.select("text").text(textToDisplay);

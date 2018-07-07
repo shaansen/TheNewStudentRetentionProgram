@@ -68,8 +68,14 @@
         onclick="
         toggleNumbers()"
         class="numbersText">
-        Numbers OFF
+        Highlight Numbers OFF
         </button>
+
+        <button
+        onclick="toggleDist()"
+        class="distText">
+        Distribution OFF
+        </button>  
         
         <button
         onclick="toggleCorr()"
@@ -77,16 +83,23 @@
         Correlation OFF
         </button>
         
-        <button
-        onclick="toggleDist()"
-        class="distText">
-        Distribution OFF
-        </button>  
+        
       </div>
     </div>
 
     <hr>
     
+    
+    <div>
+      <button class="accordion">Legends</button>
+      <div class="panel">
+        <div class="navfilter-body">
+        </div>  
+      </div>  
+    </div>
+
+    <hr>
+
     <div>
       <button class="accordion">View Cluster Members</button>
       <div class="panel">
@@ -99,15 +112,6 @@
 
     <hr>
     
-    <div>
-      <button class="accordion">Legends</button>
-      <div class="panel">
-        <div class="navfilter-body">
-        </div>  
-      </div>  
-    </div>
-
-    <hr>
 
     <div>
       <button class="accordion">Comparison with Average</button>
