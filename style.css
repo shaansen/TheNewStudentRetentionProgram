@@ -167,7 +167,8 @@ body {
   font-size: 12px;
 }
 
-p, h6,
+p,
+h6,
 input,
 .radio-distance {
   margin: 1px 10px 1px 10px;
@@ -189,10 +190,11 @@ input,
 .reason-body-list {
   overflow-y: scroll;
   height: 275px;
-
 }
 
-.reason-body-list p,h3,h5 {
+.reason-body-list p,
+h3,
+h5 {
   padding-left: 20px;
 }
 
@@ -200,13 +202,11 @@ input,
   font-size: 15px;
 }
 
-
 #searchEvent {
   width: 98%;
   border: 1px solid black;
   padding: 10px 10px 10px 10px;
   border-radius: 100px;
-
 }
 
 hr {
@@ -218,18 +218,53 @@ p {
 }
 
 .accordion {
-    background-color: #ededed;
-    color: #444;
-    border: none;
+  background-color: #ededed;
+  color: #444;
+  border: none;
 }
 
-.active, .accordion:hover {
-    background-color: #ededed; 
-    cursor: pointer;
+.active,
+.accordion:hover {
+  background-color: #ededed;
+  cursor: pointer;
 }
 
 .panel {
-    display: none;
-    background-color: #ededed;
-    overflow: hidden;
+  display: none;
+  background-color: #ededed;
+  overflow: hidden;
+}
+
+/* 
+  Generic Styling, for Desktops/Laptops 
+  */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+/* Zebra striping */
+tr:nth-of-type(odd) {
+  background: #eee;
+}
+th {
+  background: #333;
+  color: white;
+  font-weight: bold;
+  cursor: s-resize;
+  background-repeat: no-repeat;
+  background-position: 3% center;
+}
+td,
+th {
+  padding: 6px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+th.des:after {
+  content: "\21E9";
+}
+
+th.aes:after {
+  content: "\21E7";
 }

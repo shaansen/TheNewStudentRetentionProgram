@@ -955,7 +955,6 @@ function displayComparisonDataResults(data) {
 }
 
 function getComparisonWithClassAverage(overallOHdata, eventMap) {
-
 	var result = {};
 	Object.keys(overallOHdata).forEach(function(event, i) {
 		var a = eventMap[event] || 0;
@@ -1018,10 +1017,10 @@ function clickOnCircle(d, i) {
 	});
 	var fullDate = d[6];
 	var shortDate = convertLongToShortDate(fullDate);
-	
 	var eventList = eventsByDate[shortDate].filter(function(d, i) {
 		return permittedUsers.includes(d.Username);
 	});
+
 	getEventsList(d, shortDate, eventList);
 }
 
@@ -1048,7 +1047,7 @@ function getEventsList(object, date, eventsList) {
 		d.getFullYear();
 
 	d3.select(".reason-body-list")
-		.selectAll("ul")
+		.selectAll("table")
 		.remove();
 	d3.select(".reason-body-header")
 		.selectAll("h5")
@@ -1078,22 +1077,62 @@ function getEventsList(object, date, eventsList) {
 				")"
 		);
 
-	console.log(eventsList)
-
 	eventsList.sort(function(a, b) {
 		return a.Username - b.Username;
 	});
 
-	eventsReasonsList = eventsList.map(function(d, i) {
-		return d.Username + " ("  + d.Type + ") :: "  + d.Event;
-	});
-
-	var ul = d3.select(".reason-body-list").append("ul");
-	ul.selectAll("li")
-		.data(eventsReasonsList)
+	var titles = Object.keys(eventsList[0])
+	var sortAscending = true;
+	var table = d3.select(".reason-body-list").append("table");
+	// var titles = d3.keys(data[0]);
+	var headers = table
+		.append("thead")
+		.append("tr")
+		.selectAll("th")
+		.data(titles)
 		.enter()
-		.append("li")
-		.html(String);
+		.append("th")
+		.text(function(d) {
+			return d;
+		})
+		.on("click", function(d) {
+			headers.attr("class", "header");
+
+			if (sortAscending) {
+				rows.sort(function(a, b) {
+					return b[d] < a[d];
+				});
+				sortAscending = false;
+				this.className = "aes";
+			} else {
+				rows.sort(function(a, b) {
+					return b[d] > a[d];
+				});
+				sortAscending = true;
+				this.className = "des";
+			}
+		});
+
+	var rows = table
+		.append("tbody")
+		.selectAll("tr")
+		.data(eventsList)
+		.enter()
+		.append("tr");
+	rows.selectAll("td")
+		.data(function(d) {
+			return titles.map(function(k) {
+				return { value: d[k], name: k };
+			});
+		})
+		.enter()
+		.append("td")
+		.attr("data-th", function(d) {
+			return d.name;
+		})
+		.text(function(d) {
+			return d.value;
+		});
 }
 
 function getIntegratedCircles(currentLabel) {
@@ -1804,23 +1843,24 @@ function getDateIndex(completeDateList, date) {
 }
 
 function getTAdataFromCSV(oh) {
-	var TAdata = oh.slice(1, oh.length).map(function(tad) {
-		return {
-			Username: tad[0] + "",
-			Timestamp: +tad[1],
-			Events: tad[2],
-			"Time Spent": +tad[3],
-			Helped: tad[4]
-		};
+	var columns = oh[0];
+
+	var TAdata = [];
+	oh.slice(1, oh.length).forEach(function(tad) {
+		var object = {};
+		columns.forEach(function(col, i) {
+			if (isNaN(tad[i]) || col == "Username") {
+				object[col] = tad[i];
+			} else {
+				object[col] = +tad[i];
+			}
+		});
+		TAdata.push(object);
 	});
 
 	TAdata.forEach(function(event) {
 		var oldArray = eventsByDate[event["Timestamp"]] || [];
-		oldArray.push({
-			Username: event["Username"],
-			Event: event["Helped"],
-			Type: event["Events"]
-		});
+		oldArray.push(event);
 		eventsByDate[event["Timestamp"]] = oldArray;
 	});
 
@@ -1863,7 +1903,9 @@ function getFilterData(
 	TAdata = getTAdataFromCSV(csvFromOH1);
 	TAdata.forEach(function(d, i) {
 		// overallOHdata[d["Events"]] = (overallOHdata[d["Events"]] || 0) + d["Time Spent"] / TAdata.length;
-		overallOHdata[d["Events"]] = (overallOHdata[d["Events"]] || 0) + d["Time Spent"] / originalStudentData.length;
+		overallOHdata[d["Events"]] =
+			(overallOHdata[d["Events"]] || 0) +
+			d["Time Spent"] / originalStudentData.length;
 	});
 	var svg = d3.select(".filter-body").select("svg"),
 		margin = { top: 30, right: 80, bottom: 30, left: 50 },
@@ -2433,24 +2475,7 @@ function linkageCriteriaAverage(a, b) {
 	return (a + b) / 2;
 }
 
-function searchEvents() {
-	var input;
-	input = document.getElementById("searchEvent");
-
-	d3.select(".reason-body-list")
-		.selectAll("ul")
-		.remove();
-
-	var ul = d3.select(".reason-body-list").append("ul");
-	ul.selectAll("li")
-		.data(eventsReasonsList)
-		.enter()
-		.filter(function(d, i) {
-			return d.includes(input.value);
-		})
-		.append("li")
-		.html(String);
-}
+function searchEvents() {}
 
 // make dataset globally available
 var dz;
