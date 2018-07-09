@@ -33,7 +33,6 @@ button {
 body {
   font-family: "Cabin", "Roboto Condensed";
   font-size: 12px;
-  /*font-weight: bold;*/
 }
 
 .line {
@@ -235,17 +234,10 @@ p {
   overflow: hidden;
 }
 
-/* 
-  Generic Styling, for Desktops/Laptops 
-  */
 table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
-}
-/* Zebra striping */
-tr:nth-of-type(odd) {
-  /*background: #eee;*/
 }
 th {
   background: #333;
@@ -253,15 +245,7 @@ th {
 }
 td,
 th {
-  padding: 6px;
+  padding: 3px;
   border: 1px solid #ccc;
   text-align: left;
-}
-
-th.des:after {
-  content: "\21E9";
-}
-
-th.aes:after {
-  content: "\21E7";
 }

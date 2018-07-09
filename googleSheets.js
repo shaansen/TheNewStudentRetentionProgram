@@ -465,6 +465,9 @@ function enableTicks() {
 				"translate(" + margin.left + "," + margin.top + ")"
 			);
 
+	console.log("BEFORE",dateList)
+	dateList = _.filter(dateList, function(d) { return !(_.startsWith(calendarData[d]["description"], 'LAB') || _.startsWith(calendarData[d]["description"], 'SUR')) });
+	console.log("AFTER",dateList)
 	var pillars = g
 		.selectAll(".pillars")
 		.data(dateList)
@@ -1027,18 +1030,18 @@ function clickOnCircle(d, i) {
 function mouseOverCircle(d, i) {
 	d3.select(this)
 		.attr("stroke-width", "3px")
-		.style("fill", "black")
-		.style("fill-opacity", "0.01")
-		.style("stroke", "black");
+		.attr("fill", "black")
+		.attr("fill-opacity", "0.01")
+		.attr("stroke", "black");
 	mouseOverLine(null, currentIndex);
 }
 
 function mouseOutCircle(d, i) {
 	d3.select(this)
 		.attr("stroke-width", "1px")
-		.style("fill", "black")
-		.style("fill-opacity", "0.01")
-		.style("stroke", "black");
+		.attr("fill", "black")
+		.attr("fill-opacity", "0.01")
+		.attr("stroke", "black");
 	mouseOutLine(null, currentIndex);
 }
 
@@ -1222,9 +1225,9 @@ function getIntegratedCircles(currentLabel) {
 			if (d[3] != 0) return (20 * d[3]) / maxRadius + 5;
 			else return 0;
 		})
-		.style("fill", "black")
-		.style("fill-opacity", "0.01")
-		.style("stroke", "black")
+		.attr("fill", "black")
+		.attr("fill-opacity", "0.01")
+		.attr("stroke", "black")
 		.on("mouseover", mouseOverCircle)
 		.on("mouseout", mouseOutCircle)
 		.on("click", clickOnCircle);
@@ -1843,14 +1846,14 @@ function getRectangleColors(i) {
 			return "#fff";
 		case 1:
 			// return "#fff";
-			return "#000068";
+			return "#001b47";
 		case 2:
 			return "#0000ff";
 		case 3:
 			return "#ff0000";
 		case 4:
 			// return "#fff";
-			return "#720202";
+			return "#4f0000";
 	}
 }
 
@@ -2551,6 +2554,7 @@ function load_grade_dataset(csv) {
 		});
 		return object;
 	});
+	console.log(csvFromGrades)
 }
 
 function load_oh_dataset(csv) {
