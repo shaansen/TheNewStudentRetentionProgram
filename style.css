@@ -189,7 +189,7 @@ input,
 
 .reason-body-list {
   overflow-y: scroll;
-  height: 275px;
+  min-height: 500px;
 }
 
 .reason-body-list p,
@@ -241,18 +241,15 @@ p {
 table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 14px;
 }
 /* Zebra striping */
 tr:nth-of-type(odd) {
-  background: #eee;
+  /*background: #eee;*/
 }
 th {
   background: #333;
   color: white;
-  font-weight: bold;
-  cursor: s-resize;
-  background-repeat: no-repeat;
-  background-position: 3% center;
 }
 td,
 th {

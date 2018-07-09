@@ -746,7 +746,6 @@ function mouseOverLine(d, i) {
 			.filter(function(d1, i1) {
 				return d1[0] == i;
 			})
-			.style("fill-opacity", "1")
 			.style("stroke", function(d, i) {
 				return "black";
 			});
@@ -871,15 +870,17 @@ function fillUpTheOHArea(currentLabel) {
 	});
 
 	var OHToShow = [];
+
 	TAdata.forEach(function(taElement, taID) {
 		if (users.includes(taElement["Username"])) {
-			eventMap[taElement["Events"]] =
-				(eventMap[taElement["Events"]] || 0) +
-				taElement["Time Spent"] /
+			eventMap[taElement["Help Category"]] =
+				(eventMap[taElement["Help Category"]] || 0) +
+				taElement["Duration"] /
 					labelsOnBasisOfPerformance[currentLabel].length;
 			OHToShow.push(taElement);
 		}
 	});
+
 	var comparisonData = getComparisonWithClassAverage(overallOHdata, eventMap);
 	var array = Object.keys(comparisonData);
 	array.sort();
@@ -971,7 +972,6 @@ function getComparisonWithClassAverage(overallOHdata, eventMap) {
 
 		result[event] = Math.round(number * 10000) / 10000;
 	});
-
 	return result;
 }
 
@@ -1025,12 +1025,20 @@ function clickOnCircle(d, i) {
 }
 
 function mouseOverCircle(d, i) {
-	d3.select(this).attr("stroke-width", "3px");
+	d3.select(this)
+		.attr("stroke-width", "3px")
+		.style("fill", "black")
+		.style("fill-opacity", "0.01")
+		.style("stroke", "black");
 	mouseOverLine(null, currentIndex);
 }
 
 function mouseOutCircle(d, i) {
-	d3.select(this).attr("stroke-width", "1px");
+	d3.select(this)
+		.attr("stroke-width", "1px")
+		.style("fill", "black")
+		.style("fill-opacity", "0.01")
+		.style("stroke", "black");
 	mouseOutLine(null, currentIndex);
 }
 
@@ -1081,7 +1089,19 @@ function getEventsList(object, date, eventsList) {
 		return a.Username - b.Username;
 	});
 
-	var titles = Object.keys(eventsList[0])
+	var titles = [
+		"Username",
+		"Help Category",
+		"Start Time",
+		"End Time",
+		"Duration",
+		"TA Name",
+		"Question",
+		"Notes",
+		"Time Category",
+		"Wait Time"
+	];
+
 	var sortAscending = true;
 	var table = d3.select(".reason-body-list").append("table");
 	// var titles = d3.keys(data[0]);
@@ -1152,10 +1172,7 @@ function getIntegratedCircles(currentLabel) {
 		.data(circles)
 		.enter()
 		.append("g")
-		.attr("class", "officeHourDots")
-		.on("mouseover", mouseOverCircle)
-		.on("mouseout", mouseOutCircle)
-		.on("click", clickOnCircle);
+		.attr("class", "officeHourDots");
 
 	// officeHourDots.append("circle")
 	// .attr("class", "officecircles")
@@ -1165,28 +1182,28 @@ function getIntegratedCircles(currentLabel) {
 	// .style("fill",  function(d) {return z(d[0]); })
 	// .style("fill-opacity", "0.75")
 
-	officeHourDots
-		.append("circle")
-		.filter(function(d, i) {
-			return d[0] == currentLabel;
-		})
-		.attr("class", "officecircles")
-		.attr("cx", function(d, i) {
-			return d[1];
-		})
-		.attr("cy", function(d) {
-			return d[2];
-		})
-		.attr("r", function(d) {
-			return (20 * d[3]) / maxRadius;
-		})
-		.style("fill", function(d, i) {
-			return z(d[0]);
-		})
-		.style("fill-opacity", "1")
-		.style("stroke", function(d, i) {
-			return "black";
-		});
+	// officeHourDots
+	// 	.append("circle")
+	// 	.filter(function(d, i) {
+	// 		return d[0] == currentLabel;
+	// 	})
+	// 	.attr("class", "officecircles")
+	// 	.attr("cx", function(d, i) {
+	// 		return d[1];
+	// 	})
+	// 	.attr("cy", function(d) {
+	// 		return d[2];
+	// 	})
+	// 	.attr("r", function(d) {
+	// 		return (20 * d[3]) / maxRadius;
+	// 	})
+	// 	.style("fill", function(d, i) {
+	// 		return z(d[0]);
+	// 	})
+	// 	.style("fill-opacity", "1")
+	// 	.style("stroke", function(d, i) {
+	// 		return "black";
+	// 	});
 	// .style("fill-opacity", "0.50");
 
 	officeHourDots
@@ -1205,8 +1222,12 @@ function getIntegratedCircles(currentLabel) {
 			if (d[3] != 0) return (20 * d[3]) / maxRadius + 5;
 			else return 0;
 		})
-		.style("fill", "none")
-		.style("stroke", "black");
+		.style("fill", "black")
+		.style("fill-opacity", "0.01")
+		.style("stroke", "black")
+		.on("mouseover", mouseOverCircle)
+		.on("mouseout", mouseOutCircle)
+		.on("click", clickOnCircle);
 
 	officeHourDots.exit().remove();
 
@@ -1844,8 +1865,19 @@ function getDateIndex(completeDateList, date) {
 
 function getTAdataFromCSV(oh) {
 	var columns = oh[0];
+	var TAdata = processOHData(oh.slice(1, oh.length), columns);
 
+	TAdata.forEach(function(event) {
+		var oldArray = eventsByDate[event["Timestamp"]] || [];
+		oldArray.push(event);
+		eventsByDate[event["Timestamp"]] = oldArray;
+	});
+	return TAdata;
+}
+
+function processOHData(oh, columns) {
 	var TAdata = [];
+
 	oh.slice(1, oh.length).forEach(function(tad) {
 		var object = {};
 		columns.forEach(function(col, i) {
@@ -1858,13 +1890,38 @@ function getTAdataFromCSV(oh) {
 		TAdata.push(object);
 	});
 
-	TAdata.forEach(function(event) {
-		var oldArray = eventsByDate[event["Timestamp"]] || [];
-		oldArray.push(event);
-		eventsByDate[event["Timestamp"]] = oldArray;
+	var result = TAdata.map(function(d) {
+		var dateValues = getDateValues(d);
+		return {
+			Username: d.Username,
+			Duration: dateValues.duration,
+			"Start Time": dateValues.startTime,
+			Timestamp: dateValues.timestamp,
+			"End Time": dateValues.endTime,
+			"Wait Time": d["Time Waited"],
+			"TA Name": d.TA,
+			Question: d.Question,
+			Notes: d.Notes,
+			"Help Category": d["Help Category"],
+			"Time Category": d["Personal Time"]
+		};
 	});
 
-	return TAdata;
+	return result;
+}
+
+function getDateValues(d) {
+	var result = {};
+	var startTime = moment(d["Entered"], "MM/DD/YY HH:mm");
+	var endTime = moment(d["Time Helped"], "MM/DD/YY HH:mm");
+	var duration = moment.duration(endTime.diff(startTime)).asMinutes();
+
+	return {
+		duration: duration,
+		timestamp: +startTime.format("YYYYMMDD"),
+		startTime: startTime.format("HH:mm:ss"),
+		endTime: endTime.format("HH:mm:ss")
+	};
 }
 
 function getUnclusteredOHDataFromTAData(TAdata) {
@@ -1886,7 +1943,7 @@ function getUnclusteredOHDataFromTAData(TAdata) {
 		TAdata.map(function(d, i) {
 			if (d["Username"] == object["id"]) {
 				var index = entireTimePeriod.indexOf(d["Timestamp"]);
-				object["values"][index]["hours"] = d["Time Spent"];
+				object["values"][index]["hours"] = d["Duration"];
 			}
 		});
 		data.push(object);
@@ -1903,9 +1960,9 @@ function getFilterData(
 	TAdata = getTAdataFromCSV(csvFromOH1);
 	TAdata.forEach(function(d, i) {
 		// overallOHdata[d["Events"]] = (overallOHdata[d["Events"]] || 0) + d["Time Spent"] / TAdata.length;
-		overallOHdata[d["Events"]] =
-			(overallOHdata[d["Events"]] || 0) +
-			d["Time Spent"] / originalStudentData.length;
+		overallOHdata[d["Help Category"]] =
+			(overallOHdata[d["Help Category"]] || 0) +
+			d["Duration"] / originalStudentData.length;
 	});
 	var svg = d3.select(".filter-body").select("svg"),
 		margin = { top: 30, right: 80, bottom: 30, left: 50 },
