@@ -1,9 +1,9 @@
 Username,Entered,Help Category,Question,Personal Time,TA,Time Helped,Time Waited,Notes
 238,9/11/17 11:01,HW/Project,Duplicates are being entered; can  t delete them either;,6 - 15 minutes,berry,9/11/17 11:11,11:11:42,Wanted to know what tilde files were; wanted to know how to submit multiple files and check it they were correctly submitted
-362,9/11/17 13:31,Other,please need help deleting some files I created by mistake;,6 - 15 minutes,berry,9/11/17 13:33,13:33:01,Needed help deleting a file 
+362,9/11/17 13:31,I need help delecting some file I created by mistake,please need help deleting some files I created by mistake;,6 - 15 minutes,berry,9/11/17 13:33,13:33:01,Needed help deleting a file 
 144,9/11/17 13:48,HW/Project,I believe i have a logic error,16 - 30 minutes,berry,9/11/17 13:50,13:50:04,had a logic error when calculating bill for hw 1 part 6
 362,9/11/17 14:05,HW/Project,have a logical error in my outputs,6 - 15 minutes,coconut,9/11/17 14:07,14:07:13,using concatenate operator & addition in same places
-586,9/11/17 14:37,Other,I have trouble downloading puTTy; I try following the video but parts of it do not match what it says on my laptop;,16 - 30 minutes,coconut,9/11/17 14:38,14:38:04,needed help installing putty
+586,9/11/17 14:37,Putty download,I have trouble downloading puTTy; I try following the video but parts of it do not match what it says on my laptop;,16 - 30 minutes,coconut,9/11/17 14:38,14:38:04,needed help installing putty
 504,9/11/17 15:09,HW/Project,Initiating the homework ,6 - 15 minutes,mango,9/11/17 15:09,15:09:30,Help finding the syllabus quiz
 224,9/11/17 16:29,HW/Project,Checking HW1 completion and requirements,< 5 minutes,daikon,9/11/17 16:31,16:31:23,just wanted to check things like syntax
 190,9/12/17 11:54,HW/Project,I don  t know what to do when your program carries over to the next line; I want to be sure I forwatermeloned it correctly according to the coding standards; ,6 - 15 minutes,eggplant,9/12/17 11:55,11:55:06,wanted to know why the lines would not auto tab when using the backslash like in the coding standards
@@ -34,17 +34,17 @@ Username,Entered,Help Category,Question,Personal Time,TA,Time Helped,Time Waited
 504,9/15/17 16:49,HW/Project,question 6,< 5 minutes,pepper,9/15/17 16:50,16:50:04,logic error; wasn  t dividing percents by 100
 555,9/18/17 11:13,HW/Project,"My program outputs None"" when that is not the response I program""",16 - 30 minutes,berry,9/18/17 11:14,11:14:05,Wanted help with multiple comnparison statement syntax and using if - elif - else 
 555,9/18/17 11:34,HW/Project,"Program outputs None"" when asking user for response""",< 5 minutes,berry,9/18/17 11:34,11:34:55,Helped him with input synax
-362,9/18/17 13:07,Other,I did a project in order to review ; but i could not figure out how to mw]ake it work with string;,16 - 30 minutes,berry,9/18/17 13:11,13:11:40,not here
+362,9/18/17 13:07,if and elif application with string variable,I did a project in order to review ; but i could not figure out how to mw]ake it work with string;,16 - 30 minutes,berry,9/18/17 13:11,13:11:40,not here
 246,9/18/17 14:14,HW/Project,Hw1_part2,31 - 60 minutes,coconut,9/18/17 14:17,14:17:45,rounding algorithm help
-362,9/18/17 14:29,Other,help debugging my program about if / elif statement,16 - 30 minutes,coconut,9/18/17 14:33,14:33:40,didn  t quite understand if\elif\else structure
+362,9/18/17 14:29,use of string in conditional statement,help debugging my program about if / elif statement,16 - 30 minutes,coconut,9/18/17 14:33,14:33:40,didn  t quite understand if\elif\else structure
 246,9/18/17 14:35,HW/Project,hw2 negative numbers part 2,6 - 15 minutes,coconut,9/18/17 14:43,14:43:40,whole number checking statement
-362,9/18/17 14:53,Other,need to delete unwanted folder in the directory,16 - 30 minutes,coconut,9/18/17 14:58,14:58:24,needed help removing things
+362,9/18/17 14:53,romoving unwanted folder in the directory,need to delete unwanted folder in the directory,16 - 30 minutes,coconut,9/18/17 14:58,14:58:24,needed help removing things
 516,9/18/17 14:57,HW/Project,My if statements are not working properly and I am not sure why;,6 - 15 minutes,mango,9/18/17 15:02,15:02:19,help with if elif else
 340,9/18/17 15:06,HW/Project,A syntax error and simplifying my code,16 - 30 minutes,mango,9/18/17 15:09,15:09:41,forgot a parenthesis
-362,9/18/17 15:28,Other,do we indent after the main method?,< 5 minutes,mango,9/18/17 15:29,15:29:35,Questions about indentation
+362,9/18/17 15:28,quick question,do we indent after the main method?,< 5 minutes,mango,9/18/17 15:29,15:29:35,Questions about indentation
 340,9/18/17 15:33,HW/Project,My program is stopping before it goes through the rest of the code,< 5 minutes,mango,9/18/17 15:34,15:34:04,accidental capitalization
 516,9/18/17 15:34,HW/Project,Python gl error,< 5 minutes,mango,9/18/17 15:35,15:35:30,Got stuck in a weird directory
-340,9/18/17 15:46,Other,Is there a way to find out the number of characters in a line without counting each individual character?,< 5 minutes,mango,9/18/17 15:46,15:46:47,Quick question about coding standards and # of characters per line
+340,9/18/17 15:46,shortcut,Is there a way to find out the number of characters in a line without counting each individual character?,< 5 minutes,mango,9/18/17 15:46,15:46:47,Quick question about coding standards and # of characters per line
 362,9/18/17 16:01,HW/Project,how do we use of and && in python,6 - 15 minutes,daikon,9/18/17 16:03,16:03:01,needs to use and
 362,9/18/17 16:18,HW/Project,question about using main function,6 - 15 minutes,daikon,9/18/17 16:19,16:19:56,asks if all homework parts need to use main
 362,9/18/17 16:54,HW/Project,how to used string and if cond,6 - 15 minutes,daikon,9/18/17 16:54,16:54:36,missing input
@@ -54,7 +54,7 @@ Username,Entered,Help Category,Question,Personal Time,TA,Time Helped,Time Waited
 112,9/18/17 17:32,HW/Project,Changing numbers into integers on hw2part2,31 - 60 minutes,radish,9/18/17 18:53,18:53:19,Changing variable colors
 555,9/18/17 17:50,HW/Project,Logical error on hw2 part4; want to skip lines in print(),6 - 15 minutes,radish,9/18/17 18:00,18:00:40,Needed to use \n for a string
 362,9/18/17 17:55,HW/Project,if statemnet used,6 - 15 minutes,radish,9/18/17 18:05,18:05:47,Needed help with homework logic
-283,9/19/17 10:55,Other,How does ls -l work? I can not see my homework bit sizes;,< 5 minutes,iceberg lettuce,9/19/17 10:56,10:56:07,How to view size of file
+283,9/19/17 10:55,GL command,How does ls -l work? I can not see my homework bit sizes;,< 5 minutes,iceberg lettuce,9/19/17 10:56,10:56:07,How to view size of file
 500,9/19/17 11:04,Concept,Coding standards wise; how do I split up a line in order to make it more readable; especially when it comes to long strings and print statements;,< 5 minutes,eggplant,9/19/17 11:05,11:05:16,Wanted help confirming how to properly split lines to maintain 80 characters;
 242,9/19/17 11:11,HW/Project,My programming logic is not calculating the correct day in a calendar program;,> 60 minutes,eggplant,9/19/17 11:13,11:13:23,Program was not producing the input he wanted and was looking for some guidance
 427,9/19/17 11:22,HW/Project,I want to make sure my logic behind part 3 of HW2 will work for multiple sets of numbers and my code for part 6 only returns one response; ,16 - 30 minutes,eggplant,9/19/17 11:23,11:23:07,Forgot to incorporate user input into the math she was using
@@ -99,7 +99,7 @@ Username,Entered,Help Category,Question,Personal Time,TA,Time Helped,Time Waited
 362,9/20/17 17:12,HW/Project,help debugging my output in hw2_part6,< 5 minutes,yam,9/20/17 17:12,17:12:48,should  ve used or; not and
 311,9/20/17 17:17,HW/Project,If statement with a whole integer;,16 - 30 minutes,radish,9/20/17 17:20,17:20:29,If loops
 535,9/20/17 17:29,HW/Project,I  m having trouble with coming up with what days equal which day of the week in Part 5,6 - 15 minutes,yam,9/20/17 17:29,17:29:31,wrong order of vars in part 6
-362,9/20/17 17:32,Other,what are the tool i can use to prepare for exams such as website practice question or other please;,< 5 minutes,yam,9/20/17 17:35,17:35:03,Just wanted some advice on how he should practice for this class
+362,9/20/17 17:32,study habit,what are the tool i can use to prepare for exams such as website practice question or other please;,< 5 minutes,yam,9/20/17 17:35,17:35:03,Just wanted some advice on how he should practice for this class
 412,9/20/17 17:34,HW/Project, I am not sure how to round a number without using the round command;,6 - 15 minutes,yam,9/20/17 17:40,17:40:44,how to approach part 2
 535,9/20/17 17:48,HW/Project,Need help handling day 31 in Part 5,6 - 15 minutes,yam,9/20/17 17:49,17:49:03,misunderstanding of mod results
 412,9/20/17 17:56,HW/Project,I  m not sure how to create an if statement for a number being represented as a whole number,< 5 minutes,radish,9/20/17 17:57,17:57:13,Finding if float is a whole num
@@ -115,7 +115,7 @@ Username,Entered,Help Category,Question,Personal Time,TA,Time Helped,Time Waited
 428,9/21/17 14:26,HW/Project,I  m not sure what equation to use to round up/down an input #,> 60 minutes,vanilla,9/21/17 14:26,14:26:57,Logic for homework 2 part 2
 251,9/21/17 14:28,Concept,When I should use comments; ,> 60 minutes,squash,9/21/17 14:29,14:29:15,Explained to her why developers NEED to comment their code
 471,9/21/17 14:34,HW/Project,My program does not run as I expected,> 60 minutes,squash,9/21/17 14:34,14:34:47,He knew what to do with %; so I guided him towards figuring out the solution
-408,9/21/17 14:41,Other,I can  t locate putty software; and not sure if i can switch OS to windows ,< 5 minutes,squash,9/21/17 14:48,14:48:29,Couldn  t find Windows on that certain computer he was on
+408,9/21/17 14:41,can  t locate putty / strange operating system,I can  t locate putty software; and not sure if i can switch OS to windows ,< 5 minutes,squash,9/21/17 14:48,14:48:29,Couldn  t find Windows on that certain computer he was on
 251,9/21/17 14:47,HW/Project,Can you test my hw programs; ,> 60 minutes,vanilla,9/21/17 14:50,14:50:34,Making sure programs ran correctly
 251,9/21/17 15:02,Concept,How do I check if it is an int whole number?,> 60 minutes,zucchini ,9/21/17 15:10,15:10:21,just needed to run a few tests
 246,9/21/17 15:02,HW/Project,Hw2_Part4,16 - 30 minutes,zucchini ,9/21/17 15:25,15:25:24,Syntax errors with prints and some int/float confusion
@@ -189,7 +189,7 @@ Username,Entered,Help Category,Question,Personal Time,TA,Time Helped,Time Waited
 361,9/26/17 10:11,HW/Project,while loop problem,31 - 60 minutes,iceberg lettuce,9/26/17 10:13,10:13:05,Help with conditional; mixed up < and  >
 510,9/26/17 10:30,HW/Project,My program works but there is a sentence being repeated (using while loops),< 5 minutes,iceberg lettuce,9/26/17 10:32,10:32:02,Help with while loop conditionals
 235,9/26/17 10:32,HW/Project,Question about organizing code for problem 6 and boolean logic,31 - 60 minutes,iceberg lettuce,9/26/17 10:37,10:37:19,Fixed probelm on their own
-283,9/26/17 10:32,Other,I accidentally named my program hw3_partl;py; not hw3_part1;py and now I have an empty file called hw3_part1;py that is not my homework; I am unsure if changing the file name will delete my howework; ,< 5 minutes,iceberg lettuce,9/26/17 10:41,10:41:32,Renaming file
+283,9/26/17 10:32,GL system,I accidentally named my program hw3_partl;py; not hw3_part1;py and now I have an empty file called hw3_part1;py that is not my homework; I am unsure if changing the file name will delete my howework; ,< 5 minutes,iceberg lettuce,9/26/17 10:41,10:41:32,Renaming file
 555,9/26/17 10:42,HW/Project,trouble with while loop statement,16 - 30 minutes,iceberg lettuce,9/26/17 10:43,10:43:54,Not updating variable inside while loop
 361,9/26/17 10:47,HW/Project,Doesn  t understand the homework problem,16 - 30 minutes,iceberg lettuce,9/26/17 10:47,10:47:47,Help explain the hw assignment
 555,9/26/17 10:59,HW/Project,while loop not running properly,6 - 15 minutes,iceberg lettuce,9/26/17 11:01,11:01:04,Used nested whiles 
@@ -271,7 +271,7 @@ Username,Entered,Help Category,Question,Personal Time,TA,Time Helped,Time Waited
 311,9/28/17 11:39,HW/Project,How to stop while loop,31 - 60 minutes,daikon,9/28/17 12:00,12:00:52,logic help
 112,9/28/17 12:09,HW/Project,part 7; how to get a symbol(non int or float) to repeat,31 - 60 minutes,coconut,9/28/17 12:32,12:32:36,whoops; no note
 362,9/28/17 12:13,HW/Project,output and Boolean flag,6 - 15 minutes,coconut,9/28/17 12:45,12:45:31,is not getting idea of   running total  
-503,9/28/17 13:58,Other,Sequence ,16 - 30 minutes,vanilla,9/28/17 13:59,13:59:16,Needed help understanding while loops
+503,9/28/17 13:58,two whiles ,Sequence ,16 - 30 minutes,vanilla,9/28/17 13:59,13:59:16,Needed help understanding while loops
 130,9/28/17 13:58,HW/Project,Hw3 part1; my program isn  t going through the whole loop and stops before it arrives at the answer; and i need help fixing it,< 5 minutes,squash,9/28/17 13:59,13:59:27,He was using a counter variable
 361,9/28/17 13:59,HW/Project,cant figure out problem,31 - 60 minutes,squash,9/28/17 14:03,14:03:12,Did % 20 instead of % 4 and 5 for some reason
 376,9/28/17 14:01,HW/Project,I am having trouble with part 7; specifically; how to indent the characters properly;,> 60 minutes,squash,9/28/17 14:11,14:11:17,Disk quota exceeded -- told him to e-mail cacao or Prof Neary
@@ -279,7 +279,7 @@ Username,Entered,Help Category,Question,Personal Time,TA,Time Helped,Time Waited
 114,9/28/17 14:04,HW/Project,for Homework 3; question 2; I cannot figure out how to have the program give the correct answer for exponentiation; Also there was no room in 240 so I am in the hallway right across from the door,> 60 minutes,vanilla,9/28/17 14:22,14:22:10,Program wasn  t outputting correctly
 575,9/28/17 14:06,HW/Project,When should I be using constants in my code? I  m not sure if I am using them correctly,31 - 60 minutes,squash,9/28/17 14:24,14:24:23,Explained to her the difference between constants and variables and their uses
 130,9/28/17 14:12,HW/Project,Hw3 part1;  after fixing the infinite loop my program isn  t going through the whole loop again and stops before it arrives at the answer; ,31 - 60 minutes,squash,9/28/17 14:27,14:27:10,Actually about part 2 -- explained to him how exponents work in a different way
-500,9/28/17 14:21,Other,The syllabus says the collaboration logs are on the assignment page; but they aren  t;,6 - 15 minutes,squash,9/28/17 14:33,14:33:15,Collaboration log is found on the homework
+500,9/28/17 14:21,collaboration Logs?,The syllabus says the collaboration logs are on the assignment page; but they aren  t;,6 - 15 minutes,squash,9/28/17 14:33,14:33:15,Collaboration log is found on the homework
 471,9/28/17 14:23,HW/Project,I dont know how to end the loop appropriately;,> 60 minutes,squash,9/28/17 14:33,14:33:48,Reexplained part 2 to him
 130,9/28/17 14:26,HW/Project,hw3 part2; i need help in printing out the final value as i don  t know how to get it,31 - 60 minutes,squash,9/28/17 14:38,14:38:33,Multipled product with counter variable
 117,9/28/17 14:28,HW/Project,starting a new line ,31 - 60 minutes,squash,9/28/17 14:44,14:44:19,Helped her figure out how to approrach the nested while loop 
@@ -494,7 +494,7 @@ Also; how should I use in-line comments? Sometimes; it feels like my comments ar
 445,10/5/17 12:11,Lab,My program isn  t saving user input into the correct index,6 - 15 minutes,ugli fruit,10/5/17 13:00,13:00:51,checked lab 5 and put revised grade in blackboard
 381,10/5/17 12:18,HW/Project,I need help hw4 part7 checking the items if already exist,16 - 30 minutes,ugli fruit,10/5/17 13:04,13:04:28,helped student figure out how to compare items in list without using in operator
 426,10/5/17 12:18,HW/Project,I  m stuck on an infinite loop in my program; ,31 - 60 minutes,ugli fruit,10/5/17 13:12,13:12:06,student had already fixed infinite loop; but helped point out another bug in his loop for hw4 part 7
-203,10/5/17 12:28,Lab,My lab keeps giving me a syntax error that says my index is out of range; ,6 - 15 minutes,ugli fruit,10/5/17 13:21,13:21:35,student was using <= len(list) instead of just <
+203,10/5/17 12:28,HW & lab,My lab keeps giving me a syntax error that says my index is out of range; ,6 - 15 minutes,ugli fruit,10/5/17 13:21,13:21:35,student was using <= len(list) instead of just <
 252,10/5/17 12:30,HW/Project,I till cannot figure out #7,> 60 minutes,squash,10/5/17 14:15,14:15:07,Explained concepts of iterating over list and boolean flags
 252,10/5/17 12:31,Lab,how do you print the values of the list in an index,> 60 minutes,ugli fruit,10/5/17 13:45,13:45:11,helped student make progress with lab 4
 426,10/5/17 12:33,HW/Project,"I  m trying to print error"" when a string is entered twice in a string;  """,31 - 60 minutes,squash,10/5/17 14:16,14:16:13,student left
@@ -520,7 +520,7 @@ Also; how should I use in-line comments? Sometimes; it feels like my comments ar
 361,10/5/17 13:25,HW/Project,iterate through a string,> 60 minutes,squash,10/5/17 14:47,14:47:52,Told them how to get the last character in a string
 340,10/5/17 13:38,HW/Project,I  m getting an error message after my program successfully runs,6 - 15 minutes,squash,10/5/17 14:49,14:49:41,student left
 229,10/5/17 13:39,HW/Project,Getting an error on part4 of HW4,> 60 minutes,squash,10/5/17 14:49,14:49:56,student left
-397,10/5/17 13:42,HW/Project,Not sure why points were deducted from HW2 part 5;,16 - 30 minutes,squash,10/5/17 14:17,14:17:35,student left
+397,10/5/17 13:42,HW 2 Question about Grade,Not sure why points were deducted from HW2 part 5;,16 - 30 minutes,squash,10/5/17 14:17,14:17:35,student left
 130,10/5/17 13:46,HW/Project,Hw4 part4; i need help figuring out how to make it print the highest grade and the no part doesn  t get executed in the program and it accepts scores higher than 100,> 60 minutes,squash,10/5/17 14:51,14:51:56,Student did not make comparisons with the grades
 555,10/5/17 14:00,HW/Project,Trouble with getting highest grade; max value,6 - 15 minutes,vanilla,10/5/17 14:53,14:53:28,working out max/min logic
 171,10/5/17 14:20,HW/Project,My program doesn  t work,> 60 minutes,squash,10/5/17 14:56,14:56:32,Suggested using a variable to keep track of maximum
@@ -568,7 +568,7 @@ Also; how should I use in-line comments? Sometimes; it feels like my comments ar
 397,10/6/17 10:01,HW/Project,My program is not removing/recognizing the zeros at the end and beginning of numbers inputted by the user (hw5_part5;py),< 5 minutes,mango,10/6/17 10:07,10:07:13,int vs string checking that the end character was an int 0 not str 0
 173,10/6/17 10:02,HW/Project,HW4_Part7;py I need help to understand how to remove repeated items within a list,16 - 30 minutes,mango,10/6/17 10:09,10:09:51,Help with understanding duplicates part7
 188,10/6/17 10:06,HW/Project,For part 7; my program recognizes duplicates; However; utilizing the ;remove() completely messes up the order of my list; How can I use ;append() to skip over items?,> 60 minutes,berry,10/6/17 10:11,10:11:12,Helped with part 7 and how to use boolean flags and remmoveing before appending
-224,10/6/17 10:07,Other,While looping and appending not functioning ,31 - 60 minutes,mango,10/6/17 10:16,10:16:07,Help with boolean flags
+224,10/6/17 10:07,Part 7,While looping and appending not functioning ,31 - 60 minutes,mango,10/6/17 10:16,10:16:07,Help with boolean flags
 361,10/6/17 10:09,HW/Project,cant print last part of program without getting stuck in a while loop,> 60 minutes,berry,10/6/17 10:27,10:27:05,Needed help with part 7 and the loop not stopping - suggested boolean flag ans showd livecode
 397,10/6/17 10:13,HW/Project,I am not sure how to get the outline of the box vertically for hw4_part2;py;,16 - 30 minutes,mango,10/6/17 10:28,10:28:29,Help with printing the fill of the box
 555,10/6/17 10:17,HW/Project,Grocery list; help with logic of loops and if statments,6 - 15 minutes,berry,10/6/17 10:39,10:39:08,Needed help with boolean flags and while loop condition being a llist element
@@ -606,7 +606,7 @@ Also; how should I use in-line comments? Sometimes; it feels like my comments ar
 187,10/6/17 13:18,Lab,Check lab04  and lab05 for credit,16 - 30 minutes,nectarine,10/6/17 13:57,13:57:13,lab 5 did not work lab 5 did
 246,10/6/17 13:21,HW/Project,Part 2 - closer but sideways,6 - 15 minutes,eggplant,10/6/17 13:59,13:59:23,Program would infinite loop for part 2; I gave her a direction for that; She asked for help on part 4 with input validation
 396,10/6/17 13:22,HW/Project,part 5 of the homework not sure how to check if the pin starts/ends with 0 or how to check if the pin is a repeated number ,> 60 minutes,horseradish,10/6/17 14:28,14:28:10,student left
-552,10/6/17 13:22,Other,Program isn  t counting correctly for Lists,16 - 30 minutes,eggplant,10/6/17 14:15,14:15:01,Wanted to know how to print out individual content of list and ideas on how to catch QUIT for part 7
+552,10/6/17 13:22,GL/emacs/PuTTY issue,Program isn  t counting correctly for Lists,16 - 30 minutes,eggplant,10/6/17 14:15,14:15:01,Wanted to know how to print out individual content of list and ideas on how to catch QUIT for part 7
 504,10/6/17 13:24,HW/Project,Syntax errors,16 - 30 minutes,eggplant,10/6/17 14:19,14:19:45,eggplant fill this out
 130,10/6/17 13:26,HW/Project,hw4 part 4; I need help figuring out how to make it check the condition when extra credit is allowed; it  s skipping it and goes to the other conditions instead; also how to end a while loop without infinite looping? ,> 60 minutes,horseradish,10/6/17 14:28,14:28:28,loop logic was wrong
 397,10/6/17 13:32,HW/Project,Unsure why repeated values won  t leave my list; also first entry repeats twice in final print;,31 - 60 minutes,nectarine,10/6/17 14:38,14:38:33,student left
@@ -631,8 +631,8 @@ Also; how should I use in-line comments? Sometimes; it feels like my comments ar
 463,10/6/17 14:54,HW/Project,CS 201- (hw4_part2) [printing box with inside diffferent than outside]: I  m struggling trying to figure out how to structure the while loops to make the width print like it should;,6 - 15 minutes,mango,10/6/17 15:56,15:56:43,Help with printing the box
 414,10/6/17 15:04,HW/Project,Not sure how to print a list of hours along with corresponding tasks,31 - 60 minutes,quince,10/6/17 16:01,16:01:38,student left
 130,10/6/17 15:09,HW/Project,hw4 pt4; I am having trouble figuring out how to get to the sequence in the loop; it doesn  t go through the whole loop and accepts the wrong values,> 60 minutes,quince,10/6/17 16:02,16:02:14,input order
-575,10/6/17 15:12,Other,How to run code on Linux,6 - 15 minutes,berry,10/6/17 16:06,16:06:58,disk quota issue
-224,10/6/17 15:19,Other,Items already on the list keeps appending,> 60 minutes,mango,10/6/17 16:08,16:08:11,Help with setting bool flag
+575,10/6/17 15:12,GL/emacs/PuTTY issue,How to run code on Linux,6 - 15 minutes,berry,10/6/17 16:06,16:06:58,disk quota issue
+224,10/6/17 15:19,Part 7,Items already on the list keeps appending,> 60 minutes,mango,10/6/17 16:08,16:08:11,Help with setting bool flag
 355,10/6/17 15:20,HW/Project,printing a box and different characters to fill the box,6 - 15 minutes,quince,10/6/17 16:09,16:09:05,order of input & indexing
 429,10/6/17 15:24,HW/Project,My program isn  t printing out error messages as I think it should,16 - 30 minutes,mango,10/6/17 16:12,16:12:06,Help with logic
 564,10/6/17 15:25,HW/Project,How to check for duplicates ,31 - 60 minutes,cacao,10/6/17 16:14,16:14:40,Used boolean flag to check for duplicates
@@ -669,7 +669,7 @@ Also; how should I use in-line comments? Sometimes; it feels like my comments ar
 112,10/9/17 14:37,HW/Project,hw5 part2 slicing,16 - 30 minutes,coconut,10/9/17 14:51,14:51:43,Wasn  t sure how to move down string with window
 361,10/9/17 14:57,HW/Project,End of list is not printing out desired answer,31 - 60 minutes,mango,10/9/17 15:00,15:00:28,Indexing at the wrong counter
 112,10/9/17 15:15,HW/Project,hw part5 how to combine functions,6 - 15 minutes,mango,10/9/17 15:16,15:16:12,Question about arguments and parameters
-340,10/9/17 15:15,Other,How do i delete a program?,< 5 minutes,mango,10/9/17 15:21,15:21:08,rm command
+340,10/9/17 15:15,GL/emacs/PuTTY issue,How do i delete a program?,< 5 minutes,mango,10/9/17 15:21,15:21:08,rm command
 536,10/9/17 15:20,HW/Project,hw5_part3;py : how to use same variable in two functions,31 - 60 minutes,mango,10/9/17 15:22,15:22:35,function def needs to match the function call
 361,10/9/17 15:24,HW/Project,Im stuck on how to implement a homework solution thought,31 - 60 minutes,mango,10/9/17 15:30,15:30:03,whoops; no note 
 340,10/9/17 15:28,Concept,How do I use upper and lower for strings?,6 - 15 minutes,mango,10/9/17 15:31,15:31:25,Help with upper lower and indexing a string
@@ -1096,10 +1096,10 @@ also i have some uestions about functions in general ",< 5 minutes,berry,10/13/1
 338,10/19/17 13:58,HW/Project,Do I have to write exception value in header function?,16 - 30 minutes,vanilla,10/19/17 14:09,14:09:01,Clarifying project design
 575,10/19/17 14:00,Lab,I don  t know why my secret message is printing out empty,6 - 15 minutes,squash,10/19/17 14:13,14:13:11,Helped them understand how to access list --> words --> individual chars
 429,10/19/17 14:02,HW/Project,What is required for the pseudocode for main,6 - 15 minutes,squash,10/19/17 14:20,14:20:14,Clarified a few questions about project desigs
-511,10/19/17 14:10,Other,I am just looking for some answers to the review sheet on questions I am unsure about;,< 5 minutes,vanilla,10/19/17 14:23,14:23:42,Clarifying answer on review guide
+511,10/19/17 14:10,review sheet,I am just looking for some answers to the review sheet on questions I am unsure about;,< 5 minutes,vanilla,10/19/17 14:23,14:23:42,Clarifying answer on review guide
 362,10/19/17 14:14,HW/Project,review exam ; computing outputs,< 5 minutes,squash,10/19/17 14:24,14:24:59,Reviewed midterm answers
 218,10/19/17 14:15,Lab,Having trouble with 2-D Listing with each message for the list;,16 - 30 minutes,vanilla,10/19/17 14:26,14:26:17,Code inside while loops was slightly incorrect
-511,10/19/17 14:30,Other,I  m confused about the wording of problem 5 on the review sheet,< 5 minutes,squash,10/19/17 14:31,14:31:40,Helped with review packet
+511,10/19/17 14:30,Review sheet,I  m confused about the wording of problem 5 on the review sheet,< 5 minutes,squash,10/19/17 14:31,14:31:40,Helped with review packet
 361,10/19/17 14:32,HW/Project,Confused on search function on proj1,> 60 minutes,tomatillo ,10/19/17 14:33,14:33:03,Trouble understanding the serach function TOld them to try PrintSongs first 
 575,10/19/17 14:34,HW/Project,My project disappeared??,< 5 minutes,squash,10/19/17 14:36,14:36:23,She was in the wrong directory LOL
 338,10/19/17 14:43,HW/Project,Do I have to write exceptional in the function definition?,6 - 15 minutes,tomatillo ,10/19/17 14:44,14:44:24,Question regarding the length of function description 
@@ -1366,7 +1366,7 @@ how to return more than one function",31 - 60 minutes,watermelon,10/23/17 9:59,9
 362,10/25/17 15:14,HW/Project,need help fixing my loop ,< 5 minutes,yam,10/25/17 16:00,16:00:26,Didn  t get how to use helper functions
 319,10/25/17 15:16,HW/Project,getValidInput not getting the valid input,< 5 minutes,horseradish,10/25/17 15:58,15:58:58,Fixed his own problem;
 235,10/25/17 15:43,HW/Project,Having trouble figuring out how to use return value from search function in playlist function,> 60 minutes,olive,10/25/17 16:05,16:05:10,help with using search in create playlist
-460,10/25/17 15:45,Other,It keeps saying my disk quota exceeded and  can  t save;,> 60 minutes,olive,10/25/17 16:15,16:15:45,stepped through oitcleaner to fix disk quota problem
+460,10/25/17 15:45,GL/emacs/PuTTY issue,It keeps saying my disk quota exceeded and  can  t save;,> 60 minutes,olive,10/25/17 16:15,16:15:45,stepped through oitcleaner to fix disk quota problem
 319,10/25/17 15:48,HW/Project,getValidInput not getting the valid input,16 - 30 minutes,horseradish,10/25/17 15:58,15:58:05,requested again
 263,10/25/17 16:04,HW/Project,I don  t understand how to set up the search function,> 60 minutes,yam,10/25/17 16:12,16:12:11,Planning search method
 362,10/25/17 16:09,HW/Project,fixing get vadid input function,< 5 minutes,yam,10/25/17 16:18,16:18:51,hardcoded getValidInput
@@ -1559,7 +1559,7 @@ how to return more than one function",31 - 60 minutes,watermelon,10/23/17 9:59,9
 140,10/27/17 14:21,HW/Project,One of the prompts printing twice before it moves on,> 60 minutes,olive,10/27/17 14:37,14:37:38,prompt in display accidentally
 218,10/27/17 14:22,HW/Project,Need help using search() function to my createPlaylist() function and returning based on the length;,31 - 60 minutes,olive,10/27/17 14:40,14:40:23,passing choice into create item list
 219,10/27/17 14:26,HW/Project,my getValidInput function sometimes prints the valid input but fails to return the value to be called later;  ,> 60 minutes,grape,10/27/17 14:40,14:40:24,taking input in coltostring
-414,10/27/17 14:31,Other,I can not get my program to return the song list,16 - 30 minutes,grape,10/27/17 14:46,14:46:19,not casting value in search 
+414,10/27/17 14:31,0,I can not get my program to return the song list,16 - 30 minutes,grape,10/27/17 14:46,14:46:19,not casting value in search 
 350,10/27/17 14:34,HW/Project,songToString function,6 - 15 minutes,olive,10/27/17 14:47,14:47:38,songToString
 510,10/27/17 14:47,HW/Project,Need help with duration; tempo and year options in search function,> 60 minutes,grape,10/27/17 14:53,14:53:30,duration and tempo >= not ==
 564,10/27/17 14:48,HW/Project,I have an error where it was working earlier,6 - 15 minutes,olive,10/27/17 14:59,14:59:05,debugging
@@ -1611,7 +1611,7 @@ how to return more than one function",31 - 60 minutes,watermelon,10/23/17 9:59,9
 426,10/30/17 13:17,HW/Project,In proj2 Conway  s Game of Life is there suppose to be a maximum iteration?,16 - 30 minutes,berry,10/30/17 13:22,13:22:00,Wanted to know about   out of bound   cells
 503,10/30/17 13:48,HW/Project,how to write the correct codes if I want to make a deep copy of a list from another little functions ,> 60 minutes,berry,10/30/17 13:49,13:49:54,shallow copy issue
 112,10/30/17 13:57,HW/Project,confused with how the game works; would like clarification,31 - 60 minutes,berry,10/30/17 13:58,13:58:14,multiple clearification questions
-274,10/30/17 14:09,Other,I want to know why I lost points;,6 - 15 minutes,coconut,10/30/17 14:09,14:09:58,didnt know function headers were different from file headers
+274,10/30/17 14:09,Grading questions,I want to know why I lost points;,6 - 15 minutes,coconut,10/30/17 14:09,14:09:58,didnt know function headers were different from file headers
 361,10/30/17 15:09,HW/Project,getting valid user input in proj2/ confused on whole project,31 - 60 minutes,mango,10/30/17 15:09,15:09:28,design questions
 500,10/30/17 15:14,HW/Project,Mine function determining life seems overly long; is there a better way to write it,16 - 30 minutes,mango,10/30/17 15:20,15:20:12,design questions
 361,10/30/17 15:24,HW/Project,getting valid user input ,31 - 60 minutes,mango,10/30/17 15:24,15:24:20,get valid int casting problems
@@ -1846,7 +1846,7 @@ Question2: About the getValidInput() function",> 60 minutes,berry,11/6/17 13:11,
 112,11/7/17 16:40,HW/Project,dead cells are all dying; rules check must have error,16 - 30 minutes,ugli fruit,11/7/17 16:50,16:50:03,Some problem in algorithm for checking whether neighbors are alive or dead but couldn  t find it; advised to add more debugging statements
 478,11/7/17 16:44,HW/Project,Iteration,16 - 30 minutes,pepper,11/7/17 16:58,16:58:33,Needed a deep copy instead of updating board as they went along
 114,11/7/17 16:46,HW/Project,I  m having a problem with getting the correct first iteration; It is printing correctly but not following the rules; it almost looks like it is adding live cells randomly; ,6 - 15 minutes,ugli fruit,11/7/17 17:07,17:07:25,Probably an issue with if statements determining whether cell should be alive or dead
-319,11/7/17 16:54,Other,indentation error,< 5 minutes,ugli fruit,11/7/17 17:16,17:16:22,Had already fixed his indentation error; also had a question about algorithm for checking alive/dead cells
+319,11/7/17 16:54,GL/emacs/PuTTY issue,indentation error,< 5 minutes,ugli fruit,11/7/17 17:16,17:16:22,Had already fixed his indentation error; also had a question about algorithm for checking alive/dead cells
 117,11/7/17 17:10,HW/Project,type casting ; mutable function ,31 - 60 minutes,ugli fruit,11/7/17 17:24,17:24:50,Question about whether getValidInt() could be changed to handle different num of arguments; just advised not to use getValidInt() for every situation
 130,11/7/17 17:22,HW/Project,how do i handle and fix the error and crash where it goes inside the loop and crashes since it  s a string and its been cast to a int,> 60 minutes,ugli fruit,11/7/17 17:31,17:31:43,Had to change order of checking input for quit before int()ing it
 292,11/7/17 17:31,HW/Project,I think I need help debugging;  My program prints the starting bpard correctly for some combinations of numbers but not all;,> 60 minutes,ugli fruit,11/7/17 17:41,17:41:28,Had rows and columns reversed
@@ -1987,7 +1987,7 @@ Question2: About the getValidInput() function",> 60 minutes,berry,11/6/17 13:11,
 196,11/9/17 16:45,HW/Project,My program is not running statements that would check to the left or above cells in the current project; ,> 60 minutes,kale,11/9/17 17:39,17:39:22,student left
 385,11/9/17 16:53,HW/Project,I get stuck at aksing user how many times to do iterations,31 - 60 minutes,kale,11/9/17 17:39,17:39:52,sentinel loop; counting neighbors
 171,11/9/17 16:56,HW/Project,I am getting an error saying my list index is out of range,> 60 minutes,jicama,11/9/17 17:49,17:49:55,student left
-362,11/9/17 16:57,Other,while loop and interest computing,6 - 15 minutes,jicama,11/9/17 17:50,17:50:29,student left
+362,11/9/17 16:57,while loop and intrests,while loop and interest computing,6 - 15 minutes,jicama,11/9/17 17:50,17:50:29,student left
 401,11/9/17 16:59,HW/Project,My code is not looping properly,> 60 minutes,jicama,11/9/17 17:50,17:50:15,student left
 130,11/9/17 17:20,HW/Project,"Proj2; how do i fix a string and int mismatch problem for changing the value to an A""""",> 60 minutes,jicama,11/9/17 17:50,17:50:38,debug statements
 478,11/9/17 17:24,HW/Project,body of the board,16 - 30 minutes,kale,11/9/17 17:55,17:55:42,direction cases
@@ -2479,7 +2479,7 @@ Question2: About the getValidInput() function",> 60 minutes,berry,11/6/17 13:11,
 283,11/29/17 16:29,HW/Project,How do I append a row i +1 for example to the berryh list?,< 5 minutes,olive,11/29/17 16:33,16:33:10,question about base case
 361,11/29/17 16:32,HW/Project,stuck on the concept of the base case/ recursion cases,> 60 minutes,yam,11/29/17 16:37,16:37:04,structure of recursive function
 283,11/29/17 16:55,HW/Project,TypeError: 'int' object is not subscriptable?,< 5 minutes,yam,11/29/17 16:55,16:55:37,3D list indexing syntax
-244,11/29/17 17:13,Other,2d list ,< 5 minutes,radish,11/29/17 17:13,17:13:36,Help with list
+244,11/29/17 17:13,general help,2d list ,< 5 minutes,radish,11/29/17 17:13,17:13:36,Help with list
 115,11/29/17 17:21,HW/Project,What if I'm just lonely?,16 - 30 minutes,yam,11/29/17 17:22,17:22:00,Approach to non-recursive pascal's homework
 283,11/29/17 17:23,HW/Project,I can not figure out why my indices are out of range;,6 - 15 minutes,radish,11/29/17 17:24,17:24:29,Maze solver running out of bounds
 283,11/29/17 17:41,HW/Project, IndexError: list index out of range?,6 - 15 minutes,yam,11/29/17 17:43,17:43:22,nevermind

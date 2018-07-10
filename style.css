@@ -168,8 +168,7 @@ body {
 
 p,
 h6,
-input,
-.radio-distance {
+form {
   margin: 1px 10px 1px 10px;
 }
 
@@ -248,4 +247,16 @@ th {
   padding: 3px;
   border: 1px solid #ccc;
   text-align: left;
+}
+
+input[type=radio]{
+  position: absolute;
+  /*visibility: hidden;*/
+}
+
+label{
+  position: relative;
+  margin-left: 25px;
+  cursor: pointer;
+  -webkit-transition: all 0.25s linear;
 }

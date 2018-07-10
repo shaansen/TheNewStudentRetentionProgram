@@ -6,7 +6,6 @@ var csvFromOH1;
 var csvFromGrades;
 var dataSecondary;
 var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
 var months = [
 	"Jan",
 	"Feb",
@@ -21,7 +20,6 @@ var months = [
 	"Nov",
 	"Dec"
 ];
-
 var svg = d3.select(".viz-body").select("svg"),
 	margin = { top: 30, right: 80, bottom: 30, left: 50 },
 	width = svg.attr("width") - margin.left - margin.right,
@@ -36,11 +34,9 @@ var parseTime = d3.timeParse("%Y%m%d");
 var x = d3.scaleTime().range([0, width]),
 	y = d3.scaleLinear().range([height, 0]),
 	z = d3.scaleOrdinal(d3.schemeCategory10);
-
 var x_filter = d3.scaleTime().range([0, width]),
 	y_filter = d3.scaleLinear().range([height, 0]),
 	z_filter = d3.scaleOrdinal(d3.schemeCategory10);
-
 var studentline = d3
 	.line()
 	.x(function(d) {
@@ -49,15 +45,6 @@ var studentline = d3
 	.y(function(d) {
 		return y(d.scores);
 	});
-// .curve(d3.curveBasis)
-
-// var filterLimits = {
-// 	x0: new Date("December 17, 1995 03:24:00"),
-// 	x1: new Date("December 17, 2995 03:24:00"),
-// 	y0: 0,
-// 	y1: 300
-// };
-
 var circles = [];
 var maxRadius;
 var tipBox;
@@ -74,24 +61,10 @@ var TAdata;
 var overallOHdata = {};
 var eventsByDate = {};
 var bisectDate = d3.bisector(d => d).left;
-// -----------------------------------------------------------------------------------------
-//
-// Code to read Calendar and Map dates to events
-//
-// -----------------------------------------------------------------------------------------
-
-// Calendar data contains the values of all the
-// dates mapped to their events and the aggregate total score of the events till then
 var calendarData = {};
-
-// dateList contains the sequence of dates of events in an array
 var dateList = [];
 var longDateToShortDate = {};
-
-// cTotal contains the accumulative total for all the events that have occured till that date
 var cTotal = 0;
-
-// this is the list of columns that need to be displayed in the visualization
 var columns = ["date"];
 var irregDatesToRegDates = [];
 var quartilePreData;
@@ -154,7 +127,9 @@ function mainFunction(studentList) {
 
 	// K-MEANS CLUSTERING
 	studentClusters = kmeans(students, clusters, maxiterations);
-
+	studentClusters.sort(function(a, b) {
+		return b[b.length - 1]["scores"] - a[a.length - 1]["scores"];
+	});
 	// HIERARCHICAL CLUSTERING
 	// labelsOnBasisOfPerformance = hierarch(students, DTWDistance, clusters);
 	// studentClusters = getCentroids(
@@ -186,11 +161,10 @@ function mainFunction(studentList) {
 		getFilterData(labelsOnBasisOfPerformance, data, students, getLineData);
 		initializePanel();
 	}
-	// });
 }
 
 function initializePanel() {
-	d3.selectAll(".tickers").text("Ticks ON");
+	d3.selectAll(".tickers").text("Event Pillars ON");
 	d3.selectAll(".corrers").text("Correlation ON");
 	d3.selectAll(".disters").text("Distribution ON");
 	enableNavFilters();
@@ -198,257 +172,13 @@ function initializePanel() {
 
 function toggleTick() {
 	if (!tickOn) {
-		d3.selectAll(".tickText").text("Ticks ON");
+		d3.selectAll(".tickText").text("Event Pillars ON");
 		enableTicks();
 	} else {
-		d3.selectAll(".tickText").text("Ticks OFF");
+		d3.selectAll(".tickText").text("Event Pillars OFF");
 		disableTicks();
 	}
 	tickOn = !tickOn;
-}
-
-function toggleNumbers() {
-	if (!numbersOn) {
-		d3.selectAll(".numbersText").text("Highlight Numbers ON");
-		enableNumbers();
-	} else {
-		d3.selectAll(".numbersText").text("Highlight Numbers OFF");
-		disableNumbers();
-	}
-	numbersOn = !numbersOn;
-}
-
-function disableNumbers() {
-	d3.select(".viz-body")
-		.selectAll(".line")
-		.style("stroke-width", function(d1, i1) {
-			return lineWidthOriginal;
-		})
-		.style("stroke-opacity", function(d1, i1) {
-			return "1";
-		});
-
-	d3.select(".filter-body")
-		.selectAll(".officeHourline")
-		.style("stroke-width", function(d1, i1) {
-			return lineWidthOriginal;
-		})
-		.style("stroke-opacity", "1");
-
-	d3.select(".filter-body")
-		.selectAll(".officeHourlineMin")
-		.style("stroke-width", function(d1, i1) {
-			return "0.5px";
-		})
-		.style("stroke-opacity", "1");
-
-	d3.select(".filter-body")
-		.selectAll(".officeHourlineMax")
-		.style("stroke-width", function(d1, i1) {
-			return "0.5px";
-		})
-		.style("stroke-opacity", "1");
-
-	d3.select(".filter-body")
-		.select(".overlayOHSVG")
-		.selectAll("rect")
-		.remove();
-
-	d3.select(".viz-body")
-		.select(".overlayGradeSVG")
-		.selectAll("rect")
-		.remove();
-}
-
-function enableNumbers() {
-	d3.select(".viz-body")
-		.selectAll(".line")
-		.style("stroke-width", function(d1, i1) {
-			if (currentIndex != i1) {
-				return lineWidthOriginal;
-			} else {
-				return lineWidthOnHover;
-			}
-		})
-		.style("stroke-opacity", function(d1, i1) {
-			if (currentIndex != i1) {
-				return "0.05";
-			}
-		});
-
-	d3.select(".filter-body")
-		.selectAll(".officeHourline")
-		.style("stroke-width", function(d1, i1) {
-			if (currentIndex != i1) {
-				return lineWidthOriginal;
-			} else {
-				return lineWidthOnHover;
-			}
-		})
-		.style("stroke-opacity", function(d1, i1) {
-			if (currentIndex != i1) {
-				return "0.05";
-			}
-		});
-
-	d3.select(".filter-body")
-		.selectAll(".officeHourlineMin")
-		.style("stroke-width", function(d1, i1) {
-			if (currentIndex != i1) {
-				return "0.5px";
-			} else {
-				return "4px";
-			}
-			mouseOver;
-		})
-		.style("stroke-opacity", function(d1, i1) {
-			if (currentIndex != i1) {
-				return "0.05";
-			}
-		});
-
-	d3.select(".filter-body")
-		.selectAll(".officeHourlineMax")
-		.style("stroke-width", function(d1, i1) {
-			if (currentIndex != i1) {
-				return "0.5px";
-			} else {
-				return "4px";
-			}
-		})
-		.style("stroke-opacity", function(d1, i1) {
-			if (currentIndex != i1) {
-				return "0.05";
-			}
-		});
-
-	var g = d3.select(".filter-body").select(".overlayOHSVG");
-
-	var focusAvg = g
-		.append("g")
-		.attr("class", "focusAvg")
-		.style("display", "none");
-	focusAvg.append("circle").attr("r", 4.5);
-	focusAvg
-		.append("rect")
-		.attr("y", -height)
-		.attr("width", 1)
-		.attr("height", height);
-	focusAvg
-		.append("rect")
-		.attr("width", 120)
-		.attr("height", 20)
-		.attr("x", "-25px")
-		.attr("y", "-35px")
-		.attr("fill-opacity", "0.7");
-
-	var focusMin = g
-		.append("g")
-		.attr("class", "focusMin")
-		.style("display", "none");
-
-	focusMin.append("circle").attr("r", 4.5);
-	focusMin
-		.append("rect")
-		.attr("width", 120)
-		.attr("height", 20)
-		.attr("x", "-25px")
-		.attr("y", "-35px")
-		.attr("fill-opacity", "0.7");
-
-	var focusMax = g
-		.append("g")
-		.attr("class", "focusMax")
-		.style("display", "none");
-
-	focusMax.append("circle").attr("r", 4.5);
-	focusMax
-		.append("rect")
-		.attr("width", 120)
-		.attr("height", 20)
-		.attr("x", "-25px")
-		.attr("y", "-35px")
-		.attr("fill-opacity", "0.7");
-
-	focusAvg
-		.append("text")
-		.attr("x", 5)
-		.attr("dy", "-20px")
-		.attr("fill", "white");
-	focusMin
-		.append("text")
-		.attr("x", 5)
-		.attr("dy", "-20px")
-		.attr("fill", "white");
-	focusMax
-		.append("text")
-		.attr("x", 5)
-		.attr("dy", "-20px")
-		.attr("fill", "white");
-
-	g.append("rect")
-		.attr("class", "overlay")
-		.attr("width", width)
-		.attr("height", height)
-		.style("fill-opacity", "0")
-		.on("mouseover", function() {
-			focusAvg.style("display", null);
-			focusMin.style("display", null);
-			focusMax.style("display", null);
-			focusGrades.style("display", null);
-		})
-		.on("mouseout", function() {
-			focusAvg.style("display", "none");
-			focusMin.style("display", "none");
-			focusMax.style("display", "none");
-			focusGrades.style("display", "none");
-		})
-		.on("mousemove", makeUsefulTooltip);
-
-	var g = d3.select(".viz-body").select(".overlayGradeSVG");
-
-	var focusGrades = g
-		.append("g")
-		.attr("class", "focusGrades")
-		.style("display", "none");
-	focusGrades.append("circle").attr("r", 4.5);
-
-	focusGrades
-		.append("rect")
-		.attr("width", 1)
-		.attr("height", height);
-	focusGrades
-		.append("rect")
-		.attr("width", 120)
-		.attr("height", 20)
-		.attr("x", "-25px")
-		.attr("y", "7px")
-		.attr("fill-opacity", "0.7");
-
-	focusGrades
-		.append("text")
-		.attr("x", "-20px")
-		.attr("dy", "20px")
-		.attr("fill", "white");
-
-	g.append("rect")
-		.attr("class", "overlay")
-		.attr("width", width)
-		.attr("height", height)
-		.style("fill-opacity", "0")
-		.on("mouseover", function() {
-			focusAvg.style("display", null);
-			focusMin.style("display", null);
-			focusMax.style("display", null);
-			focusGrades.style("display", null);
-		})
-		.on("mouseout", function() {
-			focusAvg.style("display", "none");
-			focusMin.style("display", "none");
-			focusMax.style("display", "none");
-			focusGrades.style("display", "none");
-		})
-		.on("mousemove", makeUsefulTooltip);
 }
 
 function disableTicks() {
@@ -465,9 +195,12 @@ function enableTicks() {
 				"translate(" + margin.left + "," + margin.top + ")"
 			);
 
-	console.log("BEFORE",dateList)
-	dateList = _.filter(dateList, function(d) { return !(_.startsWith(calendarData[d]["description"], 'LAB') || _.startsWith(calendarData[d]["description"], 'SUR')) });
-	console.log("AFTER",dateList)
+	dateList = _.filter(dateList, function(d) {
+		return !(
+			_.startsWith(calendarData[d]["description"], "LAB") ||
+			_.startsWith(calendarData[d]["description"], "SUR")
+		);
+	});
 	var pillars = g
 		.selectAll(".pillars")
 		.data(dateList)
@@ -504,35 +237,6 @@ function enableTicks() {
 
 	pillars.exit().remove();
 	text.exit().remove();
-}
-
-function toggleDist() {
-	if (!distOn) {
-		d3.selectAll(".distText").text("Distribution ON");
-		// enableDistribution();
-	} else {
-		d3.selectAll(".distText").text("Distribution OFF");
-		disableDistribution();
-	}
-	distOn = !distOn;
-	getFilterData;
-}
-
-function disableDistribution() {
-	d3.selectAll(".serie").remove();
-	d3.selectAll(".enter").remove();
-}
-
-function toggleCorr() {
-	if (!corrOn) {
-		d3.selectAll(".corrText").text("Correlation ON");
-		// enableCorrelation();
-	} else {
-		d3.selectAll(".corrText").text("Correlation OFF");
-		disableCorrelation();
-	}
-	corrOn = !corrOn;
-	getFilterData;
 }
 
 function enableNavFilters() {
@@ -681,11 +385,6 @@ function enableCorrelation() {
 	// .style("fill",  function(d) {return z(d[0]); })*/
 }
 
-function disableCorrelation() {
-	d3.selectAll(".officeHourDots").remove();
-	d3.selectAll(".officecircles").remove();
-}
-
 function mouseOutLine() {
 	d3.select(".viz-body")
 		.selectAll(".line")
@@ -765,7 +464,7 @@ function mouseOverLine(d, i) {
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (i != i1) {
-				return "0.05";
+				return "0.30";
 			}
 		});
 
@@ -780,7 +479,7 @@ function mouseOverLine(d, i) {
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (i != i1) {
-				return "0.05";
+				return "0.30";
 			}
 		});
 
@@ -796,7 +495,7 @@ function mouseOverLine(d, i) {
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (i != i1) {
-				return "0.05";
+				return "0.30";
 			}
 		});
 
@@ -811,7 +510,7 @@ function mouseOverLine(d, i) {
 		})
 		.style("stroke-opacity", function(d1, i1) {
 			if (i != i1) {
-				return "0.05";
+				return "0.30";
 			}
 		});
 
@@ -2554,7 +2253,6 @@ function load_grade_dataset(csv) {
 		});
 		return object;
 	});
-	console.log(csvFromGrades)
 }
 
 function load_oh_dataset(csv) {
@@ -2614,15 +2312,15 @@ function renderVisualization() {
 
 		alert(missingText);
 	} else {
-		var form_val = getFilterCriteria();
+		var form_val = filterStudentByAttendanceType();
 		var studentList = getCommonUsers(form_val, csvFromGrades, csvFromOH1);
 		entireTimePeriod = getTheCompleteDateList();
 		mainFunction(studentList);
 	}
 }
 
-function getFilterCriteria() {
-	var form = document.getElementById("criteria");
+function filterStudentByAttendanceType() {
+	var form = document.getElementById("attendanceCriteria");
 	var form_val;
 	for (var i = 0; i < form.length; i++) {
 		if (form[i].checked) {
@@ -2634,6 +2332,53 @@ function getFilterCriteria() {
 	else if (form_val == "attended") return 2;
 	else if (form_val == "missed") return 3;
 	else return -1;
+}
+
+function handleViewChange() {
+	var form = document.getElementById("viewType");
+	var form_val;
+	for (var i = 0; i < form.length; i++) {
+		if (form[i].checked) {
+			form_val = form[i].id;
+		}
+	}
+
+	console.log("You selected", form_val);
+	if (form_val == "none") {
+		// disable everything
+		disableCorrelation()
+		disableDistribution()
+		disableNumbers()
+		numbersOn = false;
+		corrOn = false;
+		distOn = false;
+
+	} else if (form_val == "highlight") {
+		disableCorrelation()
+		disableDistribution()
+		disableNumbers()
+		corrOn = false;
+		distOn = false;
+		toggleNumbers()
+	} else if (form_val == "distribution") {
+		disableCorrelation()
+		disableNumbers()
+		numbersOn = false;
+		corrOn = false;
+		toggleDist()
+		// disable highlight and correlation
+	} else if (form_val == "correlation") {
+		disableDistribution()
+		disableNumbers()
+		numbersOn = false;
+		distOn = false;
+		toggleCorr()
+		// disable highlight and distribution
+	} else {
+
+		// give out error message
+		console.error("You wrongly chose",form_val)
+	}
 }
 
 function getCommonUsers(form_val, grades, oh) {
@@ -2707,3 +2452,281 @@ function getTheCompleteDateList() {
 var unique = (value, index, self) => {
 	return self.indexOf(value) === index;
 };
+
+function toggleNumbers() {
+	if (!numbersOn) {
+		d3.selectAll(".numbersText").text("Highlight Numbers ON");
+		enableNumbers();
+	} else {
+		d3.selectAll(".numbersText").text("Highlight Numbers OFF");
+		disableNumbers();
+	}
+	numbersOn = !numbersOn;
+}
+
+function disableNumbers() {
+	d3.select(".viz-body")
+		.selectAll(".line")
+		.style("stroke-width", function(d1, i1) {
+			return lineWidthOriginal;
+		})
+		.style("stroke-opacity", function(d1, i1) {
+			return "1";
+		});
+
+	d3.select(".filter-body")
+		.selectAll(".officeHourline")
+		.style("stroke-width", function(d1, i1) {
+			return lineWidthOriginal;
+		})
+		.style("stroke-opacity", "1");
+
+	d3.select(".filter-body")
+		.selectAll(".officeHourlineMin")
+		.style("stroke-width", function(d1, i1) {
+			return "0.5px";
+		})
+		.style("stroke-opacity", "1");
+
+	d3.select(".filter-body")
+		.selectAll(".officeHourlineMax")
+		.style("stroke-width", function(d1, i1) {
+			return "0.5px";
+		})
+		.style("stroke-opacity", "1");
+
+	d3.select(".filter-body")
+		.select(".overlayOHSVG")
+		.selectAll("rect")
+		.remove();
+
+	d3.select(".viz-body")
+		.select(".overlayGradeSVG")
+		.selectAll("rect")
+		.remove();
+}
+
+function enableNumbers() {
+	d3.select(".viz-body")
+		.selectAll(".line")
+		.style("stroke-width", function(d1, i1) {
+			if (currentIndex != i1) {
+				return lineWidthOriginal;
+			} else {
+				return lineWidthOnHover;
+			}
+		})
+		.style("stroke-opacity", function(d1, i1) {
+			if (currentIndex != i1) {
+				return "0.30";
+			}
+		});
+
+	d3.select(".filter-body")
+		.selectAll(".officeHourline")
+		.style("stroke-width", function(d1, i1) {
+			if (currentIndex != i1) {
+				return lineWidthOriginal;
+			} else {
+				return lineWidthOnHover;
+			}
+		})
+		.style("stroke-opacity", function(d1, i1) {
+			if (currentIndex != i1) {
+				return "0.30";
+			}
+		});
+
+	d3.select(".filter-body")
+		.selectAll(".officeHourlineMin")
+		.style("stroke-width", function(d1, i1) {
+			if (currentIndex != i1) {
+				return "0.5px";
+			} else {
+				return "4px";
+			}
+			mouseOver;
+		})
+		.style("stroke-opacity", function(d1, i1) {
+			if (currentIndex != i1) {
+				return "0.30";
+			}
+		});
+
+	d3.select(".filter-body")
+		.selectAll(".officeHourlineMax")
+		.style("stroke-width", function(d1, i1) {
+			if (currentIndex != i1) {
+				return "0.5px";
+			} else {
+				return "4px";
+			}
+		})
+		.style("stroke-opacity", function(d1, i1) {
+			if (currentIndex != i1) {
+				return "0.30";
+			}
+		});
+
+	var g = d3.select(".filter-body").select(".overlayOHSVG");
+
+	var focusAvg = g
+		.append("g")
+		.attr("class", "focusAvg")
+		.style("display", "none");
+	focusAvg.append("circle").attr("r", 4.5);
+	focusAvg
+		.append("rect")
+		.attr("y", -height)
+		.attr("width", 1)
+		.attr("height", height);
+	focusAvg
+		.append("rect")
+		.attr("width", 120)
+		.attr("height", 20)
+		.attr("x", "-25px")
+		.attr("y", "-35px")
+		.attr("fill-opacity", "0.7");
+
+	var focusMin = g
+		.append("g")
+		.attr("class", "focusMin")
+		.style("display", "none");
+
+	focusMin.append("circle").attr("r", 4.5);
+	focusMin
+		.append("rect")
+		.attr("width", 120)
+		.attr("height", 20)
+		.attr("x", "-25px")
+		.attr("y", "-35px")
+		.attr("fill-opacity", "0.7");
+
+	var focusMax = g
+		.append("g")
+		.attr("class", "focusMax")
+		.style("display", "none");
+
+	focusMax.append("circle").attr("r", 4.5);
+	focusMax
+		.append("rect")
+		.attr("width", 120)
+		.attr("height", 20)
+		.attr("x", "-25px")
+		.attr("y", "-35px")
+		.attr("fill-opacity", "0.7");
+
+	focusAvg
+		.append("text")
+		.attr("x", 5)
+		.attr("dy", "-20px")
+		.attr("fill", "white");
+	focusMin
+		.append("text")
+		.attr("x", 5)
+		.attr("dy", "-20px")
+		.attr("fill", "white");
+	focusMax
+		.append("text")
+		.attr("x", 5)
+		.attr("dy", "-20px")
+		.attr("fill", "white");
+
+	g.append("rect")
+		.attr("class", "overlay")
+		.attr("width", width)
+		.attr("height", height)
+		.style("fill-opacity", "0")
+		.on("mouseover", function() {
+			focusAvg.style("display", null);
+			focusMin.style("display", null);
+			focusMax.style("display", null);
+			focusGrades.style("display", null);
+		})
+		.on("mouseout", function() {
+			focusAvg.style("display", "none");
+			focusMin.style("display", "none");
+			focusMax.style("display", "none");
+			focusGrades.style("display", "none");
+		})
+		.on("mousemove", makeUsefulTooltip);
+
+	var g = d3.select(".viz-body").select(".overlayGradeSVG");
+
+	var focusGrades = g
+		.append("g")
+		.attr("class", "focusGrades")
+		.style("display", "none");
+	focusGrades.append("circle").attr("r", 4.5);
+
+	focusGrades
+		.append("rect")
+		.attr("width", 1)
+		.attr("height", height);
+	focusGrades
+		.append("rect")
+		.attr("width", 120)
+		.attr("height", 20)
+		.attr("x", "-25px")
+		.attr("y", "7px")
+		.attr("fill-opacity", "0.7");
+
+	focusGrades
+		.append("text")
+		.attr("x", "-20px")
+		.attr("dy", "20px")
+		.attr("fill", "white");
+
+	g.append("rect")
+		.attr("class", "overlay")
+		.attr("width", width)
+		.attr("height", height)
+		.style("fill-opacity", "0")
+		.on("mouseover", function() {
+			focusAvg.style("display", null);
+			focusMin.style("display", null);
+			focusMax.style("display", null);
+			focusGrades.style("display", null);
+		})
+		.on("mouseout", function() {
+			focusAvg.style("display", "none");
+			focusMin.style("display", "none");
+			focusMax.style("display", "none");
+			focusGrades.style("display", "none");
+		})
+		.on("mousemove", makeUsefulTooltip);
+}
+
+function toggleDist() {
+	if (!distOn) {
+		d3.selectAll(".distText").text("Distribution ON");
+		// enableDistribution();
+	} else {
+		d3.selectAll(".distText").text("Distribution OFF");
+		disableDistribution();
+	}
+	distOn = !distOn;
+	getFilterData;
+}
+
+function disableDistribution() {
+	d3.selectAll(".serie").remove();
+	d3.selectAll(".enter").remove();
+}
+
+function toggleCorr() {
+	if (!corrOn) {
+		d3.selectAll(".corrText").text("Correlation ON");
+		// enableCorrelation();
+	} else {
+		d3.selectAll(".corrText").text("Correlation OFF");
+		disableCorrelation();
+	}
+	corrOn = !corrOn;
+	getFilterData;
+}
+
+function disableCorrelation() {
+	d3.selectAll(".officeHourDots").remove();
+	d3.selectAll(".officecircles").remove();
+}

@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <head>
-  <!-- <link href='https://fonts.googleapis.com/css?family=Roboto Condensed' rel='stylesheet'> -->
   <link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet'>
-  <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
-  <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -37,10 +34,16 @@
           <div><input type="file" id="calendar_uploader"></div>
         </div>
 
-        <form id="criteria">
-          <input  type='radio' id="all" name="mode" checked>All</input>
-          <input type='radio' id="attended" name="mode">Attended</input>
-          <input type='radio' id="missed" name="mode">Missed</input>
+        <form id="attendanceCriteria">
+          View Students by
+          <br /><input  type='radio' id="all" name="mode" checked />
+          <label>All</label>
+          
+          <br /><input type='radio' id="attended" name="mode" />
+          <label>Attended</label>
+          
+          <br /><input type='radio' id="missed" name="mode" />
+          <label>Missed</label>
         </form>
 
         <button type="button"
@@ -56,15 +59,34 @@
 
     <div>
       <button class="accordion">Choose View</button>
+
       <div class="panel">
+        
         <button type="button"
         onclick="
         toggleTick()"
         class="tickText">
-        Ticks OFF
+        Event Pillars OFF
         </button>
 
-        <button type="button"
+        <form id="viewType" onchange="handleViewChange()">
+          Choose View Type
+        
+          <br /><input  type='radio' id="none" name="mode" checked />
+          <label>None</label>
+          
+          <br /><input  type='radio' id="highlight" name="mode"/>
+          <label>Highlight Numbers</label>
+          
+          <br /><input type='radio' id="correlation" name="mode" />
+          <label>Correlation</label>
+          
+          <br /><input type='radio' id="distribution" name="mode" />
+          <label>Distribution</label>
+
+        </form>
+
+        <!-- <button type="button"
         onclick="
         toggleNumbers()"
         class="numbersText">
@@ -81,7 +103,7 @@
         onclick="toggleCorr()"
         class="corrText">
         Correlation OFF
-        </button>
+        </button> -->
         
         
       </div>
