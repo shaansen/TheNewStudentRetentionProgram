@@ -127,9 +127,7 @@ function mainFunction(studentList) {
 
 	// K-MEANS CLUSTERING
 	studentClusters = kmeans(students, clusters, maxiterations);
-	studentClusters.sort(function(a, b) {
-		return b[b.length - 1]["scores"] - a[a.length - 1]["scores"];
-	});
+	
 	// HIERARCHICAL CLUSTERING
 	// labelsOnBasisOfPerformance = hierarch(students, DTWDistance, clusters);
 	// studentClusters = getCentroids(
@@ -1092,7 +1090,24 @@ function kmeans(dataset, clusters, maxIterations) {
 		// We can get the labels too by calling getLabels(dataset, centroids)
 	}
 
-	labelsOnBasisOfPerformance = labels;
+	var resultant = centroids.map(function(d,i) {
+		return {
+			values: d,
+			labels: labels[i]
+		}
+	})
+
+	resultant.sort(function(a,b) {
+		return b["values"][b["values"].length-1]["scores"]-a["values"][a["values"].length-1]["scores"];
+	})
+
+	centroids = resultant.map(function(d) {
+		return d["values"]
+	})
+
+	labelsOnBasisOfPerformance = resultant.map(function(d) {
+		return d["labels"]
+	})
 
 	return centroids;
 }
@@ -1981,6 +1996,8 @@ function clusterOfficeHourData(studentGroup, data) {
 }
 
 function getLineData(data, students, dataSecondary) {
+
+
 	x.domain(
 		d3.extent(data, function(d) {
 			return d.date;
