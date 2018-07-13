@@ -2124,10 +2124,11 @@ function getFilterData(
 			return y(d.max);
 		});
 
-	d3.request("data/fall2017/oh.csv")
+	d3.request("data/fall2017/oldfiles/oh3.csv")
 		.mimeType("text/csv")
 		.response(xhr => d3.csvParseRows(xhr.responseText, d => d))
 		.get(function(data) {
+
 			TAdata = data.splice(1).map(function(tad) {
 				return {
 					Username: tad[0],
@@ -2137,6 +2138,8 @@ function getFilterData(
 					Helped: tad[4]
 				};
 			});
+
+
 
 			TAdata.forEach(function(event) {
 				var oldArray = eventsByDate[event["Timestamp"]] || [];
@@ -2163,8 +2166,10 @@ function getFilterData(
 					};
 				});
 
+				console.log(fall2017_date_list)
 				TAdata.map(function(d, i) {
 					if (d["Username"] == object["id"]) {
+						console.log(d)
 						var index = fall2017_date_list.indexOf(d["Timestamp"]);
 						object["values"][index]["hours"] = d["Time Spent"];
 					}

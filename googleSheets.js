@@ -554,12 +554,11 @@ function clickOnLine(d, i) {
 	getTextValues(currentLabel, i);
 	fillUpTheOHArea(i);
 	if (distOn) getStackedBarData(currentLabel, filterCriteria);
-	if (corrOn) selectALineToViewOHData(i);
+	// if (corrOn) selectALineToViewOHData(i);
 }
 
 function selectALineToViewOHData(currentLabel) {
 	getIntegratedCircles(currentLabel);
-	// fillUpTheOHArea(currentLabel);
 }
 
 function fillUpTheOHArea(currentLabel) {
@@ -727,18 +726,12 @@ function clickOnCircle(d, i) {
 function mouseOverCircle(d, i) {
 	d3.select(this)
 		.attr("stroke-width", "3px")
-		.attr("fill", "black")
-		.attr("fill-opacity", "0.01")
-		.attr("stroke", "black");
-	mouseOverLine(null, currentIndex);
+	// mouseOverLine(null, currentIndex);
 }
 
 function mouseOutCircle(d, i) {
 	d3.select(this)
 		.attr("stroke-width", "1px")
-		.attr("fill", "black")
-		.attr("fill-opacity", "0.01")
-		.attr("stroke", "black");
 	mouseOutLine(null, currentIndex);
 }
 
@@ -855,7 +848,7 @@ function getEventsList(object, date, eventsList) {
 		});
 }
 
-function getIntegratedCircles(currentLabel) {
+function getIntegratedCircles() {
 	var svg = d3.select(".viz-body").select("svg"),
 		g = svg
 			.append("g")
@@ -908,9 +901,6 @@ function getIntegratedCircles(currentLabel) {
 
 	officeHourDots
 		.append("circle")
-		.filter(function(d, i) {
-			return d[0] == currentLabel;
-		})
 		.attr("class", "officecircles")
 		.attr("cx", function(d, i) {
 			return d[1];
@@ -919,11 +909,11 @@ function getIntegratedCircles(currentLabel) {
 			return d[2];
 		})
 		.attr("r", function(d) {
-			if (d[3] != 0) return (20 * d[3]) / maxRadius + 5;
+			if (d[3] != 0) return (15 * d[3]) / maxRadius + 3;
 			else return 0;
 		})
-		.attr("fill", "black")
-		.attr("fill-opacity", "0.01")
+		.attr("fill", function(d) {return z(d[0]); })
+		// .attr("fill-opacity", "0.01")
 		.attr("stroke", "black")
 		.on("mouseover", mouseOverCircle)
 		.on("mouseout", mouseOutCircle)
@@ -2734,7 +2724,7 @@ function disableDistribution() {
 function toggleCorr() {
 	if (!corrOn) {
 		d3.selectAll(".corrText").text("Correlation ON");
-		// enableCorrelation();
+		getIntegratedCircles()
 	} else {
 		d3.selectAll(".corrText").text("Correlation OFF");
 		disableCorrelation();

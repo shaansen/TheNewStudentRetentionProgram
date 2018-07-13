@@ -17,10 +17,6 @@ var x = d3.scaleTime().range([0, width]),
 	y = d3.scaleLinear().range([height, 0]),
 	z = d3.scaleOrdinal(d3.schemeCategory10);
 
-var yellow = d3.interpolateYlGn(), // "rgb(255, 255, 229)"
-	yellowGreen = d3.interpolateYlGn(0.5), // "rgb(120, 197, 120)"
-	green = d3.interpolateYlGn(1); // "rgb(0, 69, 41)"
-
 var cityline = d3
 	.line()
 	.x(function(d) {
@@ -140,7 +136,7 @@ function mainFunction() {
 		});
 
 		clusters = 4;
-		maxiterations = 1000;
+		maxiterations = Infinity;
 		numFeatures = cities[0]["values"].map(function(d) {
 			return d.date;
 		});
@@ -832,7 +828,7 @@ function getRandomCentroids(numFeatures, k) {
 			var x = {};
 
 			x["date"] = d;
-			x["temperature"] = 40;
+			x["temperature"] = Math.random()*40;
 			result[i].push(x);
 		});
 	}
@@ -1206,7 +1202,6 @@ function getStackedBarData(currentLabel, filterCriteria) {
 
 	var y = d3.scaleLinear().rangeRound([height, 0]);
 
-	var z = d3.interpolateRdYlBu();
 	var stack = d3.stack();
 	data = result;
 	var columns = Object.keys(result[0]);
