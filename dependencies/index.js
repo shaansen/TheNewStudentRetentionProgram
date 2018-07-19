@@ -160,7 +160,6 @@ function mainFunction(studentList) {
 	) {
 		getFilterData(labelsOnBasisOfPerformance, data, students, getLineData);
 		initializePanel();
-
 	}
 }
 
@@ -197,11 +196,9 @@ function enableTicks() {
 			);
 
 	calendarList = _.filter(csvFromCalendar, function(d) {
-		console.log(d.description, d.hide);
 		return !d["hide"];
 	});
 
-	console.log(calendarList);
 	var pillars = g
 		.selectAll(".pillars")
 		.data(calendarList)
@@ -282,37 +279,40 @@ function enableNavFilters() {
 function enableCorrelation() {}
 
 function mouseOutLine() {
-	d3.select(".viz-body")
-		.selectAll(".line")
-		.style("stroke-width", function(d1, i1) {
-			return lineWidthOriginal;
-		})
-		.style("stroke-opacity", function(d1, i1) {
-			return "1";
-		});
-	d3.select(".filter-body")
-		.selectAll(".officeHourline")
-		.style("stroke-width", function(d1, i1) {
-			return lineWidthOriginal;
-		})
-		.style("stroke-opacity", "1");
-	d3.select(".filter-body")
-		.selectAll(".officeHourlineMin")
-		.style("stroke-width", function(d1, i1) {
-			return "0.5px";
-		})
-		.style("stroke-opacity", "1");
-	d3.select(".filter-body")
-		.selectAll(".officeHourlineMax")
-		.style("stroke-width", function(d1, i1) {
-			return "0.5px";
-		})
-		.style("stroke-opacity", "1");
-	d3.select(this).style("stroke-width", lineWidthOriginal);
+	if (!numbersOn) {
+		d3.select(".viz-body")
+			.selectAll(".line")
+			.style("stroke-width", function(d1, i1) {
+				return lineWidthOriginal;
+			})
+			.style("stroke-opacity", function(d1, i1) {
+				return "1";
+			});
+		d3.select(".filter-body")
+			.selectAll(".officeHourline")
+			.style("stroke-width", function(d1, i1) {
+				return lineWidthOriginal;
+			})
+			.style("stroke-opacity", "1");
+		d3.select(".filter-body")
+			.selectAll(".officeHourlineMin")
+			.style("stroke-width", function(d1, i1) {
+				return "0.5px";
+			})
+			.style("stroke-opacity", "1");
+		d3.select(".filter-body")
+			.selectAll(".officeHourlineMax")
+			.style("stroke-width", function(d1, i1) {
+				return "0.5px";
+			})
+			.style("stroke-opacity", "1");
+		d3.select(this).style("stroke-width", lineWidthOriginal);
+	}
 	d3.selectAll(".navbarRects").attr("width", "18px");
 	d3.selectAll(".navbarTexts").attr("font-weight", "normal");
 	d3.selectAll(".navbarTexts").attr("fill", "black");
 }
+
 d3.selection.prototype.moveToFront = function() {
 	return this.each(function() {
 		this.parentNode.appendChild(this);
@@ -337,63 +337,69 @@ function mouseOverLine(d, i) {
 				return "black";
 			});
 	}
-	d3.select(".viz-body")
-		.selectAll(".line")
-		.style("stroke-width", function(d1, i1) {
-			if (i != i1) {
-				return lineWidthOriginal;
-			} else {
-				return lineWidthOnHover;
-			}
-		})
-		.style("stroke-opacity", function(d1, i1) {
-			if (i != i1) {
-				return "0.30";
-			}
-		});
-	d3.select(".filter-body")
-		.selectAll(".officeHourline")
-		.style("stroke-width", function(d1, i1) {
-			if (i != i1) {
-				return lineWidthOriginal;
-			} else {
-				return lineWidthOnHover;
-			}
-		})
-		.style("stroke-opacity", function(d1, i1) {
-			if (i != i1) {
-				return "0.30";
-			}
-		});
-	d3.select(".filter-body")
-		.selectAll(".officeHourlineMin")
-		.style("stroke-width", function(d1, i1) {
-			if (i != i1) {
-				return "0.5px";
-			} else {
-				return "4px";
-			}
-			mouseOver;
-		})
-		.style("stroke-opacity", function(d1, i1) {
-			if (i != i1) {
-				return "0.30";
-			}
-		});
-	d3.select(".filter-body")
-		.selectAll(".officeHourlineMax")
-		.style("stroke-width", function(d1, i1) {
-			if (i != i1) {
-				return "0.5px";
-			} else {
-				return "4px";
-			}
-		})
-		.style("stroke-opacity", function(d1, i1) {
-			if (i != i1) {
-				return "0.30";
-			}
-		});
+	if (!numbersOn) {
+		d3.select(".viz-body")
+			.selectAll(".line")
+			.style("stroke-width", function(d1, i1) {
+				if (i != i1) {
+					return lineWidthOriginal;
+				} else {
+					return lineWidthOnHover;
+				}
+			})
+			.style("stroke-opacity", function(d1, i1) {
+				if (i != i1) {
+					return "0.30";
+				}
+			});
+		d3.select(".filter-body")
+			.selectAll(".officeHourline")
+			.style("stroke-width", function(d1, i1) {
+				if (i != i1) {
+					return lineWidthOriginal;
+				} else {
+					return lineWidthOnHover;
+				}
+			})
+			.style("stroke-opacity", function(d1, i1) {
+				if (i != i1) {
+					return "0.30";
+				}
+			});
+		d3.select(".filter-body")
+			.selectAll(".officeHourlineMin")
+			.style("stroke-width", function(d1, i1) {
+				if (i != i1) {
+					return "0.5px";
+				} else {
+					return "4px";
+				}
+				mouseOver;
+			})
+			.style("stroke-opacity", function(d1, i1) {
+				if (i != i1) {
+					return "0.30";
+				}
+			});
+		d3.select(".filter-body")
+			.selectAll(".officeHourlineMax")
+			.style("stroke-width", function(d1, i1) {
+				if (i != i1) {
+					return "0.5px";
+				} else {
+					return "4px";
+				}
+			})
+			.style("stroke-opacity", function(d1, i1) {
+				if (i != i1) {
+					return "0.30";
+				}
+			});
+
+		d3.select(this)
+			.style("stroke-width", lineWidthOnHover)
+			.moveToFront();
+	}
 	d3.selectAll(".navbarRects")
 		.transition()
 		.attr("width", function(d1, i1) {
@@ -419,17 +425,16 @@ function mouseOverLine(d, i) {
 				return "white";
 			}
 		});
-	d3.select(this)
-		.style("stroke-width", lineWidthOnHover)
-		.moveToFront();
 }
 
 function clickOnLine(d, i) {
-	currentLabel = labelsOnBasisOfPerformance[i];
-	currentIndex = i;
-	getTextValues(currentLabel, i);
-	fillUpTheOHArea(i);
-	if (distOn) getStackedBarData(currentLabel, filterCriteria);
+	if (!numbersOn) {
+		currentLabel = labelsOnBasisOfPerformance[i];
+		currentIndex = i;
+		getTextValues(currentLabel, i);
+		fillUpTheOHArea(i);
+		if (distOn) getStackedBarData(currentLabel, filterCriteria);
+	}
 }
 
 function selectALineToViewOHData(currentLabel) {
@@ -1509,15 +1514,14 @@ function getFilterData(
 		});
 	officeHourDatum.exit().remove();
 	if (getLineData && typeof getLineData == "function") {
-
 		getLineData(originalData, students, dataSecondary);
 		showPage();
 	}
 }
 
 function showPage() {
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("visualization").style.display = "block";
+	document.getElementById("loader").style.display = "none";
+	document.getElementById("visualization").style.display = "block";
 }
 
 function makeUsefulTooltip() {

@@ -51,7 +51,6 @@
             <div>
                 <button class="accordion">Choose View</button>
                 <div class="panel">
-                    <button type="button" onclick=" toggleTick()" class="tickText"> Event Pillars OFF </button>
                     <form id="viewType" onchange="handleViewChange()"> Choose View Type
                         <br/>
                         <input type='radio' id="none" name="mode" checked/>
@@ -104,6 +103,8 @@
             <hr>
             <div class="viz-body">
                 <h6>Student Performance</h6>
+                <button type="button" onclick=" toggleTick()" class="tickText"> Event Pillars OFF </button>
+                    
                 <svg width="1700" height="410"></svg>
             </div>
             <hr>
@@ -117,6 +118,7 @@
 <script src="dependencies/d3.v4.js"></script>
 <script src="dependencies/moment.min.js"></script>
 <script src="dependencies/lodash.min.js" charset="utf-8"></script>
+<!-- <script src="dependencies/anonymizedIndex.js"></script> -->
 <script src="dependencies/index.js"></script>
 <script>
    
