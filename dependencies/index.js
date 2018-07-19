@@ -1,3 +1,20 @@
+upload_button("grade_uploader", load_grade_dataset);
+upload_button("oh_uploader", load_oh_dataset);
+upload_button("calendar_uploader", load_calendar_dataset);
+var acc = document.getElementsByClassName("accordion");
+var i;
+for (i = 0; i < acc.length; i++) {
+	acc[i].addEventListener("click", function() {
+		this.classList.toggle("active");
+		var panel = this.nextElementSibling;
+		if (panel.style.display === "block") {
+			panel.style.display = "none";
+		} else {
+			panel.style.display = "block";
+		}
+	});
+}
+
 var lineWidthOriginal = "1.5px";
 var lineWidthOnHover = "5px";
 var studentGradeData;
@@ -143,6 +160,7 @@ function mainFunction(studentList) {
 	) {
 		getFilterData(labelsOnBasisOfPerformance, data, students, getLineData);
 		initializePanel();
+
 	}
 }
 
@@ -179,11 +197,11 @@ function enableTicks() {
 			);
 
 	calendarList = _.filter(csvFromCalendar, function(d) {
-		console.log(d.description,d.hide)
-		return !(d["hide"]);
+		console.log(d.description, d.hide);
+		return !d["hide"];
 	});
 
-	console.log(calendarList)
+	console.log(calendarList);
 	var pillars = g
 		.selectAll(".pillars")
 		.data(calendarList)
@@ -579,7 +597,7 @@ function getEventsList(object, date, eventsList) {
 	var displayDate =
 		days[d.getDay()] +
 		", " +
-		(d.getMonth()+1) +
+		(d.getMonth() + 1) +
 		"-" +
 		d.getDate() +
 		"-" +
@@ -1491,8 +1509,15 @@ function getFilterData(
 		});
 	officeHourDatum.exit().remove();
 	if (getLineData && typeof getLineData == "function") {
+
 		getLineData(originalData, students, dataSecondary);
+		showPage();
 	}
+}
+
+function showPage() {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("visualization").style.display = "block";
 }
 
 function makeUsefulTooltip() {
@@ -1834,7 +1859,7 @@ function load_calendar_dataset(csv) {
 			date: d[0],
 			description: d[1],
 			total: +d[2],
-			hide: d[3]=="TRUE"
+			hide: d[3] == "TRUE"
 		};
 	});
 }
